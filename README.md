@@ -24,7 +24,10 @@ This project modifies the tracker in the existing dmlc-core library to enable tr
 
 7. Run the following command to start the `sample.py` training and evaluation script.
   ```sh
-  ../dmlc-core/tracker/dmlc-submit --cluster ssh --num-workers 3  --host-file hosts.config --worker-memory 3g --sync-dst-dir <path to federated-xgboost/sample on each machine> python3 <path to federated-xgboost/sample/sample.py on each machine>
+  ../dmlc-core/tracker/dmlc-submit --cluster ssh --num-workers 3  \
+  --host-file hosts.config --worker-memory 3g \
+  --sync-dst-dir <path to federated-xgboost/sample on each machine> \
+  python3 <path to federated-xgboost/sample/sample.py on each machine>
   ``` 
 
 
