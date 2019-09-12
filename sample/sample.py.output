@@ -1,0 +1,31 @@
+root@ip-172-31-41-140:/home/ubuntu/federated-xgboost/sample# /home/ubuntu/dmlc-core/tracker/dmlc-submit --cluster ssh --num-workers 3  --host-file hosts.config --worker-memory 3g --sync-dst-dir /home/ubuntu/federated-xgboost/sample python3 /home/ubuntu/federated-xgboost/sample/sample.py
+/usr/lib/python3/dist-packages/requests/__init__.py:80: RequestsDependencyWarning: urllib3 (1.25.3) or chardet (3.0.4) doesn't match a supported version!
+  RequestsDependencyWarning)
+2019-09-12 07:53:38,171 INFO start listen on 172.31.41.140:9091
+2019-09-12 07:53:38,182 INFO rsync /home/ubuntu/federated-xgboost/sample/ -> 34.216.75.84:/home/ubuntu/federated-xgboost/sample
+2019-09-12 07:53:38,182 INFO rsync /home/ubuntu/federated-xgboost/sample/ -> 34.223.91.79:/home/ubuntu/federated-xgboost/sample
+2019-09-12 07:53:38,182 INFO rsync /home/ubuntu/federated-xgboost/sample/ -> 34.222.181.241:/home/ubuntu/federated-xgboost/sample
+Warning: Permanently added '34.222.181.241' (ECDSA) to the list of known hosts.
+Warning: Permanently added '34.223.91.79' (ECDSA) to the list of known hosts.
+Warning: Permanently added '34.216.75.84' (ECDSA) to the list of known hosts.
+2019-09-12 07:53:40,716 INFO @tracker All of 3 nodes getting started
+3
+[07:53:55] WARNING: /workspace/src/learner.cc:622: Tree method is automatically selected to be 'approx' for distributed training.
+[07:53:55] Tree method is automatically selected to be 'approx' for distributed training.
+[0]	eval-rmse:9.345022
+/usr/local/lib/python3.6/dist-packages/xgboost/core.py:614: UserWarning: Use subset (sliced data) of np.ndarray is not recommended because it will generate extra copies and increase memory consumption
+  "because it will generate extra copies and increase memory consumption")
+3
+[07:53:55] WARNING: /workspace/src/learner.cc:622: Tree method is automatically selected to be 'approx' for distributed training.
+[07:53:55] Tree method is automatically selected to be 'approx' for distributed training.
+[0]	eval-rmse:9.345022
+/usr/local/lib/python3.6/dist-packages/xgboost/core.py:614: UserWarning: Use subset (sliced data) of np.ndarray is not recommended because it will generate extra copies and increase memory consumption
+  "because it will generate extra copies and increase memory consumption")
+3
+[07:53:55] WARNING: /workspace/src/learner.cc:622: Tree method is automatically selected to be 'approx' for distributed training.
+[07:53:55] Tree method is automatically selected to be 'approx' for distributed training.
+[0]	eval-rmse:9.345022
+/usr/local/lib/python3.6/dist-packages/xgboost/core.py:614: UserWarning: Use subset (sliced data) of np.ndarray is not recommended because it will generate extra copies and increase memory consumption
+  "because it will generate extra copies and increase memory consumption")
+2019-09-12 07:54:14,951 INFO @tracker All nodes finishes job
+2019-09-12 07:54:14,951 INFO @tracker 34.23478722572327 secs between node start and job finish
