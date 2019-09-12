@@ -5,7 +5,7 @@ from FederatedXGBoost import FederatedXGBoost
 fxgb = FederatedXGBoost()
 
 # Get number of federating parties
-print(fxgb.get_num_parties()
+print(fxgb.get_num_parties())
 
 # Load training data
 # Ensure that each party's data is in the same location with the same name
@@ -17,7 +17,7 @@ num_rounds = 40
 fxgb.train(params, num_rounds)
 
 # Load the test data
-fxgb.load_test_data('/home/ubuntu/mc2/xgb_standalone/tutorial/msd_test_data_sample.libsvm')
+fxgb.load_test_data('/home/ubuntu/mc2/data/msd_test_data_split.csv')
 
 # Evaluate the model
 print(fxgb.eval())
