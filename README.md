@@ -19,13 +19,13 @@ This project extends the existing XGBoost gradient boosting machine learning fra
     ```
 
 3. Ensure that SSH keys have been properly set up between the tracker and other parties. 
-* If the machine running the tracker doesn't yet have SSH keys set up (most likely at `~/.ssh/`), generate a 4096 bit RSA key. There should now be keys at `~/.ssh/`
-    ```sh
-    ssh-keygen -t rsa -b 4096
-    ```
-* Otherwise, if the tracker has already set up SSH keys, ensure that the private key is in a file named `~/.ssh/id_rsa`.
-* Set up communicate between the tracker and the worker nodes by appending the driver's public key to the `~/.ssh/authorized_keys` file of all nodes. The public key should be in `~/.ssh/id_rsa.pub`. You can manually copy and paste the public key over to each party's node.
-* Make sure that you also add the public key to the tracker's own `~/.ssh/authorized_keys` file.
+    * If the machine running the tracker doesn't yet have SSH keys set up (most likely at `~/.ssh/`), generate a 4096 bit RSA key. There should now be keys at `~/.ssh/`
+        ```sh
+        ssh-keygen -t rsa -b 4096
+        ```
+    * Otherwise, if the tracker has already set up SSH keys, ensure that the private key is in a file named `~/.ssh/id_rsa`.
+    * Set up communication between the tracker and the worker nodes by appending the driver's public key to the `~/.ssh/authorized_keys` file of all nodes. The public key should be in `~/.ssh/id_rsa.pub`. You can manually copy and paste the public key over to each party's node.
+    * Make sure that you also add the public key to the tracker's own `~/.ssh/authorized_keys` file.
 
 4. Modify the `hosts.config` file in `federated-xgboost/sample/` to reflect the IPs of the parties. 
 
