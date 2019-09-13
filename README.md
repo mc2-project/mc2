@@ -31,18 +31,30 @@ This project extends the existing XGBoost gradient boosting machine learning fra
 
 5. Place the training and test data .csv files at each party **at the same location**. Replace the paths passed into `fxgb.load_training_data()` and `fxgb.load_test_data()` with your respective paths.
 
-6. Ensure that the `sample.py` file is at the same place on the machine of each party. For example, if on the tracker machine the `sample.py` file is at `/home/ubuntu/federated-xgboost/sample/sample.py`, ensure that the same path exists on machines of all parties.  
+6. The recommended (required) way of running distributed training is by creating a subdirectory in the `federated-xgboost/` directory that contains `hosts.config`, the training script, `start_job.sh`, and `FederatedXGBoost.py`. 
 
-7. Run the following command to start the `sample.py` training and evaluation script.
+7. Ensure that there is a directory named `federated-xgboost/` at the same place on each party's machine. The directory doesn't have to contain anything on any of the non-tracker machines, but must exist. For example, if on the tracker machine the `federated-xgboost/` file is at `/home/ubuntu/federated-xgboost/`, ensure that the same path exists on machines of all parties.  
+
+8. Run the following command to start the `sample.py` job script.
     ```sh
-    ../dmlc-core/tracker/dmlc-submit --cluster ssh --num-workers 3  \
-    --host-file hosts.config --worker-memory 3g \
-    --sync-dst-dir <path to federated-xgboost/sample on each machine> \
-    python3 <path to federated-xgboost/sample/sample.py on each machine>
+    ./start_job.sh -p 3 -m 3g -d /home/ubuntu/federated-xgboost/sample/ -j /home/ubuntu/federated-xgboost/sample/sample.py 
     ``` 
 
-
+### Usage
+The following flags must be specified when running the `start_job.sh`
+``` sh
+./start_job.sh
+``` 
+* `-m | --worker-memory` string, specified as "<memory>g", e.g. 3g
+    * Amount of memory on workers allocated to job
+* `-p | --num-parties` integer
+    * Number of parties in the federation
+* `-d | --dir` string
+    * Path to created subdirectory containing job script, e.g. `/home/ubuntu/federated-xgboost/sample`
+* `-j | --job` string
+    * Path to job script. This should be the parameter passed into the `--dir` option concatenated with the job script file name, e.g. `/home/ubuntu/federated-xgboost/sample/sample.py`
+    
 ### Notes
 * This has only been tested with Python 3
-* The recommended way of running distributed training is by creating a subdirectory in the `federated-xgboost/` directory that contains `hosts.config`, the training script, and `FederatedXGBoost.py`. `FederatedXGBoost.py` is a wrapper that simplifies the data loading, training, and evaluation process. 
+* `FederatedXGBoost.py` is a wrapper that simplifies the data loading, training, and evaluation process. 
 * The `--sync-dst-dir` option in the `dmlc-submit` command copies everything in the passed in directory to all worker machines.This means that the training script can initially only be on the tracker machine, and will be automatically copied over to all parties once the job is submitted. 
