@@ -31,7 +31,7 @@ This project extends the existing XGBoost gradient boosting machine learning fra
 
 5. Place the training and test data .csv files at each party **at the same location**. Replace the paths passed into `fxgb.load_training_data()` and `fxgb.load_test_data()` with your respective paths.
 
-6. The recommended (required) way of running distributed training is by creating a subdirectory in the `federated-xgboost/` directory that contains `hosts.config`, the training script, `start_job.sh`, and `FederatedXGBoost.py`. 
+6. The recommended (required) way of running distributed training is by creating a subdirectory in the `federated-xgboost/` directory that contains `hosts.config`, the training script, `start_job.sh`, and `FederatedXGBoost.py`. No modifications are needed to `start_job.sh` and `FederatedXGBoost.py`. You can just copy them over to the new subdirectory.
 
 7. Ensure that there is a directory named `federated-xgboost/` at the same place on each party's machine. The directory doesn't have to contain anything on any of the non-tracker machines, but must exist. For example, if on the tracker machine the `federated-xgboost/` file is at `/home/ubuntu/federated-xgboost/`, ensure that the same path exists on machines of all parties.  
 
