@@ -4,19 +4,26 @@ This project modifies the tracker in the existing dmlc-core library to enable tr
 ### Quickstart
 1. Clone the federated-xgboost codebase and initialize the submodule.
 
-  ```sh
-  git clone https://github.com/mc2-project/federated-xgboost.git
-  git submodule init 
-  git submodule update
-  ```
+    ```sh
+    git clone https://github.com/mc2-project/federated-xgboost.git
+    git submodule init 
+    git submodule update
+    ```
 
 2. Ensure that the Python3 version of XGBoost has been installed on every machine that will be performing training.
 
-  ```sh
-  pip3 install xgboost
-  ```
+    ```sh
+    pip3 install xgboost
+    ```
 
-3. Ensure that SSH keys have been properly set up between the tracker (driver) and the worker nodes by adding the driver's public key to the `authorized_keys` file of all worker nodes.  
+3. Ensure that SSH keys have been properly set up between the tracker and other parties. 
+* If the machine running the tracker doesn't yet have SSH keys set up (most likely at `~/.ssh/`), generate a 4096 bit RSA key. There should now be keys at `~/.ssh/`
+    ```sh
+    ssh-keygen -t rsa -b 4096
+    ```
+* Otherwise, if the tracker has already set up SSH keys, ensure that the private key is in a file named `~/.ssh/id_rsa`.
+* Set up communicate between the tracker and the worker nodes by appending the driver's public key to the `~/.ssh/authorized_keys` file of all nodes. The public key should be in `~/.ssh/id_rsa.pub`. You can manually copy and paste the public key over to each party's node.
+* Make sure that you also add the public key to the tracker's own `~/.ssh/authorized_keys` file.
 
 4. Modify the `hosts.config` file in `federated-xgboost/sample/` to reflect the IPs of the parties. 
 
@@ -25,12 +32,12 @@ This project modifies the tracker in the existing dmlc-core library to enable tr
 6. Ensure that the `sample.py` file is at the same place on the machine of each party. For example, if on the tracker machine the `sample.py` file is at `/home/ubuntu/federated-xgboost/sample/sample.py`, ensure that the same path exists on machines of all parties.  
 
 7. Run the following command to start the `sample.py` training and evaluation script.
-  ```sh
-  ../dmlc-core/tracker/dmlc-submit --cluster ssh --num-workers 3  \
-  --host-file hosts.config --worker-memory 3g \
-  --sync-dst-dir <path to federated-xgboost/sample on each machine> \
-  python3 <path to federated-xgboost/sample/sample.py on each machine>
-  ``` 
+    ```sh
+    ../dmlc-core/tracker/dmlc-submit --cluster ssh --num-workers 3  \
+    --host-file hosts.config --worker-memory 3g \
+    --sync-dst-dir <path to federated-xgboost/sample on each machine> \
+    python3 <path to federated-xgboost/sample/sample.py on each machine>
+    ``` 
 
 
 ### Notes
