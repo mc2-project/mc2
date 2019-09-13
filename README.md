@@ -35,14 +35,27 @@ This project extends the existing XGBoost gradient boosting machine learning fra
 
 7. Run the following command to start the `sample.py` training and evaluation script.
     ```sh
-    ../dmlc-core/tracker/dmlc-submit --cluster ssh --num-workers 3  \
-    --host-file hosts.config --worker-memory 3g \
-    --sync-dst-dir <path to federated-xgboost/sample on each machine> \
-    python3 <path to federated-xgboost/sample/sample.py on each machine>
+    ./start_job.sh -w 3 -d /home/ubuntu/federated-xgboost/sample/ -j /home/ubuntu/federated-xgboost/sample/sample.py -w 3g
     ``` 
+
+### Usage
+The following flags must be specified when running the `start_job.sh`
+``` sh
+./start_job.sh
+``` 
+* `-m | --worker-memory` string, specified as "<memory>g", e.g. 3g
+    * Amount of memory on workers allocated to job
+* `-p | --num-parties` integer
+    * Number of parties in the federation
+* `-d | --dir` string
+    * Path to created subdirectory containing job script, e.g. `/home/ubuntu/federated-xgboost/sample`
+* `-j | --job` string
+    * Path to job script. This should be the parameter passed into the `--dir` option concatenated with the job script file name, e.g. `/home/ubuntu/federated-xgboost/sample/sample.py`
+    
 
 
 ### Notes
 * This has only been tested with Python 3
-* The recommended way of running distributed training is by creating a subdirectory in the `federated-xgboost/` directory that contains `hosts.config`, the training script, and `FederatedXGBoost.py`. `FederatedXGBoost.py` is a wrapper that simplifies the data loading, training, and evaluation process. 
+* The recommended (required) way of running distributed training is by creating a subdirectory in the `federated-xgboost/` directory that contains `hosts.config`, the training script, `start_job.sh`, and `FederatedXGBoost.py`. Run the `start_job.sh` from the subdirectory.
+* `FederatedXGBoost.py` is a wrapper that simplifies the data loading, training, and evaluation process. 
 * The `--sync-dst-dir` option in the `dmlc-submit` command copies everything in the passed in directory to all worker machines.This means that the training script can initially only be on the tracker machine, and will be automatically copied over to all parties once the job is submitted. 
