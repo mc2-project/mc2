@@ -1,5 +1,7 @@
 # federated-xgboost
-This project modifies the tracker in the existing dmlc-core library to enable training XGBoost models in the federated setting. The project is still under development.
+Federated learning allows multiple parties to collaboratively learn a shared model while keeping each party's data at its respective site. It allows for collaborative learning with lower latencies while ensuring data privacy.
+
+This project extends the existing XGBoost gradient boosting machine learning framework to enable training models in the federated setting. This work is being actively contributed to and is still under development.
 
 ### Quickstart
 1. Clone the federated-xgboost codebase and initialize the submodule.
