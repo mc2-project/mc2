@@ -1,5 +1,7 @@
 # federated-xgboost
-Federated learning allows multiple parties to collaboratively learn a shared model while keeping each party's data at its respective site. It allows for collaborative learning with lower latencies while ensuring data privacy.
+Federated learning allows multiple parties to collaboratively learn a shared model while keeping each party's data at its respective site. It allows for collaborative learning with lower latencies without a central data storage, thereby improving the privacy of individual parties' data.
+
+In the federated setting, a central party has a basic model that is initially broadcast to all parties. Each party locally trains the model with its own data, then sends a summary of the updates to the model back to the central party. In the decision tree case, parties would be sending the best local feature splits back to the central party. The central party then aggregates all updates, updates its own model with the aggregated update, and broadcasts the newly updated model to all parties. This process is then repeated over and over.
 
 ![federated diagram](./images/federated-xgboost-diagram.png)
 
