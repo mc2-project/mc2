@@ -16,10 +16,10 @@ This project extends the existing XGBoost gradient boosting machine learning fra
     git submodule update
     ```
 
-2. Ensure that the Python3 version of XGBoost has been installed on every machine that will be performing training.
+2. Ensure that the necessary packages have been installed on every machine that will be performing training.
 
     ```sh
-    pip3 install xgboost
+    pip3 install -r requirements.txt
     ```
 
 3. Ensure that SSH keys have been properly set up between the tracker and other parties. 
