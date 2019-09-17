@@ -11,7 +11,7 @@ This project extends the existing XGBoost gradient boosting machine learning fra
 1. Clone the federated-xgboost codebase and initialize the submodule.
 
     ```sh
-    git clone https://github.com/mc2-project/federated-xgboost.git
+    git clone https://github.com/mc2-project/mc2.git
     git submodule init 
     git submodule update
     ```
