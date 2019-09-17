@@ -38,4 +38,4 @@ esac
 done
 set -- "${POSITIONAL[@]}" # restore positional parameters
 
-../dmlc-core/tracker/dmlc-submit --cluster ssh --num-workers ${PARTIES} --host-file hosts.config --worker-memory ${WORKER_MEMORY} --sync-dst-dir ${SYNC_DST_DIR} python3 ${JOB}
+../../dmlc-core/tracker/dmlc-submit --cluster ssh --num-workers ${PARTIES} --host-file hosts.config --worker-memory ${WORKER_MEMORY} --sync-dst-dir ${SYNC_DST_DIR} python3 ${JOB}
