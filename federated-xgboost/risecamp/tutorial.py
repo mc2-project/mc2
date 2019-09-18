@@ -11,7 +11,7 @@ fxgb.load_training_data('/home/ubuntu/data/msd_training_data_split.csv')
 
 # Train a model
 params = {'max_depth': 3, 'min_child_weight': 1.0, 'lambda': 1.0}
-num_rounds = 100
+num_rounds = 50
 fxgb.train(params, num_rounds)
 
 # Save the model
