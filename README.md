@@ -1,6 +1,8 @@
 # federated-xgboost
 Federated learning allows multiple parties to collaboratively learn a shared model while keeping each party's data at its respective site. It allows for collaborative learning with lower latencies while ensuring data privacy.
 
+[Quickstart](#quickstart)
+
 ![federated diagram](./images/federated-xgboost-diagram.png)
 
 #### Step-by-step breakdown
