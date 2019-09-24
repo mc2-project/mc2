@@ -1,6 +1,8 @@
 # federated-xgboost
 Federated learning allows multiple parties to collaboratively learn a shared model while keeping each party's data at its respective site. It allows for collaborative learning with lower latencies while ensuring data privacy.
 
+This project extends the existing XGBoost gradient boosting machine learning framework to enable training models in the federated setting. This work is being actively contributed to and is still under development.
+
 [QUICKSTART](#quickstart)
 
 ![federated diagram](./images/federated-xgboost-diagram.png)
@@ -22,8 +24,6 @@ Stopping conditions include
  - when no split is found to give a benefit score greater than some specified value gamma
  - Metrics tested against a validation set are not improving once every k number of rounds, where k is configurable. 
 
-
-This project extends the existing XGBoost gradient boosting machine learning framework to enable training models in the federated setting. This work is being actively contributed to and is still under development.
 
 ### Quickstart
 1. Clone the federated-xgboost codebase and initialize the submodule.
