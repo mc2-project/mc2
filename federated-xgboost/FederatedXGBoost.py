@@ -35,6 +35,10 @@ class FederatedXGBoost:
     def get_num_parties(self):
         return xgb.rabit.get_world_size()
 
+    def load_model(self, model_path):
+        self.model = xgb.Booster()
+        self.model.load_model(model_path)
+
     def save_model(self, model_name):
         self.model.save_model(model_name)
         logging.info("Saved model to {}".format(model_name))
