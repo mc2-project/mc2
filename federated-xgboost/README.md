@@ -9,7 +9,8 @@ This project extends the existing XGBoost gradient boosting machine learning fra
 
 ![federated diagram](./images/federated-xgboost-diagram.png)
 
-#### Step-by-step breakdown
+
+### Step-by-step breakdown
 
 ![diagram 1](./images/detail_1.png)  
 
