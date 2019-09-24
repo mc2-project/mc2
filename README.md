@@ -15,7 +15,13 @@ Federated learning allows multiple parties to collaboratively learn a shared mod
 
 ![diagram 4](./images/detail_4.png)  
 
-![diagram summary](./images/detail_summary.png)  
+The above four steps are looped to create one decision tree.
+
+Stopping conditions include
+ - reaching the max_depth configurable parameter in the training method
+ - when no split is found to give a benefit score greater than some specified value gamma
+ - Metrics tested against a validation set are not improving once every k number of rounds, where k is configurable. 
+
 
 This project extends the existing XGBoost gradient boosting machine learning framework to enable training models in the federated setting. This work is being actively contributed to and is still under development.
 
