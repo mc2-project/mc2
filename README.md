@@ -3,9 +3,7 @@ Federated learning allows multiple parties to collaboratively learn a shared mod
 
 ![federated diagram](./images/federated-xgboost-diagram.png)
 
-<h>
-Step-by-step breakdown
-
+#### Step-by-step breakdown
 
 ![diagram 1](./images/detail_1.png)
 ![diagram 2](./images/detail_2.png)
