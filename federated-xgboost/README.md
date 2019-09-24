@@ -9,8 +9,8 @@ This project extends the existing XGBoost gradient boosting machine learning fra
 
 ![federated diagram](./images/federated-xgboost-diagram.png)
 
+### Finding a split
 
-### Step-by-step breakdown
 ![diagram 1](./images/detail_1.png)  
 
 ![diagram 2](./images/detail_2.png)  
@@ -79,4 +79,3 @@ The following flags must be specified when running the `start_job.sh`
     
 ### Notes
 * This has only been tested with Python 3
-* `FederatedXGBoost.py` is a wrapper that simplifies the data loading, training, and evaluation process. 
