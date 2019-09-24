@@ -11,7 +11,6 @@ This project extends the existing XGBoost gradient boosting machine learning fra
 
 
 ### Step-by-step breakdown
-
 ![diagram 1](./images/detail_1.png)  
 
 ![diagram 2](./images/detail_2.png)  
@@ -81,4 +80,3 @@ The following flags must be specified when running the `start_job.sh`
 ### Notes
 * This has only been tested with Python 3
 * `FederatedXGBoost.py` is a wrapper that simplifies the data loading, training, and evaluation process. 
-* The `--sync-dst-dir` option in the `dmlc-submit` command copies everything in the passed in directory to all worker machines. This means that the training script can initially only be on the tracker machine, and will be automatically copied over to all parties once the job is submitted. 
