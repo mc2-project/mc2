@@ -1,7 +1,7 @@
 # federated-xgboost
 Federated learning allows multiple parties to collaboratively learn a shared model while keeping each party's data at its respective site. It allows for collaborative learning with lower latencies without a central data storage, thereby improving the privacy of individual parties' data.
 
-In the federated setting, a central party has a basic model that is initially broadcast to all parties. Each party locally trains the model with its own data, then sends a summary of the updates to the model back to the central party. In the decision tree case, parties would be sending the best local feature splits back to the central party. The central party then aggregates all updates, updates its own model with the aggregated update, and broadcasts the newly updated model to all parties. This process is then repeated over and over.
+In the federated setting, a central party has a basic model that is initially broadcast to all parties. Each party locally trains the model with its own data, then sends a summary of the updates to the model back to the central party. In the decision tree case, parties would be sending the best local feature splits back to the central party. The central party then aggregates all updates, updates its own model with the aggregated update, and broadcasts the newly updated model to all parties. This process is then repeated over and over. See the diagrams below for a visualization of this workflow.
 
 This project extends the existing XGBoost gradient boosting machine learning framework to enable training models in the federated setting. This work is being actively contributed to and is still under development.
 
@@ -11,13 +11,9 @@ This project extends the existing XGBoost gradient boosting machine learning fra
 
 ### Finding a split
 
-![diagram 1](./images/detail_1.png)  
+1. ![diagram 1](./images/detail_1.png)  2. ![diagram 2](./images/detail_2.png)  
 
-![diagram 2](./images/detail_2.png)  
-
-![diagram 3](./images/detail_3.png)  
-
-![diagram 4](./images/detail_4.png)  
+3. ![diagram 3](./images/detail_3.png)  4. ![diagram 4](./images/detail_4.png)  
 
 The above four steps are looped to create one decision tree.
 
