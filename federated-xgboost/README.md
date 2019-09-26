@@ -7,18 +7,24 @@ This project extends the existing XGBoost gradient boosting machine learning fra
 
 [QUICKSTART](#quickstart)
 
+### _High Level_
+
 ![federated diagram](./images/federated-xgboost-diagram.png)
 
-### Finding a split
+### _Finding a Split_
+ 
+ ![diagram 1](./images/detail_1.png)
 
-1. ![diagram 1](./images/detail_1.png)  2. ![diagram 2](./images/detail_2.png)  
+ ![diagram 2](./images/detail_2.png)
 
-3. ![diagram 3](./images/detail_3.png)  4. ![diagram 4](./images/detail_4.png)  
+ ![diagram 3](./images/detail_3.png)
+ 
+ ![diagram 4](./images/detail_4.png)
 
 The above four steps are looped to create one decision tree.
 
-Stopping conditions include
- - reaching the max_depth configurable parameter in the training method
+Stopping conditions include  
+ - reaching the max_depth configurable parameter in the training method
  - when no split is found to give a benefit score greater than some specified value gamma
  - Metrics tested against a validation set are not improving once every k number of rounds, where k is configurable. 
 
@@ -75,3 +81,5 @@ The following flags must be specified when running the `start_job.sh`
     
 ### Notes
 * This has only been tested with Python 3
+* `FederatedXGBoost.py` is a wrapper that simplifies the data loading, training, and evaluation process. 
+* The --sync-dst-dir option in the dmlc-submit command copies everything in the passed in directory to all worker machines. This means that the training script can initially only be on the tracker machine, and will be automatically copied over to all parties once the job is submitted.
