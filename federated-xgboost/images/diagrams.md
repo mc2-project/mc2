@@ -14,7 +14,6 @@
 
  ![diagram 4](detail_4.png)  
 
-
 The above four steps are looped to create one decision tree. Stopping conditions include
 
 * reaching the `max_depth` configurable parameter in the training method.  
