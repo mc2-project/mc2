@@ -8,12 +8,9 @@
 
  ![diagram 1](detail_1.png)  
 
-
  ![diagram 2](detail_2.png)  
 
-
  ![diagram 3](detail_3.png)  
-
 
  ![diagram 4](detail_4.png)  
 
