@@ -6,7 +6,7 @@ In the federated setting, a central party has a basic model that is initially br
 
 This project extends the existing XGBoost gradient boosting machine learning framework to enable training models in the federated setting. This work is being actively contributed to and is still under development.
 
-[See diagrams visualizing split finding](diagrams.md)
+[See diagrams visualizing split finding](./images/diagrams.md)
 
 ## Quickstart
 
