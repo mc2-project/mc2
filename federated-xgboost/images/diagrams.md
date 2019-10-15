@@ -6,13 +6,17 @@
 
 ## Finding a Split
 
- ![diagram 1](detail_1.png)
+ ![diagram 1](detail_1.png)  
 
- ![diagram 2](detail_2.png)
 
- ![diagram 3](detail_3.png)
+ ![diagram 2](detail_2.png)  
 
- ![diagram 4](detail_4.png)
+
+ ![diagram 3](detail_3.png)  
+
+
+ ![diagram 4](detail_4.png)  
+
 
 The above four steps are looped to create one decision tree. Stopping conditions include
 
