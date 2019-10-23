@@ -1,6 +1,3 @@
-[submodule "dmlc-core"]
-	path = dmlc-core
-	url = https://github.com/mc2-project/dmlc-core
 [submodule "secure-xgboost"]
 	path = secure-xgboost
 	url = https://github.com/mc2-project/secure-xgboost.git
