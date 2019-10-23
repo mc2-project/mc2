@@ -16,9 +16,9 @@ This project extends the existing XGBoost gradient boosting machine learning fra
 
     ```sh
     git clone --recursive https://github.com/mc2-project/mc2.git
-    cd cub; git submodule init; git submodule update
-    cd ../dmlc-core; git submodule init; git submodule update
-    cd ../rabit; git submodule init; git submodule update
+    cd mc2/secure-xgboost
+    git submodule init
+    git submodule update
     ```
 
 2. Build secure XGBoost. 
