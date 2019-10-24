@@ -6,22 +6,38 @@ In the federated setting, a central party has a basic model that is initially br
 
 This project extends the existing XGBoost gradient boosting machine learning framework to enable training models in the federated setting. This work is being actively contributed to and is still under development.
 
+### Quickstart
+1. Clone the federated-xgboost codebase and initialize the submodules.
 [See diagrams visualizing split finding](./images/diagrams.md)
 
 ## Quickstart
 
-1. Clone the federated-xgboost codebase and initialize the submodule.
+1. Clone the federated-xgboost codebase and initialize the submodules.
 
     ```sh
-    git clone https://github.com/mc2-project/mc2.git
-    git submodule init 
+    git clone --recursive https://github.com/mc2-project/mc2.git
+    cd mc2/secure-xgboost
+    git submodule init
     git submodule update
     ```
 
-2. Ensure that the Python3 version of XGBoost has been installed on every machine that will be performing training.
+2. Build secure XGBoost. 
 
+On Ubuntu:
     ```sh
-    pip3 install xgboost
+    cd mc2/secure-xgboost
+    make
+    cd python-package
+    python3 setup.py install
+    ```
+
+On Mac:
+    ```sh
+    cd mc2/secure-xgboost
+    cp make/minimum.mk ./config.mk
+    make -j4
+    cd python-package
+    python3 setup.py install
     ```
 
 3. Ensure that SSH keys have been properly set up between the tracker and other parties. 
