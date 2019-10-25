@@ -23,7 +23,8 @@ This project extends the existing XGBoost gradient boosting machine learning fra
 
 2. Build secure XGBoost. 
 
-On Ubuntu:
+* On Ubuntu:
+
     ```sh
     cd mc2/secure-xgboost
     make
@@ -31,7 +32,8 @@ On Ubuntu:
     python3 setup.py install
     ```
 
-On Mac:
+* On Mac:
+    
     ```sh
     cd mc2/secure-xgboost
     cp make/minimum.mk ./config.mk
