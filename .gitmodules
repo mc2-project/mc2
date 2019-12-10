@@ -1,3 +1,6 @@
 [submodule "secure-xgboost"]
 	path = secure-xgboost
 	url = https://github.com/mc2-project/secure-xgboost.git
+[submodule "cerebro"]
+	path = cerebro
+	url = https://github.com/mc2-project/cerebro
