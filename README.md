@@ -7,4 +7,3 @@
 * Delphi: secure inference for deep neural networks
 * Coopetitive XGBoost: an oblivious solution for multiparty XGBoost with hardware enclaves
 
-We're aiming for a late 2019 release for the above projects.
