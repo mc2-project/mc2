@@ -4,3 +4,6 @@
 [submodule "cerebro"]
 	path = cerebro
 	url = https://github.com/mc2-project/cerebro
+[submodule "delphi"]
+	path = delphi
+	url = https://github.com/mc2-project/delphi
