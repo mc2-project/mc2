@@ -4,9 +4,6 @@
 [submodule "delphi"]
 	path = delphi
 	url = https://github.com/mc2-project/delphi
-[submodule "mc2-xgboost"]
-	path = mc2-xgboost
-	url = https://github.com/mc2-project/mc2-xgboost/
 [submodule "federated-xgboost"]
 	path = federated-xgboost
 	url = https://github.com/mc2-project/federated-xgboost.git
