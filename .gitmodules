@@ -10,3 +10,6 @@
 [submodule "secure-xgboost"]
 	path = secure-xgboost
 	url = https://github.com/mc2-project/secure-xgboost.git
+[submodule "opaque"]
+	path = opaque
+	url = https://github.com/mc2-project/opaque.git
