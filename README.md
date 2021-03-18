@@ -7,3 +7,6 @@
 ## Research Prototypes
 * [Cerebro](https://github.com/mc2-project/cerebro): A general purpose Python DSL for learning with secure multiparty computation
 * [Delphi](https://github.com/mc2-project/delphi): Secure inference for deep neural networks
+
+## Contact
+For questions and general discussion, please reach out to mc2-dev@googlegroups.com.
