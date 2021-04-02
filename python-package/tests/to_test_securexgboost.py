@@ -3,8 +3,8 @@ import os
 import pathlib
 import shutil
 
-import numpy as np
 import mc2client as mc2
+import numpy as np
 import pytest
 import yaml
 

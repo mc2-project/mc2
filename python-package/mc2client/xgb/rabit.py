@@ -7,6 +7,7 @@ from ..rpc import (  # pylint: disable=no-name-in-module
 )
 from .securexgboost import _check_remote_call
 
+
 def init(args=None):
     """Initialize the rabit library with arguments"""
 

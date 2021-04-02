@@ -3,10 +3,10 @@ import os
 import pathlib
 import shutil
 import subprocess
-import yaml
 
 import mc2client as mc2
 import mc2client.xgb as xgb
+import yaml
 
 
 parser = argparse.ArgumentParser()

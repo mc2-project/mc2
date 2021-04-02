@@ -50,11 +50,6 @@ else:
 
 _LIB = ctypes.CDLL(lib_path)
 
-_LIB.api_free_ptr.argtypes = (ctypes.c_void_p,)
-
-_LIB.api_free_double_ptr.argtypes = (ctypes.POINTER(ctypes.c_void_p), ctypes.c_int)
-
-
 # _CONF is a cache of data retrieved throughout processing
 _CONF = {}
 
@@ -694,8 +689,6 @@ def decrypt_data(encrypted_file, plaintext_file, enc_format):
 
     if result.value != 0:
         raise CryptoError("Decryption failed")
-
-
 
 
 def upload_file(input_path, output_path):
