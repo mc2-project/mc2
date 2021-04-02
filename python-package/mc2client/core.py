@@ -50,11 +50,6 @@ else:
 
 _LIB = ctypes.CDLL(lib_path)
 
-_LIB.api_free_ptr.argtypes = (ctypes.c_void_p,)
-
-_LIB.api_free_double_ptr.argtypes = (ctypes.POINTER(ctypes.c_void_p), ctypes.c_int)
-
-
 # _CONF is a cache of data retrieved throughout processing
 _CONF = {}
 
