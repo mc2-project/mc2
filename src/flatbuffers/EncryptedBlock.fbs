@@ -1,0 +1,17 @@
+namespace tuix;
+
+table EncryptedBlock {
+    num_rows:uint;
+    // When decrypted, this should contain a Rows object at its root
+    enc_rows:[ubyte];
+}
+
+table EncryptedBlocks {
+    blocks:[EncryptedBlock];
+}
+
+table SortedRuns {
+    runs:[EncryptedBlocks];
+}
+
+root_type EncryptedBlocks;

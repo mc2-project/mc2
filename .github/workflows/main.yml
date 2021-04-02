@@ -1,0 +1,117 @@
+name: Continous Integration
+
+# Run this workflow every time a new commit pushed to your repository
+on:
+  push:
+    branches: 
+      - master
+  pull_request:
+    branches:
+      - master
+  
+jobs:
+
+  build:
+    name: Build, install, and test MC2 Client
+    # Define the OS to run on
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        python-version: ['3.6', '3.7', '3.8']
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps: 
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+          path: main
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Upgrade Pip
+        run: python -m pip install --upgrade pip setuptools wheel
+   
+      - name: Install apt package dependencies
+        run: |
+          # Install OpenEnclave 0.12.0
+          echo 'deb [arch=amd64] https://download.01.org/intel-sgx/sgx_repo/ubuntu bionic main' | sudo tee /etc/apt/sources.list.d/intel-sgx.list
+          wget -qO - https://download.01.org/intel-sgx/sgx_repo/ubuntu/intel-sgx-deb.key | sudo apt-key add -
+          echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-7 main" | sudo tee /etc/apt/sources.list.d/llvm-toolchain-bionic-7.list
+          wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+          echo "deb [arch=amd64] https://packages.microsoft.com/ubuntu/18.04/prod bionic main" | sudo tee /etc/apt/sources.list.d/msprod.list
+          wget -qO - https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+
+          sudo apt update
+          sudo apt -y install clang-7 libssl-dev gdb libsgx-enclave-common libsgx-enclave-common-dev libprotobuf10 libsgx-dcap-ql libsgx-dcap-ql-dev az-dcap-client open-enclave=0.12.0 
+
+          # CMake
+          wget https://github.com/Kitware/CMake/releases/download/v3.15.6/cmake-3.15.6-Linux-x86_64.sh
+
+          # Mbed TLS
+          sudo apt-get install -y libmbedtls-dev
+
+      - name: Build C++
+        run: | 
+          # Build C++ source
+          cd main
+          cd src
+          mkdir build
+          cd build
+          cmake ..
+          make -j4
+          cd ../..
+
+      - name: Install Python dependencies
+        run: |
+          # Python packages
+          # pip install setuptools wheel pytest
+
+          cd main
+          pip install -r requirements.txt 
+
+      - name: Install mc2client Python package
+        run: |
+          # Install the Python package
+          cd main/python-package
+          python setup.py install
+
+      - name: Checkout sequencefile Python package
+        uses: actions/checkout@master
+        with:
+            path: sequencefile
+            repository: opaque-systems/sequencefile
+
+      - name: Install sequencefile Python package
+        run: cd sequencefile; python setup.py install
+        shell: bash
+
+      - name: Run tests
+        run: cd main/python-package/tests; pytest
+        shell: bash
+
+
+  # Set the job key. The key is displayed as the job name
+  # when a job name is not provided
+  super-lint:
+    # Name the Job
+    name: Lint code base
+    # Set the type of machine to run on
+    runs-on: ubuntu-18.04
+
+    steps:
+      # Checks out a copy of your repository on the ubuntu-18.04 machine
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Runs the Super-Linter action
+      - name: Run Super-Linter
+        uses: github/super-linter@v3
+        env:
+          DEFAULT_BRANCH: master
+          VALIDATE_JSCPD: false
+          VALIDATE_BASH: false
+          VALIDATE_PROTOBUF: false

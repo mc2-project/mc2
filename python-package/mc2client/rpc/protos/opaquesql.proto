@@ -1,0 +1,26 @@
+/* This file should be kept in sync with Opaque's listener.proto */
+
+syntax = "proto3";
+
+package opaque.protos;
+
+service Listener {
+  rpc ReceiveQuery (QueryRequest) returns (QueryResult) {}
+}
+
+message QueryRequest {
+  string request = 1;
+}
+
+message QueryResult {
+  string result = 1;
+  Status status = 2;
+}
+
+message Status {
+  // Status
+  int32 status = 1;
+
+  // Exception message
+  string exception = 2;
+}

@@ -1,0 +1,12 @@
+setuptools
+cryptography==3.3.1
+grpcio
+grpcio-tools
+jsonschema
+numproto
+numpy==1.19.5
+pandas
+paramiko
+pytest
+pyyaml
+scp
