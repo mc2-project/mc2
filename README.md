@@ -84,7 +84,7 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
     build/sbt run
     ```
 
-1. Once you've started the compute service, encrypt and transfer the encrypted data. Data to be encrypted/transferred is in `mc2.yaml` (this is pre-populated with the sample data). In this quickstart, the "transfer" is just a `scp` to another directory in the same container. In practice, the transfer is an upload to a remote machine in the cloud. The destination path for the data can also be specified in the configuration YAML under `cloud/data_dir`. Run the following command depending on which compute service you've started.
+1. Once you've started the compute service, encrypt and transfer the encrypted data. Data to be encrypted/transferred is in `mc2.yaml` (this is pre-populated with the sample data). In this quickstart, the "transfer" is just a `scp` to another directory in the same container. In practice, the transfer is an upload to a remote machine in the cloud. The destination path for the data can also be specified in the configuration YAML under `cloud/data_dir`. In the `demo` directory, run the following command depending on which compute service you've started.
 
     ```sh
     mc2 upload --xgb/--sql
