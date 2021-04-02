@@ -691,8 +691,6 @@ def decrypt_data(encrypted_file, plaintext_file, enc_format):
         raise CryptoError("Decryption failed")
 
 
-
-
 def upload_file(input_path, output_path):
     """
     Upload file to Azure storage

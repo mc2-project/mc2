@@ -94,24 +94,24 @@ jobs:
         shell: bash
 
 
-  # Set the job key. The key is displayed as the job name
-  # when a job name is not provided
-  super-lint:
-    # Name the Job
-    name: Lint code base
-    # Set the type of machine to run on
-    runs-on: ubuntu-18.04
-
-    steps:
-      # Checks out a copy of your repository on the ubuntu-18.04 machine
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      # Runs the Super-Linter action
-      - name: Run Super-Linter
-        uses: github/super-linter@v3
-        env:
-          DEFAULT_BRANCH: master
-          VALIDATE_JSCPD: false
-          VALIDATE_BASH: false
-          VALIDATE_PROTOBUF: false
+  # # Set the job key. The key is displayed as the job name
+  # # when a job name is not provided
+  # super-lint:
+  #   # Name the Job
+  #   name: Lint code base
+  #   # Set the type of machine to run on
+  #   runs-on: ubuntu-18.04
+  # 
+  #   steps:
+  #     # Checks out a copy of your repository on the ubuntu-18.04 machine
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+  # 
+  #     # Runs the Super-Linter action
+  #     - name: Run Super-Linter
+  #       uses: github/super-linter@v3
+  #       env:
+  #         DEFAULT_BRANCH: master
+  #         VALIDATE_JSCPD: false
+  #         VALIDATE_BASH: false
+  #         VALIDATE_PROTOBUF: false
