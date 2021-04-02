@@ -16,6 +16,7 @@ MC<sup>2</sup> also contains some research prototypes:
 * [MC<sup>2</sup> Client](#mc2-client)
 * [Quickstart](#quickstart)
 * [Documentation](#documentation)
+* [Contact](#contact)
 
 ## MC<sup>2</sup> Client
 The Opaque SQL and Secure XGBoost compute services require a client to run an end-to-end workflow. In particular, once a user has launched VM's running Opaque SQL or Secure XGBoost (instructions to do so can be found in each repository), the user can encrypt their data and transfer it to such VMs, submit queries to specify the exact computation they want to run, and retrieve and view encrypted results.
@@ -102,4 +103,12 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
     ```
 
 ## Documentation
-More thorough documentation on installation and usage can be found [here]().
+For more thorough documentation on installation and usage, please visit:
+
+* [MC<sup>2</sup> Client]()
+* [Opaque SQL](https://mc2-project.github.io/opaque/)
+* [Secure XGBoost](https://secure-xgboost.readthedocs.io/en/latest/)
+
+
+## Contact
+For questions and general discussion, please reach out to mc2-dev@googlegroups.com.
