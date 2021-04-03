@@ -32,6 +32,9 @@ num_rounds = 10
 for i in range(num_rounds):
     bst.update(dtrain, i, None)
 
+# Save model
+bst.save_model("/root/results/xgb.model")
+
 # Get fscores of model
 feature_map = bst.get_fscore()
 

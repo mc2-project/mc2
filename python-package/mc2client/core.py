@@ -729,7 +729,7 @@ def download_file(input_path, output_path):
     cloud_config = yaml.safe_load(open(_CONF["general_config"]).read())["cloud"]
     remote_username = cloud_config.get("remote_username")
 
-    head_ip = cloud_config.get("orchestrator")
+    head_ip = cloud_config.get("nodes")[0]
 
     if not head_ip:
         raise MC2ClientConfigError(

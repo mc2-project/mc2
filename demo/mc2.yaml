@@ -32,7 +32,11 @@ cloud:
     # Directory to save encrypted results to
     # This directory will be fetched from when retrieving results
     results: 
-      - /root/results/
+      # Secure XGBoost results
+      - /root/results/xgb.model
+
+      # Opaque SQL results
+      #
 
 # Configuration for local data
 local:

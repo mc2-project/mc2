@@ -103,7 +103,7 @@ if __name__ == "__main__":
             pathlib.Path(local_results_dir).mkdir(parents=True, exist_ok=True)
 
         for remote_result in remote_results:
-            filename = os.path.basename(results)
+            filename = os.path.basename(remote_result)
             local_result = os.path.join(local_results_dir, filename)
 
             # Fetch file
