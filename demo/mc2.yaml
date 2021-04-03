@@ -6,13 +6,13 @@ user:
     # Path to your symmetric key - will be used for encryption/decryption
     # If you don't have a symmetric key, specify a path here and the MC2 Client
     # will generate a key and output it to this path
-    symmetric_key: keys/user1_sym.key
+    symmetric_key: /root/mc2/demo/keys/user1_sym.key
 
     # Path to your private key and certificate
     # If you don't have a private key / certificate, specify paths here
     # and the MC2 client will generate them to these paths
-    private_key: keys/user1.pem
-    certificate: keys/user1.crt
+    private_key: /root/mc2/demo/keys/user1.pem
+    certificate: /root/mc2/demo/keys/user1.crt
 
 # Configuration for cloud resource management and connection
 cloud:
@@ -27,20 +27,24 @@ cloud:
       - 127.0.0.1 
 
     # Directory to upload encrypted data to
-    data_dir: /home/mc2/data
+    data_dir: /root/data
 
     # Directory to save encrypted results to
     # This directory will be fetched from when retrieving results
     results: 
-      - /home/mc2/results/
+      # Secure XGBoost results
+      - /root/results/xgb.model
+
+      # Opaque SQL results
+      #
 
 # Configuration for local data
 local:
     # If you want to run Secure XGBoost
     # Your data to compute on
     data:
-        - data/opaquexgb.csv.train
-        - data/opaquexgb.csv.test
+        - /root/mc2/demo/data/opaquexgb.csv.train
+        - /root/mc2/demo/data/opaquexgb.csv.test
 
     # Opaque XGBoost script to run
     script: opaque_xgboost_demo.py
@@ -50,10 +54,10 @@ local:
     # # If you want to run Opaque SQL
     # Your data to compute on
     # data:
-    #     - data/opaquesql.csv
+    #     - /root/mc2/data/opaquesql.csv
     # 
     # schemas:
-    #     - data/opaquesql.csv.schema
+    #     - /root/mc2/data/opaquesql.csv.schema
     # 
     # # Opaque SQL script to run
     # script: opaque_sql_demo.scala
