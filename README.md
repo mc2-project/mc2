@@ -24,14 +24,14 @@ The Opaque SQL and Secure XGBoost compute services require a client to run an en
 ## Quickstart
 To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that comes with pre-built versions of MC<sup>2</sup> Client, Opaque SQL, and Secure XGBoost, and all dependencies. This quickstart is completely self-contained within a container.
 
-1. You must have [Docker](https://docs.docker.com/get-docker/) installed. We recommend giving Docker at least 2 CPUs, 6 GB of memory, and 2 GB of swap space ([Mac](https://docs.docker.com/docker-for-mac/#resources), [Windows](https://docs.docker.com/docker-for-windows/#resources)). Without sufficient memory, the quickstart may not work.
+1. You must have [Docker](https://docs.docker.com/get-docker/) installed. We recommend giving Docker at least 2 CPUs, 6 GB of memory, and 2 GB of swap space (instructions for [Mac](https://docs.docker.com/docker-for-mac/#resources), [Windows](https://docs.docker.com/docker-for-windows/#resources)). Without sufficient resources, the quickstart may not work.
 
     Once that is done, pull the Docker image, launch a container, and start an SSH server inside the container.
 
     ```sh
     docker pull mc2project/mc2
-    docker run -it -p 22:22 -p 50051-50055:50051-50055 -w /root mc2project/mc2
 
+    docker run -it -p 22:22 -p 50051-50055:50051-50055 -w /root mc2project/mc2
     root@4e358edcbbfa:~ $ service ssh start
      * Starting OpenBSD Secure Shell server sshd
     ```
@@ -122,15 +122,15 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
 
 1. Once computation has finished, download results. The source and destination of downloaded results can be specified in the configuration YAML under `cloud/results` and `local/results`, respectively. To also decrypt results, specify either `--xgb` or `--sql` to decrypt results outputted by Secure XGBoost and Opaque SQL, respectively.
 
-For this quickstart, the predictions outputted by Secure XGBoost are sent over the network and automatically decrypted client-side instead of saved to a file, so you will not need to decrypt results if running Secure XGBoost.
+    For this quickstart, the predictions outputted by Secure XGBoost are sent over the network and automatically decrypted client-side instead of saved to a file, so you will not need to decrypt results if running Secure XGBoost.
 
-    ```sh
-    # Download results
-    mc2 download
+        ```sh
+        # Download results
+        mc2 download
 
-    # If running Opaque SQL, download results and decrypt them
-    # mc2 download --sql
-    ```
+        # If running Opaque SQL, download results and decrypt them
+        # mc2 download --sql
+        ```
 
 ## Documentation
 For more thorough documentation on installation and usage, please visit:
