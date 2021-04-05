@@ -57,7 +57,7 @@ jobs:
         run: |
           cd main
           pip install -r requirements.txt 
-          pip install numpydoc sphinx==3.0.3 sphinx-argparse sphinx-copybutton sphinxcontrib-spelling
+          pip install furo numpydoc sphinx==3.0.3 sphinx-argparse sphinx-copybutton sphinxcontrib-spelling
 
       - name: Install mc2client Python package
         run: |
