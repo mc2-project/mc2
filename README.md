@@ -1,10 +1,10 @@
 # MC<sup>2</sup>: A Platform for Secure Analytics and Machine Learning
-Born out of research in the [UC Berkeley RISE Lab](https://rise.cs.berkeley.edu/), MC<sup>2</sup> is a platform for running secure analytics and machine learning in an untrusted environment, like the cloud. MC<sup>2</sup> provides compute services that can be cryptographically trusted to correctly and securely perform computation even when the machines they run on have been compromised.
+Born out of research in the [UC Berkeley RISE Lab](https://rise.cs.berkeley.edu/), MC<sup>2</sup> is a platform for running secure analytics and machine learning on confidential data in an untrusted environment, like the cloud. MC<sup>2</sup> provides compute services that can be cryptographically trusted to correctly and securely perform computation on the data, without compromising data confidentiality.
 
 This repo contains the source code for the MC<sup>2</sup> client, which enables a user to interface with MC<sup>2</sup>'s cloud compute services. Actively maintained compute services include:
 
 * [Federated XGBoost](https://github.com/mc2-project/federated-xgboost): Collaborative XGBoost in the federated setting.
-* [Opaque SQL](https://github.com/mc2-project/opaque): Encrypted data analytics on Spark SQL with hardware enclaves.
+* [Opaque SQL](https://github.com/mc2-project/opaque): Encrypted data analytics on Spark SQL using hardware enclaves.
 * [Secure XGBoost](https://github.com/mc2-project/secure-xgboost): Collaborative XGBoost training and inference on encrypted data using hardware enclaves.
 
 MC<sup>2</sup> also contains some research prototypes:
@@ -19,12 +19,12 @@ MC<sup>2</sup> also contains some research prototypes:
 * [Contact](#contact)
 
 ## MC<sup>2</sup> Client
-The Opaque SQL and Secure XGBoost compute services require a client to run an end-to-end workflow. In particular, once a user has launched VM's running Opaque SQL or Secure XGBoost (instructions to do so can be found in each repository), the user can encrypt their data and transfer it to such VMs, submit queries to specify the exact computation they want to run, and retrieve and view encrypted results.
+The Opaque SQL and Secure XGBoost compute services require a client to run an end-to-end workflow. In particular, once a user has launched VMs running Opaque SQL or Secure XGBoost (instructions to do so can be found in each repository), the user can encrypt their data and transfer it to such VMs, submit queries to specify the exact computation they want to run, and retrieve and view encrypted results.
 
 ## Quickstart
 To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that comes with pre-built versions of MC<sup>2</sup> Client, Opaque SQL, and Secure XGBoost, and all dependencies. This quickstart is completely self-contained within a container.
 
-1. Pull the Docker image and launch a container.
+1. You must have [Docker](https://docs.docker.com/get-docker/) installed. Once that is done, pull the Docker image and launch a container.
 
     ```sh
     docker pull mc2project/mc2
