@@ -24,15 +24,10 @@ The Opaque SQL and Secure XGBoost compute services require a client to run an en
 ## Quickstart
 To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that comes with pre-built versions of MC<sup>2</sup> Client, Opaque SQL, and Secure XGBoost, and all dependencies. This quickstart is completely self-contained within a container.
 
-1. Pull the Docker image.
+1. Pull the Docker image and launch a container.
 
     ```sh
     docker pull mc2project/mc2
-    ```
-
-1. Launch a container from the image, binding necessary ports from your host to the container.
-
-    ```sh
     docker run -it -p 22:22 -p 50051-50055:50051-50055 -w /root mc2project/mc2
     ```
 
@@ -44,11 +39,11 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
         # If you want to run Secure XGBoost
         # Your data to compute on
         data:
-            - data/opaquexgb.csv.train
-            - data/opaquexgb.csv.test
+            - data/securexgb_train.csv
+            - data/securexgb_test.csv
 
         # Opaque XGBoost script to run
-        script: opaque_xgboost_demo.py
+        script: secure_xgboost_demo.py
         # ----------------------------------
 
 
@@ -58,7 +53,7 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
         #     - data/opaquesql.csv
         # 
         # schemas:
-        #     - data/opaquesql.csv.schema
+        #     - data/opaquesql_schema.json
         # 
         # # Opaque SQL script to run
         # script: opaque_sql_demo.scala
@@ -87,19 +82,22 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
 1. Once you've started the compute service, encrypt and transfer the encrypted data. Data to be encrypted/transferred is in `mc2.yaml` (this is pre-populated with the sample data). In this quickstart, the "transfer" is just a `scp` to another directory in the same container. In practice, the transfer is an upload to a remote machine in the cloud. The destination path for the data can also be specified in the configuration YAML under `cloud/data_dir`. In the `demo` directory, run the following command depending on which compute service you've started.
 
     ```sh
-    mc2 upload --xgb/--sql
+    mc2 upload --xgb
+    # mc2 upload --sql
     ```
 
 1. Now, you're ready to run computation. Start computation through MC<sup>2</sup> according to the compute service.
 
     ```sh
-    mc2 run --xgb/--sql
+    mc2 run --xgb
+    # mc2 run --sql
     ```
 
 1. Once computation has finished, download and decrypt results. The source and destination of downloaded results can be specified in the configuration YAML under `cloud/results` and `local/results`, respectively.
 
     ```sh
-    mc2 download --xgb/--sql
+    mc2 download --xgb
+    # mc2 download --sql
     ```
 
 ## Documentation
