@@ -1,5 +1,5 @@
 setuptools
-cryptography==3.3.1
+cryptography==3.3.2
 furo
 grpcio
 grpcio-tools
