@@ -4,6 +4,9 @@ on:
   push:
     branches:    
       - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
@@ -12,7 +15,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.CI_BOT_PAT }}
           submodules: true
           path: main
 
@@ -60,7 +62,7 @@ jobs:
           pip install -r requirements.txt 
           pip install numpydoc sphinx==3.0.3 sphinx-argparse sphinx-copybutton sphinxcontrib-spelling
 
-      - name: Install opaqueclient Python package
+      - name: Install mc2client Python package
         run: |
           # Install the Python package
           cd main/python-package
@@ -71,7 +73,6 @@ jobs:
         with:
             path: sequencefile
             repository: opaque-systems/sequencefile
-            token: ${{ secrets.CI_BOT_PAT }}
 
       - name: Install sequencefile Python package
         run: cd sequencefile; python setup.py install
@@ -85,18 +86,17 @@ jobs:
       - name: Clone gh-pages branch
         uses: actions/checkout@v2
         with: 
-          repository: opaque-systems/opaque-client
+          repository: mc2-project/mc2
           ref: gh-pages
           path: main/gh-pages
-          token: ${{ secrets.CI_BOT_PAT }}
 
       - name: Commit documentation changes
         run: |
           cp -r main/docs/_build/html/* main/gh-pages/
           cd main/gh-pages
           touch .nojekyll
-          git config --local user.email "ci-bot@opaquesys.io"
-          git config --local user.name "Opaque CI Bot"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git add .
           git commit -m "${GITHUB_ACTOR}'s changes in ${GITHUB_SHA} triggered this build" -a || true
 
@@ -105,4 +105,3 @@ jobs:
         with:
           branch: gh-pages
           directory: main/gh-pages
-          github_token: ${{ secrets.CI_BOT_PAT }}
