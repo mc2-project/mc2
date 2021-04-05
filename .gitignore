@@ -19,3 +19,6 @@ docs/_build/
 
 # Any sample encrypted files
 *.enc
+
+# Results in demo
+demo/results/

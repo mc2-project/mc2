@@ -15,19 +15,19 @@ parser_upload = subparsers.add_parser(
     "upload", help="Encrypt and upload data."
 )
 parser_upload.add_argument("--sql", help="Encrypt data in Opaque SQL format", action="store_true")
-parser_upload.add_argument("--xgb", help="Encrypt data in Opaque XGBoost format", action="store_true")
+parser_upload.add_argument("--xgb", help="Encrypt data in Secure XGBoost format", action="store_true")
 
 parser_run = subparsers.add_parser(
     "run", help="Attest the MC\ :sup:`2` deployment and run your script."
 )
 parser_run.add_argument("--sql", help="Run the Opaque SQL code specified in the config", action="store_true")
-parser_run.add_argument("--xgb", help="Run the Opaque XGBoost code specified in the config", action="store_true")
+parser_run.add_argument("--xgb", help="Run the Secure XGBoost code specified in the config", action="store_true")
 
 parser_download = subparsers.add_parser(
     "download", help="Download and decrypt results from your computation."
 )
 parser_download.add_argument("--sql", help="Decrypt data in Opaque SQL format", action="store_true")
-parser_download.add_argument("--xgb", help="Decrypt data in Opaque XGBoost format", action="store_true")
+parser_download.add_argument("--xgb", help="Decrypt data in Secure XGBoost format", action="store_true")
 
 if __name__ == "__main__":
     mc2_config = os.environ.get("MC2_CONFIG")
@@ -72,6 +72,8 @@ if __name__ == "__main__":
             if args.xgb:
                 mc2.encrypt_data(data[i], encrypted_data[i], None, "securexgboost")
             elif args.sql:
+                if schemas is None:
+                    raise Exception("Please specify a schema when uploading data for Opaque SQL")
                 mc2.encrypt_data(data[i], encrypted_data[i], schemas[i], "opaque")
             else:
                 raise Exception("Specified format not supported")
@@ -86,7 +88,6 @@ if __name__ == "__main__":
             # TODO: comment in rabit functionality if you want to run in distributed manner
             # mc2.xgb.rabit.init()
             mc2.attest()
-            print("Remote attestation succeeded")
             print("Running script...")
             exec(open(script).read())
             # mc2.xgb.rabit.finalize()

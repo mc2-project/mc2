@@ -22,11 +22,11 @@ sys.path.insert(0, curr_path)
 # -- Project information -----------------------------------------------------
 
 project = "MC<sup>2</sup> Client"
-copyright = "2021, MC<sup>2</sup> Contributors"
-author = "MC<sup>2</sup> Contributors"
+copyright = "2021, MC2 Contributors"
+author = "MC2 Contributors"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.1"
+#  release = "0.0.1"
 
 
 # -- General configuration ---------------------------------------------------
@@ -57,7 +57,19 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "alabaster"
+html_theme = "furo"
+
+# Theme options are theme-specific and customize the look and feel of a theme
+# further.  For a list of options available for each theme, see the
+# documentation.
+#
+html_theme_options = {
+    "light_css_variables": {
+        "color-brand-primary": "#00B0FF",
+        "color-brand-content": "#00B0FF",
+        "color-admonition-background": "orange",
+    },
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

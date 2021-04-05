@@ -43,11 +43,11 @@ local:
     # If you want to run Secure XGBoost
     # Your data to compute on
     data:
-      - /root/mc2/demo/data/opaquexgb.csv.train
-      - /root/mc2/demo/data/opaquexgb.csv.test
+      - /root/mc2/demo/data/securexgb_train.csv
+      - /root/mc2/demo/data/securexgb_test.csv
 
-    # Opaque XGBoost script to run
-    script: opaque_xgboost_demo.py
+    # Secure XGBoost script to run
+    script: /root/mc2/demo/secure_xgboost_demo.py
     # ----------------------------------
 
     # # If you want to run Opaque SQL
@@ -56,14 +56,14 @@ local:
     #   - /root/mc2/demo/data/opaquesql.csv
     # 
     # schemas:
-    #   - /root/mc2/demo/data/opaquesql.csv.schema
+    #   - /root/mc2/demo/data/opaquesql_schema.json
     # 
     # # Opaque SQL script to run
-    # script: opaque_sql_demo.scala
+    # script: /root/mc2/demo/opaque_sql_demo.scala
     # # ------------------------------
 
     # Directory to download results
-    results: results
+    results: /root/mc2/demo/results
 
 # Configuration for remote attestation of enclaves
 attestation:
