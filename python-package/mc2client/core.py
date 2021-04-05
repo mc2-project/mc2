@@ -739,7 +739,7 @@ def download_file(input_path, output_path):
 
     ssh = _createSSHClient(head_ip, 22, remote_username)
     scp = SCPClient(ssh.get_transport())
-    scp.get(input_path, output_path)
+    scp.get(input_path, output_path, recursive=True)
 
 
 def attest():
