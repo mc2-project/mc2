@@ -24,7 +24,7 @@ Cloud
 You'll need to configure some parameters for the cloud.
 
 - ``remote_username`` : the username to be used when transferring data over ``scp``.
-- ``orchestrator`` : the IP address of the compute orchestrator. MC\ :sup:`2` Client will send attestation requests to this IP address. Leave blank for ``mc2.create_cluster()`` to configure automatically.
+- ``orchestrator`` : the IP address of the compute orchestrator. MC\ :sup:`2` Client will send attestation requests to this IP address.
 - ``nodes`` : the IP addresses of the cluster workers.
 - ``data_dir`` : the directory to transfer data to.
 - ``results`` : a list of paths, each of which is a result outputted during computation.
