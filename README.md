@@ -124,13 +124,13 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
 
     For this quickstart, the predictions outputted by Secure XGBoost are sent over the network and automatically decrypted client-side instead of saved to a file, so you will not need to decrypt results if running Secure XGBoost.
 
-        ```sh
-        # Download results
-        mc2 download
+    ```sh
+    # Download results
+    mc2 download
 
-        # If running Opaque SQL, download results and decrypt them
-        # mc2 download --sql
-        ```
+    # If running Opaque SQL, download results and decrypt them
+    # mc2 download --sql
+    ```
 
 ## Documentation
 For more thorough documentation on installation and usage, please visit:
