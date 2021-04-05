@@ -43,4 +43,8 @@ sorted_features = {feature: importance for feature, importance in sorted(feature
 
 # Get encrypted predictions
 predictions = bst.predict(dtest)
-print(predictions)
+
+# Print first 10 predictions
+print("First 10 predictions: ---------")
+for i in range(10):
+    print(predictions[i])

@@ -25,4 +25,6 @@ def run(script):
         response = _check_remote_call(
             stub.ReceiveQuery(opaquesql_pb2.QueryRequest(request=code))
         )
-        return response.result
+        # response.result is an unparsed string containing
+        # the return of the script as well as stdout.
+        print(response.result)

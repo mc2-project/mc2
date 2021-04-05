@@ -429,14 +429,17 @@ def convert_from_sequencefiles(encrypted_data):
 
         # FIXME: Unclear if we need the below line
         #  position = sequence_file_reader.getPosition()
-        with open(output_partition_file, "wb") as partition:
-            while sequence_file_reader.next(key, value):
-                partition.write(value.toBytes())
-                #  position = sequence_file_reader.getPosition()
+        has_next = sequence_file_reader.next(key, value)
+        if has_next:
+            with open(output_partition_file, "wb") as partition:
+                while has_next:
+                    partition.write(value.toBytes())
+                    has_next = sequence_file_reader.next(key, value)
+                    #  position = sequence_file_reader.getPosition()
+
+            output_partition_files.append(output_partition_file)
 
         sequence_file_reader.close()
-
-        output_partition_files.append(output_partition_file)
 
     return output_partition_files
 
@@ -741,7 +744,7 @@ def download_file(input_path, output_path):
 
     ssh = _createSSHClient(head_ip, 22, remote_username)
     scp = SCPClient(ssh.get_transport())
-    scp.get(input_path, output_path)
+    scp.get(input_path, output_path, recursive=True)
 
 
 def attest():
