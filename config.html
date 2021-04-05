@@ -3,7 +3,8 @@
 
 <html>
   <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
     <title>Global Configuration &#8212; MC&lt;sup&gt;2&lt;/sup&gt; Client 0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -35,10 +36,10 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="global-configuration">
+  <section id="global-configuration">
 <h1>Global Configuration<a class="headerlink" href="#global-configuration" title="Permalink to this headline">¶</a></h1>
 <p>Before using MC<sup>2</sup> Client, you’ll need to perform some configuration by specifying parameters in a YAML file. An example YAML file can be found at <code class="docutils literal notranslate"><span class="pre">demo/mc2.yaml</span></code>. We describe the various parameters below.</p>
-<div class="section" id="user-configuration">
+<section id="user-configuration">
 <h2>User Configuration<a class="headerlink" href="#user-configuration" title="Permalink to this headline">¶</a></h2>
 <p>We’ll need to perform some configuration for the user in the <code class="docutils literal notranslate"><span class="pre">user</span></code> section of the YAML file. Parameters are:</p>
 <ul class="simple">
@@ -49,8 +50,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">root_private_key</span></code> : path to the Certificate Authority’s private key. MC<sup>2</sup> Client uses the CA’s private key to generate a certificate for you. The MC<sup>2</sup> compute service should also be aware of the CA private key.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">root_certificate</span></code> : path to the Certificate Authority’s certificate. MC<sup>2</sup> Client uses the CA’s certificate to generate a certificate for you. The MC<sup>2</sup> compute service should also be aware of the CA certificate.</p></li>
 </ul>
-</div>
-<div class="section" id="cloud">
+</section>
+<section id="cloud">
 <h2>Cloud<a class="headerlink" href="#cloud" title="Permalink to this headline">¶</a></h2>
 <p>You’ll need to configure some parameters for the cloud.</p>
 <ul class="simple">
@@ -60,8 +61,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">data_dir</span></code> : the directory to transfer data to.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">results</span></code> : a list of paths, each of which is a result outputted during computation.</p></li>
 </ul>
-</div>
-<div class="section" id="local">
+</section>
+<section id="local">
 <h2>Local<a class="headerlink" href="#local" title="Permalink to this headline">¶</a></h2>
 <p>You’ll also need to configure some parameters to tell MC<sup>2</sup> Client about what to run.</p>
 <ul class="simple">
@@ -70,8 +71,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">script</span></code> : a Python (if running Secure XGBoost) or Scala (if running Opaque SQL) script detailing your computation. MC<sup>2</sup> Client will run this code.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">results</span></code> : a directory to download results. Once computation has finished, MC<sup>2</sup> Client will retrieve the results specified in <code class="docutils literal notranslate"><span class="pre">cloud</span> <span class="pre">--&gt;</span> <span class="pre">results</span></code> in the <a class="reference internal" href="#cloud"><span class="std std-ref">Cloud</span></a> section above and download them to this directory.</p></li>
 </ul>
-</div>
-<div class="section" id="attestation">
+</section>
+<section id="attestation">
 <h2>Attestation<a class="headerlink" href="#attestation" title="Permalink to this headline">¶</a></h2>
 <p>Likewise, we’ll need to perform some configuration for the <code class="docutils literal notranslate"><span class="pre">attestation</span></code> section of the YAML file. In particular, we’ll need to specify what we want to check during attestation, and which clients should be allowed to use the same MC<sup>2</sup> compute service cluster.</p>
 <ul>
@@ -91,8 +92,8 @@
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">client_list</span></code> : a list of client usernames with whom you’ve agreed to collaborate.</p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -111,7 +112,7 @@
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Global Configuration</a><ul>

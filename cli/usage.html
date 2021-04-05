@@ -3,7 +3,8 @@
 
 <html>
   <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
     <title>CLI Usage &#8212; MC&lt;sup&gt;2&lt;/sup&gt; Client 0.0.1 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -35,26 +36,26 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="cli-usage">
+  <section id="cli-usage">
 <h1>CLI Usage<a class="headerlink" href="#cli-usage" title="Permalink to this headline">¶</a></h1>
 <p>Below, you’ll find guides on how to use the MC<sup>2</sup> Client command line interface. The CLI is dependent on the <code class="docutils literal notranslate"><span class="pre">mc2client</span></code> Python package, so ensure that you’ve first installed the Python package by trying to import <code class="docutils literal notranslate"><span class="pre">mc2client</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mc2client</span> <span class="k">as</span> <span class="nn">oc</span>
 </pre></div>
 </div>
-<div class="section" id="configuring-mc2-client">
+<section id="configuring-mc2-client">
 <h2>Configuring MC<sup>2</sup> Client<a class="headerlink" href="#configuring-mc2-client" title="Permalink to this headline">¶</a></h2>
 <p>Before running anything, you’ll need to create a YAML file specifying certain parameters, e.g. the paths to your keys, what to check during remote attestation, and the path to your Azure configuration. Exact instructions on configuration are <a class="reference internal" href="../config.html"><span class="doc">here</span></a>.</p>
 <p>Once you’ve populated a YAML file with your desired parameters, set the <code class="docutils literal notranslate"><span class="pre">MC2_CONFIG</span></code> environment variable to the path to your configuration file.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">MC2_CONFIG</span><span class="o">=</span>/path/to/config/yaml
 </pre></div>
 </div>
-</div>
-<div class="section" id="encrypting-and-uploading-data">
+</section>
+<section id="encrypting-and-uploading-data">
 <h2>Encrypting and Uploading Data<a class="headerlink" href="#encrypting-and-uploading-data" title="Permalink to this headline">¶</a></h2>
 <p>MC<sup>2</sup> Client will use the symmetric key you specified during configuration to encrypt your sensitive data and decrypt sensitive results outputted by the MC<sup>2</sup> compute services. If you don’t yet have a symmetric key, see the above section on <a class="reference internal" href="../python/usage.html#generating-keys"><span class="std std-ref">Generating Keys</span></a>.</p>
 <p>MC<sup>2</sup> Client encrypts your data into two different formats, depending on which compute service you plan to use: <code class="docutils literal notranslate"><span class="pre">opaque</span></code> or <code class="docutils literal notranslate"><span class="pre">securexgboost</span></code>. <code class="docutils literal notranslate"><span class="pre">opaque</span></code> format is for the Opaque SQL compute service, while <code class="docutils literal notranslate"><span class="pre">securexgboost</span></code> is for Secure XGBoost. You should specify the data you will use during computation (and hence should encrypt and upload) and the nodes you’re using for computation, i.e., where you want to upload your data during the <a class="reference internal" href="../config.html"><span class="doc">configuration step</span></a>.</p>
 <p>MC<sup>2</sup> Client will encrypt and upload your data in one step through the command line.</p>
-<div class="section" id="secure-xgboost-format">
+<section id="secure-xgboost-format">
 <h3>Secure XGBoost Format<a class="headerlink" href="#secure-xgboost-format" title="Permalink to this headline">¶</a></h3>
 <p>If you plan on using the Secure XGBoost compute service, you’ll want to encrypt your data in <code class="docutils literal notranslate"><span class="pre">securexgboost</span></code> format. To do so, specify the <code class="docutils literal notranslate"><span class="pre">--xgb</span></code> option.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Encrypt data in `securexgboost` format and upload it</span>
@@ -62,8 +63,8 @@
 mc2 upload --xgb
 </pre></div>
 </div>
-</div>
-<div class="section" id="opaque-sql-format">
+</section>
+<section id="opaque-sql-format">
 <h3>Opaque SQL Format<a class="headerlink" href="#opaque-sql-format" title="Permalink to this headline">¶</a></h3>
 <p>If you plan on using the Opaque SQL compute service, you’ll want to encrypt your data in <code class="docutils literal notranslate"><span class="pre">opaque</span></code> format – specify the <code class="docutils literal notranslate"><span class="pre">--sql</span></code> option. For this format, you’ll first need to create a file specifying the schema of the data.</p>
 <p>The schema must be written in the following format:</p>
@@ -88,9 +89,9 @@ mc2 upload --xgb
 mc2 upload --sql
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="running-computation">
+</section>
+</section>
+<section id="running-computation">
 <h2>Running Computation<a class="headerlink" href="#running-computation" title="Permalink to this headline">¶</a></h2>
 <p>To perform computation, first write a script that contains the Python (in the case of Secure XGBoost) or the Scala (in the case of Opaque SQL) code that you want to run. Example scripts can be found in <code class="docutils literal notranslate"><span class="pre">demo/</span></code>. Specify this script in the <a class="reference internal" href="../config.html"><span class="doc">configuration YAML</span></a>. You can then remotely run this script using MC<sup>2</sup> Client.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run your Secure XGBoost or Opaque SQL computation</span>
@@ -98,8 +99,8 @@ mc2 run --xgb/--sql
 </pre></div>
 </div>
 <p>As part of this step, MC<sup>2</sup> Client will perform remote attestation to authenticate all enclaves and ensure that the expected code has been properly loaded into each enclave. Attestation parameters, e.g. what values to check, are also specified during <a class="reference internal" href="../config.html"><span class="doc">configuration</span></a>. MC<sup>2</sup> Client will retrieve these parameters under the hood and attest accordingly.</p>
-</div>
-<div class="section" id="decrypting-and-downloading-results">
+</section>
+<section id="decrypting-and-downloading-results">
 <h2>Decrypting and Downloading Results<a class="headerlink" href="#decrypting-and-downloading-results" title="Permalink to this headline">¶</a></h2>
 <p>Once your computation has finished, you can download and, optionally, decrypt the results. All compute services included with MC<sup>2</sup> will only save encrypted results to disk, i.e. it will not expose any results in plaintext. You should specify the source of the transfer, i.e. the paths of the results on the cloud, and the destination of the transfer, i.e. the local directory to which you want to save results, during <a class="reference internal" href="../config.html"><span class="doc">configuration</span></a>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Retrieve results from the first worker node,</span>
@@ -117,8 +118,8 @@ mc2 download --xgb
 mc2 download --sql
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -137,7 +138,7 @@ mc2 download --sql
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../config.html">Global Configuration</a></li>
