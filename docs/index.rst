@@ -3,9 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Opaque Client's documentation!
+Welcome to MC\ :sup:`2` Client's documentation!
 =========================================
-Opaque Client enables users of Opaque's secure cloud compute services to set up cloud resources, prepare their data, and submit queries for execution. It provides two interfaces, a Python interface and a command line interface, for this functionality.
+MC\ :sup:`2` Client enables users of MC\ :sup:`2`'s secure cloud compute services to set up cloud resources, prepare their data, and submit queries for execution. It provides two interfaces, a Python interface and a command line interface, for this functionality.
 
 .. toctree::
     :maxdepth: 2

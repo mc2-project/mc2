@@ -693,7 +693,8 @@ def decrypt_data(encrypted_file, plaintext_file, enc_format):
 
 def upload_file(input_path, output_path):
     """
-    Upload file to Azure storage
+    Upload file to the worker nodes specified
+    during configuration.
 
     Parameters
     ----------
@@ -717,7 +718,8 @@ def upload_file(input_path, output_path):
 
 def download_file(input_path, output_path):
     """
-    Download file from Azure storage
+    Download file from the first worker node
+    specified during configuration.
 
     Parameters
     ----------

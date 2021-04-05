@@ -21,9 +21,9 @@ sys.path.insert(0, curr_path)
 
 # -- Project information -----------------------------------------------------
 
-project = "Opaque Client"
-copyright = "2021, Opaque Systems Team"
-author = "Opaque Systems Team"
+project = "MC<sup>2</sup> Client"
+copyright = "2021, MC<sup>2</sup> Contributors"
+author = "MC<sup>2</sup> Contributors"
 
 # The full version, including alpha/beta/rc tags
 release = "0.0.1"

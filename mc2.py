@@ -18,7 +18,7 @@ parser_upload.add_argument("--sql", help="Encrypt data in Opaque SQL format", ac
 parser_upload.add_argument("--xgb", help="Encrypt data in Opaque XGBoost format", action="store_true")
 
 parser_run = subparsers.add_parser(
-    "run", help="Attest the MC2 deployment and run your script."
+    "run", help="Attest the MC\ :sup:`2` deployment and run your script."
 )
 parser_run.add_argument("--sql", help="Run the Opaque SQL code specified in the config", action="store_true")
 parser_run.add_argument("--xgb", help="Run the Opaque XGBoost code specified in the config", action="store_true")
