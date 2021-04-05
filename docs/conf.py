@@ -22,11 +22,11 @@ sys.path.insert(0, curr_path)
 # -- Project information -----------------------------------------------------
 
 project = "MC<sup>2</sup> Client"
-copyright = "2021, MC<sup>2</sup> Contributors"
-author = "MC<sup>2</sup> Contributors"
+copyright = "2021, MC2 Contributors"
+author = "MC2 Contributors"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.1"
+#  release = "0.0.1"
 
 
 # -- General configuration ---------------------------------------------------
