@@ -42,7 +42,7 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
             - data/securexgb_train.csv
             - data/securexgb_test.csv
 
-        # Opaque XGBoost script to run
+        # Secure XGBoost script to run
         script: secure_xgboost_demo.py
         # ----------------------------------
 
@@ -59,6 +59,7 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
         # script: opaque_sql_demo.scala
         # # ------------------------------
     ```
+Included in the repo are a [sample Secure XGBoost script](demo/secure_xgboost_demo.py) and a [sample Opaque SQL script](demo/opaque_sql_demo.scala).
 
 1. Start the desired compute service within the container (Secure XGBoost or Opaque SQL). In a production environment, these compute services would be started in the cloud. Starting a compute service will start a listener that listens on port 50052.
 
@@ -82,28 +83,39 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
 1. Once you've started the compute service, encrypt and transfer the encrypted data. Data to be encrypted/transferred is in `mc2.yaml` (this is pre-populated with the sample data). In this quickstart, the "transfer" is just a `scp` to another directory in the same container. In practice, the transfer is an upload to a remote machine in the cloud. The destination path for the data can also be specified in the configuration YAML under `cloud/data_dir`. In the `demo` directory, run the following command depending on which compute service you've started.
 
     ```sh
+    # Specify the --xgb flag if running Secure XGBoost
     mc2 upload --xgb
+
+    # Specify the --sql flag if running Opaque SQL
     # mc2 upload --sql
     ```
 
 1. Now, you're ready to run computation. Start computation through MC<sup>2</sup> according to the compute service.
 
     ```sh
+    # Specify the --xgb flag if running Secure XGBoost
     mc2 run --xgb
+
+    # Specify the --sql flag if running Opaque SQL
     # mc2 run --sql
     ```
 
-1. Once computation has finished, download and decrypt results. The source and destination of downloaded results can be specified in the configuration YAML under `cloud/results` and `local/results`, respectively.
+1. Once computation has finished, download results. The source and destination of downloaded results can be specified in the configuration YAML under `cloud/results` and `local/results`, respectively. To also decrypt results, specify either `--xgb` or `--sql` to decrypt results outputted by Secure XGBoost and Opaque SQL, respectively.
+
+For this quickstart, the predictions outputted by Secure XGBoost are sent over the network and automatically decrypted client-side instead of saved to a file, so you will not need to decrypt results if running Secure XGBoost.
 
     ```sh
-    mc2 download --xgb
+    # Download results
+    mc2 download
+
+    # If running Opaque SQL, download results and decrypt them
     # mc2 download --sql
     ```
 
 ## Documentation
 For more thorough documentation on installation and usage, please visit:
 
-* [MC<sup>2</sup> Client]()
+* [MC<sup>2</sup> Client](https://mc2-project.github.io/mc2/)
 * [Opaque SQL](https://mc2-project.github.io/opaque/)
 * [Secure XGBoost](https://secure-xgboost.readthedocs.io/en/latest/)
 
