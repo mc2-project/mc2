@@ -108,12 +108,16 @@ if __name__ == "__main__":
 
             # Fetch file
             mc2.download_file(remote_result, local_result)
+            print("Downloaded result to ", local_result)
 
             # Decrypt data
             if args.xgb:
-                mc2.decrypt_data(local_result, os.path.join(local_result, ".dec"), "securexgboost")
+                mc2.decrypt_data(local_result, local_result + ".dec", "securexgboost")
+                print("Decrypted result saved to ", local_result + ".dec")
             elif args.sql:
-                mc2.decrypt_data(local_result, os.path.join(local_result, ".dec"), "opaque")
+                mc2.decrypt_data(local_result, local_result + ".dec", "opaque")
+                print("Decrypted result saved to ", local_result + ".dec")
             else:
                 raise Exception("Specified format not supported")
+
 
