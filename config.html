@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Global Configuration &#8212; MC&lt;sup&gt;2&lt;/sup&gt; Client 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Python Interface" href="python/index.html" />
+    <link rel="prev" title="Installation" href="install.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="global-configuration">
+<h1>Global Configuration<a class="headerlink" href="#global-configuration" title="Permalink to this headline">¶</a></h1>
+<p>Before using MC<sup>2</sup> Client, you’ll need to perform some configuration by specifying parameters in a YAML file. An example YAML file can be found at <code class="docutils literal notranslate"><span class="pre">demo/mc2.yaml</span></code>. We describe the various parameters below.</p>
+<div class="section" id="user-configuration">
+<h2>User Configuration<a class="headerlink" href="#user-configuration" title="Permalink to this headline">¶</a></h2>
+<p>We’ll need to perform some configuration for the user in the <code class="docutils literal notranslate"><span class="pre">user</span></code> section of the YAML file. Parameters are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">username</span></code> : your username. This username will be used for certificate generation and authentication purposes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">symmetric_key</span></code> : path to your symmetric key. If you don’t yet have a symmetric key, you can ask MC<sup>2</sup> Client to generate a key for you (see <a class="reference internal" href="python/usage.html#generating-keys"><span class="std std-ref">Generating Keys</span></a>). MC<sup>2</sup> Client will look to this path for your key when encrypting and decrypting your data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">private_key</span></code> : path to your private key. If you don’t yet have a private key, you can ask MC<sup>2</sup> Client to generate a private key/certificate for you (see <a class="reference internal" href="python/usage.html#generating-keys"><span class="std std-ref">Generating Keys</span></a>). MC<sup>2</sup> Client will use your private key to sign messages sent to the cloud.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">certificate</span></code> : path to your certificate. if you don’t yet have a certificate, you can ask MC<sup>2</sup> Client to generate a certificate/private key for you (see <a class="reference internal" href="python/usage.html#generating-keys"><span class="std std-ref">Generating Keys</span></a>). MC<sup>2</sup> Client will use your certificate to authenticate you to the cloud.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">root_private_key</span></code> : path to the Certificate Authority’s private key. MC<sup>2</sup> Client uses the CA’s private key to generate a certificate for you. The MC<sup>2</sup> compute service should also be aware of the CA private key.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">root_certificate</span></code> : path to the Certificate Authority’s certificate. MC<sup>2</sup> Client uses the CA’s certificate to generate a certificate for you. The MC<sup>2</sup> compute service should also be aware of the CA certificate.</p></li>
+</ul>
+</div>
+<div class="section" id="cloud">
+<h2>Cloud<a class="headerlink" href="#cloud" title="Permalink to this headline">¶</a></h2>
+<p>You’ll need to configure some parameters for the cloud.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">remote_username</span></code> : the username to be used when transferring data over <code class="docutils literal notranslate"><span class="pre">scp</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">orchestrator</span></code> : the IP address of the compute orchestrator. MC<sup>2</sup> Client will send attestation requests to this IP address. Leave blank for <code class="docutils literal notranslate"><span class="pre">mc2.create_cluster()</span></code> to configure automatically.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nodes</span></code> : the IP addresses of the cluster workers.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data_dir</span></code> : the directory to transfer data to.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">results</span></code> : a list of paths, each of which is a result outputted during computation.</p></li>
+</ul>
+</div>
+<div class="section" id="local">
+<h2>Local<a class="headerlink" href="#local" title="Permalink to this headline">¶</a></h2>
+<p>You’ll also need to configure some parameters to tell MC<sup>2</sup> Client about what to run.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code> : a list of data files that will be used during computation. MC<sup>2</sup> Client will encrypt and upload this data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">schemas</span></code> : a list of files, each detailing the schema of the respective data file listed in <code class="docutils literal notranslate"><span class="pre">data</span></code>. Note that schema <code class="docutils literal notranslate"><span class="pre">i</span></code> should reflect the schema of data file <code class="docutils literal notranslate"><span class="pre">i</span></code> above. The schemas are only needed if you’re running Opaque SQL.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">script</span></code> : a Python (if running Secure XGBoost) or Scala (if running Opaque SQL) script detailing your computation. MC<sup>2</sup> Client will run this code.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">results</span></code> : a directory to download results. Once computation has finished, MC<sup>2</sup> Client will retrieve the results specified in <code class="docutils literal notranslate"><span class="pre">cloud</span> <span class="pre">--&gt;</span> <span class="pre">results</span></code> in the <a class="reference internal" href="#cloud"><span class="std std-ref">Cloud</span></a> section above and download them to this directory.</p></li>
+</ul>
+</div>
+<div class="section" id="attestation">
+<h2>Attestation<a class="headerlink" href="#attestation" title="Permalink to this headline">¶</a></h2>
+<p>Likewise, we’ll need to perform some configuration for the <code class="docutils literal notranslate"><span class="pre">attestation</span></code> section of the YAML file. In particular, we’ll need to specify what we want to check during attestation, and which clients should be allowed to use the same MC<sup>2</sup> compute service cluster.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">simulation_mode</span></code> : this value should be either <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">0</span></code> means false, or that we’re not running in simulation mode, and that consequently we should verify the attestation report sent back to the client by the MC<sup>2</sup> compute service.</p>
+<p><code class="docutils literal notranslate"><span class="pre">1</span></code> means true, or that we’re running in simulation mode, and to not check the attestation report. This should only be done for development purposes, as not attesting makes the MC<sup>2</sup> compute services insecure.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mrenclave</span></code> : the <code class="docutils literal notranslate"><span class="pre">MRENCLAVE</span></code> value of the enclave, or the hash of the enclave log logging every step of the enclave build and initialization process. Setting this to <code class="docutils literal notranslate"><span class="pre">NULL</span></code> will result in MC<sup>2</sup> Client not checking this value. However, doing this is insecure and should not be done in production environments. You can retrieve the <code class="docutils literal notranslate"><span class="pre">MRENCLAVE</span></code> value from MC<sup>2</sup> Systems for each compute service.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mrsigner</span></code> : the <code class="docutils literal notranslate"><span class="pre">MRSIGNER</span></code> value of the enclave, or the key of the authority that signed the enclaves’ certificates. Setting this to <code class="docutils literal notranslate"><span class="pre">NULL</span></code> will result in MC<sup>2</sup> Client not checking this value. However, this is insecure and should not be done in production environments.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">check_client_list</span></code> : this value should be either <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+<blockquote>
+<div><p>If <code class="docutils literal notranslate"><span class="pre">1</span></code>, MC<sup>2</sup> Client checks that a list of clients sent back to it during attestation by the MC<sup>2</sup> compute service is the correct list, i.e. the expected list of clients. This is particularly relevant in a collaboration, when multiple parties may be using the same compute cluster. You can list out the expected list of clients in the parameter <code class="docutils literal notranslate"><span class="pre">client_list</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">0</span></code>, MC<sup>2</sup> Client will not check that the clients sent back to it during attestation by the MC<sup>2</sup> compute services are the expected clients.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">client_list</span></code> : a list of client usernames with whom you’ve agreed to collaborate.</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">MC<sup>2</sup> Client</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Global Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#user-configuration">User Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cloud">Cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#local">Local</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attestation">Attestation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python/index.html">Python Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/index.html">CLI Interface</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="install.html" title="previous chapter">Installation</a></li>
+      <li>Next: <a href="python/index.html" title="next chapter">Python Interface</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, MC<sup>2</sup> Contributors.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/config.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

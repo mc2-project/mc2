@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Installation &#8212; MC&lt;sup&gt;2&lt;/sup&gt; Client 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Global Configuration" href="config.html" />
+    <link rel="prev" title="Welcome to MC2 Client’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>MC<sup>2</sup> Client is written in both C++ and Python. As a result, we’ll have to first build the C++ source, and then build and install the Python package.</p>
+<ol class="arabic simple">
+<li><p>Install dependencies.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># CMake</span>
+wget https://github.com/Kitware/CMake/releases/download/v3.15.6/cmake-3.15.6-Linux-x86_64.sh
+sudo bash cmake-3.15.6-Linux-x86_64.sh --skip-license --prefix<span class="o">=</span>/usr/local
+
+<span class="c1"># Mbed TLS and Pip</span>
+sudo apt-get install -y libmbedtls-dev python3-pip
+
+<span class="c1"># MC2 Client Python package dependencies</span>
+git clone --recursive https://github.com/mc2-project/mc2.git
+<span class="nb">cd</span> mc2
+pip3 install -r requirements.txt
+<span class="nb">cd</span> ..
+
+<span class="c1"># `sequencefile` Python package</span>
+git clone https://github.com/opaque-systems/sequencefile.git
+<span class="nb">cd</span> sequencefile
+sudo python3 setup.py install
+<span class="nb">cd</span> ..
+</pre></div>
+</div>
+<p>Additionally, install Open Enclave by following these <a class="reference external" href="https://github.com/openenclave/openenclave/blob/master/docs/GettingStartedDocs/install_oe_sdk-Ubuntu_18.04.md">instructions</a>. Be sure to install Open Enclave 0.12.0 in Step 3 by specifying <code class="docutils literal notranslate"><span class="pre">open-enclave=0.12.0</span></code>.</p>
+<ol class="arabic simple" start="2">
+<li><p>Build the C++ source.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> mc2/src
+mkdir build
+<span class="nb">cd</span> build
+cmake ..
+make -j4
+<span class="nb">cd</span> ../..
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Once you’ve built the binary, install the Python package.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> python-package
+sudo python3 setup.py install
+</pre></div>
+</div>
+<p>You’re done! Try importing the <code class="docutils literal notranslate"><span class="pre">mc2client</span></code> Python package to check that your installation was successful.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3
+Python 3.8.7 (default, Dec 30 2020, 10:13:08)
+[Clang 12.0.0 (clang-1200.0.32.28)] on darwin
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+
+&gt;&gt;&gt; import mc2client as oc
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">MC<sup>2</sup> Client</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Global Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python/index.html">Python Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/index.html">CLI Interface</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to MC<sup>2</sup> Client’s documentation!</a></li>
+      <li>Next: <a href="config.html" title="next chapter">Global Configuration</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, MC<sup>2</sup> Contributors.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/install.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

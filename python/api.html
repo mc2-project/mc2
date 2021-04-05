@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>API Reference &#8212; MC&lt;sup&gt;2&lt;/sup&gt; Client 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CLI Interface" href="../cli/index.html" />
+    <link rel="prev" title="Python Package Usage" href="usage.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<p>MC<sup>2</sup> Client provides a Python interface through the Python package, <code class="docutils literal notranslate"><span class="pre">mc2client</span></code>. See the Installation section for installation instructions. To use the Python package, we’ll need to import it.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mc2client</span> <span class="k">as</span> <span class="nn">mc2</span>
+</pre></div>
+</div>
+<div class="section" id="global-configuration">
+<h2>Global Configuration<a class="headerlink" href="#global-configuration" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="mc2client.set_config">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">set_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">general_config</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.set_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the path to the config file. This function must be run before running anything else.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>path</strong><span class="classifier">str</span></dt><dd><p>Path to config file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="cryptographic-utilities">
+<h2>Cryptographic Utilities<a class="headerlink" href="#cryptographic-utilities" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="mc2client.attest">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">attest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.attest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify remote attestation report of enclave and extract its public key.
+The report and public key are saved as instance attributes.
+Parameters for attestation, e.g. whether to verify report,
+whether to check client list, whether to check MRSIGNER/MRENCLAVE, can be specified in config YAML.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mc2client.decrypt_data">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">decrypt_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">encrypted_file</span></em>, <em class="sig-param"><span class="n">plaintext_file</span></em>, <em class="sig-param"><span class="n">enc_format</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.decrypt_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encrypt a file in a certain format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>encrypted_file</strong><span class="classifier">str</span></dt><dd><p>Path to encrypted data to decrypt</p>
+</dd>
+<dt><strong>plaintext_file</strong><span class="classifier">str</span></dt><dd><p>Path to decrypted data</p>
+</dd>
+<dt><strong>enc_format</strong><span class="classifier">str</span></dt><dd><p>The encryption format (i.e. Opaque or Secure XGBoost)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mc2client.encrypt_data">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">encrypt_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plaintext_file</span></em>, <em class="sig-param"><span class="n">encrypted_file</span></em>, <em class="sig-param"><span class="n">schema_file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">enc_format</span><span class="o">=</span><span class="default_value">'securexgboost'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.encrypt_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encrypt a file in a certain format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>plaintext_file</strong><span class="classifier">str</span></dt><dd><p>Path to data to be encrypted</p>
+</dd>
+<dt><strong>encrypted_file</strong><span class="classifier">str</span></dt><dd><p>Destination path of encrypted data</p>
+</dd>
+<dt><strong>schema_file</strong><span class="classifier">str</span></dt><dd><p>Path to schema of data. Represented as comma separated column types.
+Necessary for Opaque encryption format.</p>
+</dd>
+<dt><strong>enc_format</strong><span class="classifier">str</span></dt><dd><p>The format (i.e. Opaque or Secure XGBoost) to use for encryption</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mc2client.generate_keypair">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">generate_keypair</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">expiration</span><span class="o">=</span><span class="default_value">315360000</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.generate_keypair" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a new private key and certificate and save it to path
+specified by user in config YAML passed to <cite>set_config()</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>expiration</strong><span class="classifier">int</span></dt><dd><p>Number of seconds from now after which the generated certificate should expire</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mc2client.generate_symmetric_key">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">generate_symmetric_key</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_bytes</span><span class="o">=</span><span class="default_value">32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.generate_symmetric_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a new symmetric key and save it path specified by user in config YAML passed to <cite>set_config()</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>num_bytes</strong><span class="classifier">int</span></dt><dd><p>Number of bytes for key</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="cloud-management">
+<h2>Cloud Management<a class="headerlink" href="#cloud-management" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="mc2client.download_file">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">download_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_path</span></em>, <em class="sig-param"><span class="n">output_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.download_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download file from the first worker node
+specified during configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>input_path</strong><span class="classifier">str</span></dt><dd><p>Path to input file</p>
+</dd>
+<dt><strong>output_path</strong><span class="classifier">str</span></dt><dd><p>Path to output file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mc2client.upload_file">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">upload_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_path</span></em>, <em class="sig-param"><span class="n">output_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.upload_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload file to the worker nodes specified
+during configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>input_path</strong><span class="classifier">str</span></dt><dd><p>Path to input file</p>
+</dd>
+<dt><strong>output_path</strong><span class="classifier">str</span></dt><dd><p>Path to output file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">MC<sup>2</sup> Client</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config.html">Global Configuration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python Interface</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="usage.html">Python Package Usage</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/index.html">CLI Interface</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Python Interface</a><ul>
+      <li>Previous: <a href="usage.html" title="previous chapter">Python Package Usage</a></li>
+      <li>Next: <a href="../cli/index.html" title="next chapter">CLI Interface</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, MC<sup>2</sup> Contributors.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/python/api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
