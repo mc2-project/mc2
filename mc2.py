@@ -118,7 +118,3 @@ if __name__ == "__main__":
             elif args.sql:
                 mc2.decrypt_data(local_result, local_result + ".dec", "opaque")
                 print("Decrypted result saved to ", local_result + ".dec")
-            else:
-                raise Exception("Specified format not supported")
-
-
