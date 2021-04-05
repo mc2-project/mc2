@@ -11,9 +11,6 @@ MC\ :sup:`2` Client is written in both C++ and Python. As a result, we'll have t
     wget https://github.com/Kitware/CMake/releases/download/v3.15.6/cmake-3.15.6-Linux-x86_64.sh
     sudo bash cmake-3.15.6-Linux-x86_64.sh --skip-license --prefix=/usr/local
 
-    # Azure CLI
-    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-
     # Mbed TLS and Pip
     sudo apt-get install -y libmbedtls-dev python3-pip
 
@@ -31,7 +28,7 @@ MC\ :sup:`2` Client is written in both C++ and Python. As a result, we'll have t
 
 Additionally, install Open Enclave by following these `instructions <https://github.com/openenclave/openenclave/blob/master/docs/GettingStartedDocs/install_oe_sdk-Ubuntu_18.04.md>`_. Be sure to install Open Enclave 0.12.0 in Step 3 by specifying ``open-enclave=0.12.0``.
 
-2. Clone the MC\ :sup:`2` GitHub repo and build the C++ source.
+2. Build the C++ source.
 
 .. code-block:: bash
 

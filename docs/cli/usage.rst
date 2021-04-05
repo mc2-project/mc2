@@ -17,20 +17,6 @@ Once you've populated a YAML file with your desired parameters, set the ``MC2_CO
 
     export MC2_CONFIG=/path/to/config/yaml
 
-Generating Keys
----------------
-If you don't already have a keypair and/or a symmetric key, you'll want to generate them so that you can interact with MC\ :sup:`2` cloud compute services in a cryptographically secure manner. MC\ :sup:`2` uses your certificate and private key to authenticate you to MC\ :sup:`2` compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn't see it in plaintext..
-
-You can generate a certificate and corresponding private key, and a symmetric key, through the CLI. You should have specified paths for your certificate, private key, and symmetric key during configuration. These functions will output the certificate, private key, and symmetric key to these paths.
-
-.. code-block:: bash
-
-    # Generate a certificate and corresponding private key
-    python3 cli.py crypto --gen-keypair
-
-    # Generate a symmetric key
-    python3 cli.py crypto --gen-symm-key
-
 
 Encrypting and Uploading Data
 -----------------------------
