@@ -31,7 +31,7 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
     docker run -it -p 22:22 -p 50051-50055:50051-50055 -w /root mc2project/mc2
     ```
 
-1. Navigate to the `mc2-client/demo` directory. The configuration for this quickstart has been pre-populated in `demo/mc2.yaml`. More on the configuration can be found [here](). By default, the configuration has been set assuming you want to run Secure XGBoost. If you want to run Opaque SQL instead, comment out the Secure XGBoost section in the `local` part of the YAML configuration and comment in the Opaque SQL section.
+1. Navigate to the `mc2-client/demo` directory. The configuration for this quickstart has been pre-populated in `demo/mc2.yaml`. More on the configuration can be found [here](https://mc2-project.github.io/mc2/config.html). By default, the configuration has been set assuming you want to run Secure XGBoost. If you want to run Opaque SQL instead, comment out the Secure XGBoost section in the `local` part of the YAML configuration and comment in the Opaque SQL section.
 
     ```yaml
     # Configuration for local data
