@@ -105,3 +105,4 @@ jobs:
         with:
           branch: gh-pages
           directory: main/gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
