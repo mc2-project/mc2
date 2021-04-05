@@ -59,7 +59,7 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
         # script: opaque_sql_demo.scala
         # # ------------------------------
     ```
-Included in the repo are a [sample Secure XGBoost script](demo/secure_xgboost_demo.py) and a [sample Opaque SQL script](demo/opaque_sql_demo.scala).
+    Included in the repo are a [sample Secure XGBoost script](demo/secure_xgboost_demo.py) and a [sample Opaque SQL script](demo/opaque_sql_demo.scala).
 
 1. Start the desired compute service within the container (Secure XGBoost or Opaque SQL). In a production environment, these compute services would be started in the cloud. Starting a compute service will start a listener that listens on port 50052.
 
