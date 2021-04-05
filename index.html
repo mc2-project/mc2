@@ -37,7 +37,9 @@
             
   <section id="welcome-to-mc2-client-s-documentation">
 <h1>Welcome to MC<sup>2</sup> Client’s documentation!<a class="headerlink" href="#welcome-to-mc2-client-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>MC<sup>2</sup> Client enables users of MC<sup>2</sup>’s secure cloud compute services to set up cloud resources, prepare their data, and submit queries for execution. It provides two interfaces, a Python interface and a command line interface, for this functionality.</p>
+<p>Born out of research from the <a class="reference external" href="https://rise.cs.berkeley.edu/">UC Berkeley RISE Lab</a>, MC<sup>2</sup> is a platform for running secure analytics and machine learning in an untrusted environment, like the cloud. MC<sup>2</sup> provides compute services that can be cryptographically trusted to correctly and securely perform computation even when the machines they run on have been compromised. MC<sup>2</sup> is open-source and is freely available on <a class="reference external" href="https://github.com/mc2-project/mc2">GitHub</a>.</p>
+<p>MC<sup>2</sup> Client enables users of MC<sup>2</sup>’s secure cloud compute services to remotely interface with MC<sup>2</sup>’s cloud services from their local machine. Currently, MC<sup>2</sup> supports <a class="reference external" href="https://mc2-project.github.io/opaque/">Opaque SQL</a>, a secure framework for SQL analytics built on top of Apache Spark, and <a class="reference external" href="https://secure-xgboost.readthedocs.io/en/latest/">Secure XGBoost</a>, a secure library for training (and learning from) gradient boosted decision tree models. Users will first need to start a compute service in the cloud, and then run MC<sup>2</sup> Client locally.</p>
+<p>MC<sup>2</sup> Client provides two interfaces, a Python interface and a command line interface, to enable a user to encrypt and upload their data, write and remotely run code, and retrieve results.</p>
 <div class="toctree-wrapper compound">
 <p><span class="caption-text">Contents:</span></p>
 <ul>
