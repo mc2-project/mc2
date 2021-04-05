@@ -24,11 +24,16 @@ The Opaque SQL and Secure XGBoost compute services require a client to run an en
 ## Quickstart
 To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that comes with pre-built versions of MC<sup>2</sup> Client, Opaque SQL, and Secure XGBoost, and all dependencies. This quickstart is completely self-contained within a container.
 
-1. You must have [Docker](https://docs.docker.com/get-docker/) installed. Once that is done, pull the Docker image and launch a container.
+1. You must have [Docker](https://docs.docker.com/get-docker/) installed. We recommend giving Docker at least 2 CPUs, 6 GB of memory, and 2 GB of swap space ([Mac](https://docs.docker.com/docker-for-mac/#resources), [Windows](https://docs.docker.com/docker-for-windows/#resources)). Without sufficient memory, the quickstart may not work.
+
+    Once that is done, pull the Docker image, launch a container, and start an SSH server inside the container.
 
     ```sh
     docker pull mc2project/mc2
     docker run -it -p 22:22 -p 50051-50055:50051-50055 -w /root mc2project/mc2
+
+    root@4e358edcbbfa:~ $ service ssh start
+     * Starting OpenBSD Secure Shell server sshd
     ```
 
 1. Navigate to the `mc2-client/demo` directory. The configuration for this quickstart has been pre-populated in `demo/mc2.yaml`. More on the configuration can be found [here](https://mc2-project.github.io/mc2/config.html). By default, the configuration has been set assuming you want to run Secure XGBoost. If you want to run Opaque SQL instead, comment out the Secure XGBoost section in the `local` part of the YAML configuration and comment in the Opaque SQL section.
@@ -80,9 +85,24 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
     build/sbt run
     ```
 
-1. Once you've started the compute service, encrypt and transfer the encrypted data. Data to be encrypted/transferred is in `mc2.yaml` (this is pre-populated with the sample data). In this quickstart, the "transfer" is just a `scp` to another directory in the same container. In practice, the transfer is an upload to a remote machine in the cloud. The destination path for the data can also be specified in the configuration YAML under `cloud/data_dir`. In the `demo` directory, run the following command depending on which compute service you've started.
+1. Once you've started the compute service, open another pane with a shell into the container.
 
     ```sh
+    # From your local host (outside the container), find the container ID for your running container.
+    $ docker ps
+    CONTAINER ID   IMAGE                              COMMAND       CREATED              STATUS              PORTS                                                      NAMES
+    f5849fa6842f   mc2project/mc2:latest              "/bin/bash"   About a minute ago   Up About a minute   0.0.0.0:22->22/tcp, 0.0.0.0:50051-50055->50051-50055/tcp   optimistic_pasteur
+
+    # Start a shell into the container.
+    $ docker exec -it f5849fa6842f /bin/bash
+    root@f5849fa6842f:~ $
+    ```
+
+    Next, navigate once again to the `mc2/demo` directory, and encrypt and transfer the encrypted data. Data to be encrypted/transferred is in `mc2.yaml` (this is pre-populated with the sample data). In this quickstart, the "transfer" is just a `scp` to another directory in the same container. In practice, the transfer is an upload to a remote machine in the cloud. The destination path for the data can also be specified in the configuration YAML under `cloud/data_dir`. In the `demo` directory, run the following command depending on which compute service you've started.
+
+    ```sh
+    cd mc2/demo
+
     # Specify the --xgb flag if running Secure XGBoost
     mc2 upload --xgb
 
