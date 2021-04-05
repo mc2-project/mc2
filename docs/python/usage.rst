@@ -1,7 +1,7 @@
 Python Package Usage
 ====================
 
-Below, you'll find guides on how to use the MC:sup:`2` Client Python package. Ensure that you've first installed the Python package by trying to import ``mc2client``.
+Below, you'll find guides on how to use the MC\ :sup:`2` Client Python package. Ensure that you've first installed the Python package by trying to import ``mc2client``.
 
 .. code-block:: bash
 
@@ -13,7 +13,7 @@ Below, you'll find guides on how to use the MC:sup:`2` Client Python package. En
     >>> import mc2client as mc2
 
 
-Configuring MC:sup:`2` Client
+Configuring MC\ :sup:`2` Client
 -----------------------------
 Before running anything, you'll need to create a YAML file specifying certain parameters, e.g. the paths to your keys, what to check during remote attestation, and the path to your Azure configuration. Exact instructions on configuration are :doc:`here <../config>`.
 
@@ -26,9 +26,9 @@ Once you've populated a YAML file with your desired parameters, set the path to 
 
 Generating Keys
 ---------------
-If you don't already have a keypair and/or a symmetric key, you'll want to generate them so that you can interact with MC:sup:`2` cloud compute services in a cryptographically secure manner. MC:sup:`2` uses your certificate and private key to authenticate you to MC:sup:`2` compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn't see it in plaintext..
+If you don't already have a keypair and/or a symmetric key, you'll want to generate them so that you can interact with MC\ :sup:`2` cloud compute services in a cryptographically secure manner. MC\ :sup:`2` uses your certificate and private key to authenticate you to MC\ :sup:`2` compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn't see it in plaintext..
 
-MC:sup:`2` Client provides a function to generate a certificate and corresponding private key, and a function to generate a symmetric key. You should have specified paths for your certificate, private key, and symmetric key during configuration. These functions will output the certificate, private key, and symmetric key to these paths.
+MC\ :sup:`2` Client provides a function to generate a certificate and corresponding private key, and a function to generate a symmetric key. You should have specified paths for your certificate, private key, and symmetric key during configuration. These functions will output the certificate, private key, and symmetric key to these paths.
 
 .. code-block:: python
 
@@ -40,13 +40,13 @@ MC:sup:`2` Client provides a function to generate a certificate and correspondin
 
 Encrypting and Decrypting Files
 -------------------------------
-MC:sup:`2` Client will use the symmetric key you specified during configuration to encrypt your sensitive data and decrypt sensitive results outputted by the MC:sup:`2` compute services. If you don't yet have a symmetric key, see the above section on :ref:`Generating Keys`.
+MC\ :sup:`2` Client will use the symmetric key you specified during configuration to encrypt your sensitive data and decrypt sensitive results outputted by the MC\ :sup:`2` compute services. If you don't yet have a symmetric key, see the above section on :ref:`Generating Keys`.
 
-MC:sup:`2` Client encrypts your data into two different formats, depending on which compute service you plan to use: ``opaque`` or ``securexgboost``. ``opaque`` format is for the Opaque SQL compute service, while ``securexgboost`` is for Secure XGBoost.
+MC\ :sup:`2` Client encrypts your data into two different formats, depending on which compute service you plan to use: ``opaque`` or ``securexgboost``. ``opaque`` format is for the Opaque SQL compute service, while ``securexgboost`` is for Secure XGBoost.
 
 ``securexgboost`` Format
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-If you plan on using the Secure XGBoost compute service, you'll want to encrypt your data in ``securexgboost`` format. For this format, you'll need to specify the path to the plaintext data and a path for MC:sup:`2` Client to output the encrypted data, as well as the encryption format.
+If you plan on using the Secure XGBoost compute service, you'll want to encrypt your data in ``securexgboost`` format. For this format, you'll need to specify the path to the plaintext data and a path for MC\ :sup:`2` Client to output the encrypted data, as well as the encryption format.
 
 .. code-block:: python
 
@@ -57,7 +57,7 @@ If you plan on using the Secure XGBoost compute service, you'll want to encrypt 
         enc_format="securexgboost",
     )
 
-To decrypt data encrypted in ``securexgboost`` format, you'll need to specify the path to the encrypted data, a path for MC:sup:`2` Client to output the decrypted data, and the encryption format.
+To decrypt data encrypted in ``securexgboost`` format, you'll need to specify the path to the encrypted data, a path for MC\ :sup:`2` Client to output the decrypted data, and the encryption format.
 
 .. code-block:: python
    
@@ -93,9 +93,9 @@ Currently, Opaque SQL supports the following types:
 - ``double``
 - ``string``
 
-If the data in your column is not of any of these types, MC:sup:`2` Client will by default encrypt it as a string type. 
+If the data in your column is not of any of these types, MC\ :sup:`2` Client will by default encrypt it as a string type. 
 
-To encrypt the data, you'll need to specify the path to the plaintext data, a path for MC:sup:`2` Client to output the encrypted data, the path to the schema of the data, and the encryption format.
+To encrypt the data, you'll need to specify the path to the plaintext data, a path for MC\ :sup:`2` Client to output the encrypted data, the path to the schema of the data, and the encryption format.
 
 .. code-block:: python
 
@@ -107,7 +107,7 @@ To encrypt the data, you'll need to specify the path to the plaintext data, a pa
         enc_format="opaque",
     )
 
-To decrypt data encrypted in ``opaque`` format, you'll need to specify the path to the encrypted data, a path for MC:sup:`2` Client to output the decrypted data, and the encryption format.
+To decrypt data encrypted in ``opaque`` format, you'll need to specify the path to the encrypted data, a path for MC\ :sup:`2` Client to output the decrypted data, and the encryption format.
 
 .. code-block:: python
    
@@ -121,7 +121,7 @@ To decrypt data encrypted in ``opaque`` format, you'll need to specify the path 
 
 Remote Attestation
 ------------------
-Before using MC:sup:`2` compute services, you'll want to attest the MC:sup:`2` cluster in the cloud to authenticate all the enclaves and to ensure that the expected code has been properly loaded into each enclave. Attestation parameters, e.g. what values to check, are specified during :doc:`configuration <../config>`. MC:sup:`2` Client will retrieve these parameters under the hood and attest accordingly.
+Before using MC\ :sup:`2` compute services, you'll want to attest the MC\ :sup:`2` cluster in the cloud to authenticate all the enclaves and to ensure that the expected code has been properly loaded into each enclave. Attestation parameters, e.g. what values to check, are specified during :doc:`configuration <../config>`. MC\ :sup:`2` Client will retrieve these parameters under the hood and attest accordingly.
 
 
 .. code-block:: python
@@ -143,12 +143,12 @@ Once you've encrypted your data, you can upload your encrypted data to the worke
         "/name/of/file/on/server"
     )
 
-Similarly, you can download any data outputted by MC:sup:`2` compute services to your Azure containers. MC:sup:`2` compute services will, before outputting data, encrypt the data with your symmetric key (as specified during configuration), so any data outputted to the Azure containers will be encrypted.
+Similarly, you can download any data outputted by MC\ :sup:`2` compute services to your Azure containers. MC\ :sup:`2` compute services will, before outputting data, encrypt the data with your symmetric key (as specified during configuration), so any data outputted to the Azure containers will be encrypted.
 
 .. code-block:: python
     
-    # Download encrypted data from Azure
-    # MC:sup:`2` Client will look for the data
+    # Download encrypted data
+    # MC2 Client will look for the data
     # specified in the `cloud` --> `results`
     # section in the config YAML
     mc2.download_file(
