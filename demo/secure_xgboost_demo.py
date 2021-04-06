@@ -45,12 +45,12 @@ sorted_features = {feature: importance for feature, importance in sorted(feature
 predictions = bst.predict(dtest)[0]
 
 # Print first 10 predictions
-print("First 10 predictions: ---------")
+print("Probability of breast cancer of first 10 patients:")
 for i in range(10):
     print(predictions[i], end=" ")
 print("\n\n")
 
-print("Last 10 predictions: ----------")
+print("Probability of breast cancer of last 10 patients:")
 for i in range(10):
     print(predictions[-i], end=" ")
 print("")

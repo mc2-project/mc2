@@ -26,6 +26,17 @@ cloud:
     nodes:
       - 127.0.0.1 
 
+    # List of commands to launch desired compute service
+    launch:
+      # Launch commands for Secure XGBoost service
+      secure_xgboost:
+        - python3 /root/secure-xgboost/demo/python/remote-control/server/enclave_serve.py
+        - python3 /root/secure-xgboost/demo/python/remote-control/orchestrator/start_orchestrator.py
+
+      # Launch command for Opaque SQL service
+      opaque_sql:
+        - build/sbt run
+
     # Directory to upload encrypted data to
     data_dir: /root/data
 
@@ -33,34 +44,34 @@ cloud:
     # This directory will be fetched from when retrieving results
     results: 
       # Secure XGBoost results
-      - /root/results/xgb.model
+      # - /root/results/xgb.model
 
-      # Opaque SQL results
-      # - /root/results/opaque_sql_result
+      # FIXME: Opaque SQL results
+      - /root/results/opaque_sql_result
 
 # Configuration for local data
 local:
     # If you want to run Secure XGBoost
     # Your data to compute on
-    data:
-      - /root/mc2/demo/data/securexgb_train.csv
-      - /root/mc2/demo/data/securexgb_test.csv
-
-    # Secure XGBoost script to run
-    script: /root/mc2/demo/secure_xgboost_demo.py
+    # data:
+    #   - /root/mc2/demo/data/securexgb_train.csv
+    #   - /root/mc2/demo/data/securexgb_test.csv
+    # 
+    # # Secure XGBoost script to run
+    # script: /root/mc2/demo/secure_xgboost_demo.py
     # ----------------------------------
 
-    # # If you want to run Opaque SQL
-    # # Your data to compute on
-    # data:
-    #   - /root/mc2/demo/data/opaquesql.csv
-    # 
-    # schemas:
-    #   - /root/mc2/demo/data/opaquesql_schema.json
-    # 
-    # # Opaque SQL script to run
-    # script: /root/mc2/demo/opaque_sql_demo.scala
-    # # ------------------------------
+    # FIXME: If you want to run Opaque SQL
+    # Your data to compute on
+    data:
+      - /root/mc2/demo/data/opaquesql.csv
+    
+    schemas:
+      - /root/mc2/demo/data/opaquesql_schema.json
+    
+    # Opaque SQL script to run
+    script: /root/mc2/demo/opaque_sql_demo.scala
+    # ------------------------------
 
     # Directory to download results
     results: /root/mc2/demo/results
