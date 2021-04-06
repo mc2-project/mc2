@@ -44,33 +44,33 @@ cloud:
     # This directory will be fetched from when retrieving results
     results: 
       # Secure XGBoost results
-      # - /root/results/xgb.model
+      - /root/results/xgb.model
 
       # FIXME: Opaque SQL results
-      - /root/results/opaque_sql_result
+      # - /root/results/opaque_sql_result
 
 # Configuration for local data
 local:
     # If you want to run Secure XGBoost
     # Your data to compute on
-    # data:
-    #   - /root/mc2/demo/data/securexgb_train.csv
-    #   - /root/mc2/demo/data/securexgb_test.csv
-    # 
-    # # Secure XGBoost script to run
-    # script: /root/mc2/demo/secure_xgboost_demo.py
+    data:
+      - /root/mc2/demo/data/securexgb_train.csv
+      - /root/mc2/demo/data/securexgb_test.csv
+    
+    # Secure XGBoost script to run
+    script: /root/mc2/demo/secure_xgboost_demo.py
     # ----------------------------------
 
-    # FIXME: If you want to run Opaque SQL
-    # Your data to compute on
-    data:
-      - /root/mc2/demo/data/opaquesql.csv
-    
-    schemas:
-      - /root/mc2/demo/data/opaquesql_schema.json
-    
-    # Opaque SQL script to run
-    script: /root/mc2/demo/opaque_sql_demo.scala
+    # # FIXME: If you want to run Opaque SQL
+    # # Your data to compute on
+    # data:
+    #   - /root/mc2/demo/data/opaquesql.csv
+    # 
+    # schemas:
+    #   - /root/mc2/demo/data/opaquesql_schema.json
+    # 
+    # # Opaque SQL script to run
+    # script: /root/mc2/demo/opaque_sql_demo.scala
     # ------------------------------
 
     # Directory to download results
