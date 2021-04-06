@@ -145,14 +145,14 @@
         </label>
         <section id="cli-reference">
 <h1>CLI Reference<a class="headerlink" href="#cli-reference" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">python3</span> <span class="n">mc2</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">{</span><span class="n">upload</span><span class="p">,</span><span class="n">run</span><span class="p">,</span><span class="n">download</span><span class="p">}</span> <span class="o">...</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">python3</span> <span class="n">mc2</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">{</span><span class="n">upload</span><span class="p">,</span><span class="n">run</span><span class="p">,</span><span class="n">download</span><span class="p">,</span><span class="n">launch</span><span class="p">,</span><span class="n">check</span><span class="p">}</span> <span class="o">...</span>
 </pre></div>
 </div>
 <section id="Positional Arguments">
 <h2>Positional Arguments<a class="headerlink" href="#Positional Arguments" title="Permalink to this headline">¶</a></h2>
 <dl class="option-list">
 <dt><kbd>command</kbd></dt>
-<dd><p>Possible choices: upload, run, download</p>
+<dd><p>Possible choices: upload, run, download, launch, check</p>
 <p>Command to run.</p>
 </dd>
 </dl>
@@ -219,6 +219,33 @@
 </dl>
 </section>
 </section>
+<section id="launch">
+<h3>launch<a class="headerlink" href="#launch" title="Permalink to this headline">¶</a></h3>
+<p>Launch compute service using commands specified in config</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">mc2</span><span class="o">.</span><span class="n">py</span> <span class="n">launch</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">sql</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">xgb</span><span class="p">]</span>
+</pre></div>
+</div>
+<section id="Named Arguments_repeat3">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat3" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--sql</kbd></dt>
+<dd><p>Launch Opaque SQL service</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--xgb</kbd></dt>
+<dd><p>Launch Secure XGBoost service</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="check">
+<h3>check<a class="headerlink" href="#check" title="Permalink to this headline">¶</a></h3>
+<p>Check status of compute service</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">mc2</span><span class="o">.</span><span class="n">py</span> <span class="n">check</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
 </section>
 </section>
 
@@ -283,6 +310,11 @@
 <li><a class="reference internal" href="#Named Arguments_repeat2">Named Arguments</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#launch">launch</a><ul>
+<li><a class="reference internal" href="#Named Arguments_repeat3">Named Arguments</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#check">check</a></li>
 </ul>
 </li>
 </ul>

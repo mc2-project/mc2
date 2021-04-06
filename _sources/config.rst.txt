@@ -28,6 +28,7 @@ You'll need to configure some parameters for the cloud.
 - ``nodes`` : the IP addresses of the cluster workers.
 - ``data_dir`` : the directory to transfer data to.
 - ``results`` : a list of paths, each of which is a result outputted during computation.
+- ``launch`` : a list of commands to launch each compute service. Commands can be specified for the ``secure_xgboost`` compute service and/or the ``opaque_sql`` compute service.
 
 
 Local
