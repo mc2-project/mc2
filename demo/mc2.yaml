@@ -56,7 +56,7 @@ local:
     data:
       - /root/mc2/demo/data/securexgb_train.csv
       - /root/mc2/demo/data/securexgb_test.csv
-    
+
     # Secure XGBoost script to run
     script: /root/mc2/demo/secure_xgboost_demo.py
     # ----------------------------------
