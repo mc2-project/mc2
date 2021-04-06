@@ -12,23 +12,27 @@ MC<sup>2</sup> also contains some research prototypes:
 * [Cerebro](https://github.com/mc2-project/cerebro): A general purpose Python DSL for learning with secure multiparty computation.
 * [Delphi](https://github.com/mc2-project/delphi): Secure inference for deep neural networks.
 
+The Opaque SQL and Secure XGBoost cloud compute services require a local client to run an end-to-end workflow. In particular, once a user has launched VMs running Opaque SQL or Secure XGBoost (instructions to do so can be found in each repository), the user can encrypt their data and transfer it to such VMs, submit queries to specify the exact computation they want to run, and retrieve and view encrypted results.
+
 ## Table of Contents
-* [MC<sup>2</sup> Client](#mc2-client)
 * [Quickstart](#quickstart)
 * [Documentation](#documentation)
 * [Contact](#contact)
 
-## MC<sup>2</sup> Client
-The Opaque SQL and Secure XGBoost compute services require a client to run an end-to-end workflow. In particular, once a user has launched VMs running Opaque SQL or Secure XGBoost (instructions to do so can be found in each repository), the user can encrypt their data and transfer it to such VMs, submit queries to specify the exact computation they want to run, and retrieve and view encrypted results.
-
 ## Quickstart
 To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that comes with pre-built versions of MC<sup>2</sup> Client, Opaque SQL, and Secure XGBoost, and all dependencies. This quickstart is completely self-contained within a container.
 
-1. You must have [Docker](https://docs.docker.com/get-docker/) installed. Once that is done, pull the Docker image and launch a container.
+1. You must have [Docker](https://docs.docker.com/get-docker/) installed. We recommend giving Docker at least 2 CPUs, 6 GB of memory, and 2 GB of swap space (instructions for [Mac](https://docs.docker.com/docker-for-mac/#resources), [Windows](https://docs.docker.com/docker-for-windows/#resources)). Without sufficient resources, the quickstart may not work.
+
+    Once that is done, pull the Docker image, launch a container, and start an SSH server inside the container. Note that you only need to start the SSH server if running in a Docker container -- most cloud VMs automatically start an SSH server on boot.
 
     ```sh
     docker pull mc2project/mc2
+
     docker run -it -p 22:22 -p 50051-50055:50051-50055 -w /root mc2project/mc2
+
+    root@4e358edcbbfa:~ $ service ssh start
+     * Starting OpenBSD Secure Shell server sshd
     ```
 
 1. Navigate to the `mc2-client/demo` directory. The configuration for this quickstart has been pre-populated in `demo/mc2.yaml`. More on the configuration can be found [here](https://mc2-project.github.io/mc2/config.html). By default, the configuration has been set assuming you want to run Secure XGBoost. If you want to run Opaque SQL instead, comment out the Secure XGBoost section in the `local` part of the YAML configuration and comment in the Opaque SQL section.
@@ -63,26 +67,25 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
 
 1. Start the desired compute service within the container (Secure XGBoost or Opaque SQL). In a production environment, these compute services would be started in the cloud. Starting a compute service will start a listener that listens on port 50052.
 
-    * To start Secure XGBoost, navigate to `/root/secure-xgboost/demo/python/remote-control/server` and start the (simulated) enclave, then navigate to `/root/secure-xgboost/demo/python/remote-control/orchestrator` and start the orchestrator.
-
     ```sh
-    cd /root/secure-xgboost/demo/python/remote-control/server/
-    python3 enclave_serve.py
+    # Start the Secure XGBoost service
+    mc2 launch --xgb
 
-    cd ../orchestrator
-    python3 start_orchestrator.py
+    # Start the Opaque SQL service
+    mc2 launch --sql
     ```
 
-    * To start Opaque SQL, navigate to `/root/opaque/` and start everything at once.
+    The Secure XGBoost service will take a few seconds to start, while the Opaque SQL service will take anywhere between 20-30 seconds to start. You can check whether the service is ready:
 
     ```sh
-    cd /root/opaque/
-    build/sbt run
+    mc2 check
     ```
 
-1. Once you've started the compute service, encrypt and transfer the encrypted data. Data to be encrypted/transferred is in `mc2.yaml` (this is pre-populated with the sample data). In this quickstart, the "transfer" is just a `scp` to another directory in the same container. In practice, the transfer is an upload to a remote machine in the cloud. The destination path for the data can also be specified in the configuration YAML under `cloud/data_dir`. In the `demo` directory, run the following command depending on which compute service you've started.
+1. Next, encrypt and transfer the encrypted data. Data to be encrypted/transferred is in `mc2.yaml` (this is pre-populated with the sample data). In this quickstart, the "transfer" is just a `scp` to another directory in the same container. In practice, the transfer is an upload to a remote machine in the cloud. The destination path for the data can also be specified in the configuration YAML under `cloud/data_dir`. In the `demo` directory, run the following command depending on which compute service you've started.
 
     ```sh
+    cd mc2/demo
+
     # Specify the --xgb flag if running Secure XGBoost
     mc2 upload --xgb
 
@@ -100,9 +103,9 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
     # mc2 run --sql
     ```
 
-1. Once computation has finished, download results. The source and destination of downloaded results can be specified in the configuration YAML under `cloud/results` and `local/results`, respectively. To also decrypt results, specify either `--xgb` or `--sql` to decrypt results outputted by Secure XGBoost and Opaque SQL, respectively.
+1. Once computation has finished, download results. The source and destination of downloaded results can be specified in the configuration YAML under `cloud/results` and `local/results`, respectively. To also decrypt results, specify either `--xgb` or `--sql` to decrypt results outputted by Secure XGBoost or Opaque SQL, respectively.
 
-For this quickstart, the predictions outputted by Secure XGBoost are sent over the network and automatically decrypted client-side instead of saved to a file, so you will not need to decrypt results if running Secure XGBoost.
+    For this quickstart, the predictions outputted by Secure XGBoost are sent over the network and automatically decrypted client-side instead of saved to a file, so you will not need to decrypt results if running Secure XGBoost.
 
     ```sh
     # Download results
