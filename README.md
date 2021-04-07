@@ -34,7 +34,7 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
     docker pull mc2project/mc2
     docker run -it -p 22:22 -p 50051-50055:50051-50055 -w /root mc2project/mc2
     ```
-    Start an SSH server inside the container. (Note that you only need to start the SSH server if running in a Docker container -- most cloud VMs automatically start an SSH server on boot.)
+    Start an SSH server inside the container. (Note that this step is Docker-specific, and you only need to start the SSH server if running in a Docker container -- most cloud VMs automatically start an SSH server on boot.)
 
     ```
     service ssh start
