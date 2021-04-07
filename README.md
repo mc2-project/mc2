@@ -1,18 +1,23 @@
 # MC<sup>2</sup>: A Platform for Secure Analytics and Machine Learning
-Born out of research in the [UC Berkeley RISE Lab](https://rise.cs.berkeley.edu/), MC<sup>2</sup> is a platform for running secure analytics and machine learning on confidential data in an untrusted environment, like the cloud. MC<sup>2</sup> provides compute services that can be cryptographically trusted to correctly and securely perform computation on the data, without compromising data confidentiality.
+Born out of research in the [UC Berkeley RISE Lab](https://rise.cs.berkeley.edu/), MC<sup>2</sup> is a platform for running secure analytics and machine learning on encrypted data.
+With MC<sup>2</sup>, users can outsource their confidential data workloads to the cloud, while ensuring that the data is never exposed unencrypted to the cloud provider. 
+MC<sup>2</sup> also enables secure collaboration, i.e., multiple data owners can use the platform to jointly analyze their collective data, without revealing their individual data to each other.
 
-This repo contains the source code for the MC<sup>2</sup> client, which enables a user to interface with MC<sup>2</sup>'s cloud compute services. Actively maintained compute services include:
+MC<sup>2</sup> provides the following (actively maintained) secure computation services:
+* [Opaque SQL](https://github.com/mc2-project/opaque): Encrypted data analytics on Spark SQL using hardware enclaves
+* [Secure XGBoost](https://github.com/mc2-project/secure-xgboost): Collaborative XGBoost training and inference on encrypted data using hardware enclaves
+* [Federated XGBoost](https://github.com/mc2-project/federated-xgboost): Collaborative XGBoost in the federated setting
 
-* [Federated XGBoost](https://github.com/mc2-project/federated-xgboost): Collaborative XGBoost in the federated setting.
-* [Opaque SQL](https://github.com/mc2-project/opaque): Encrypted data analytics on Spark SQL using hardware enclaves.
-* [Secure XGBoost](https://github.com/mc2-project/secure-xgboost): Collaborative XGBoost training and inference on encrypted data using hardware enclaves.
-
-MC<sup>2</sup> also contains some research prototypes:
-
+The MC<sup>2</sup> project also includes exploratory research prototypes that develop new cryptographic techniques for secure computation. Please visit the individual project pages for more information:
 * [Cerebro](https://github.com/mc2-project/cerebro): A general purpose Python DSL for learning with secure multiparty computation.
 * [Delphi](https://github.com/mc2-project/delphi): Secure inference for deep neural networks.
 
-The Opaque SQL and Secure XGBoost cloud compute services require a local client to run an end-to-end workflow. In particular, once a user has launched VMs running Opaque SQL or Secure XGBoost (instructions to do so can be found in each repository), the user can encrypt their data and transfer it to such VMs, submit queries to specify the exact computation they want to run, and retrieve and view encrypted results.
+This repository contains the source code for the **MC<sup>2</sup> client**, which enables users to easily interface with MC<sup>2</sup> services deployed remotely in the cloud. Currently, the client supports remote deployments of Secure XGBoost and Opaque SQL only. 
+To run an end-to-end MC<sup>2</sup> workflow:
+1. Launch Opaque SQL or Secure XGBoost in the cloud (instructions to do so can be found in the respective repositories) 
+2. Use the MC<sup>2</sup> client to encrypt data locally, transfer it to the cloud VMs, run scripts specifying the desired computation, and retrieve and view encrypted results.
+
+Alternatively, to use the individual services without the MC<sup>2</sup> client, please visit the respective project pages linked above.
 
 ## Table of Contents
 * [Quickstart](#quickstart)
@@ -24,15 +29,15 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
 
 1. You must have [Docker](https://docs.docker.com/get-docker/) installed. We recommend giving Docker at least 2 CPUs, 6 GB of memory, and 2 GB of swap space (instructions for [Mac](https://docs.docker.com/docker-for-mac/#resources), [Windows](https://docs.docker.com/docker-for-windows/#resources)). Without sufficient resources, the quickstart may not work.
 
-    Once that is done, pull the Docker image, launch a container, and start an SSH server inside the container. Note that you only need to start the SSH server if running in a Docker container -- most cloud VMs automatically start an SSH server on boot.
-
+    Once that is done, pull the Docker image and launch a container.
     ```sh
     docker pull mc2project/mc2
-
     docker run -it -p 22:22 -p 50051-50055:50051-50055 -w /root mc2project/mc2
+    ```
+    Start an SSH server inside the container. (Note that this step is Docker-specific, and you only need to start the SSH server if running in a Docker container -- most cloud VMs automatically start an SSH server on boot.)
 
-    root@4e358edcbbfa:~ $ service ssh start
-     * Starting OpenBSD Secure Shell server sshd
+    ```
+    service ssh start
     ```
 
 1. Navigate to the `mc2-client/demo` directory. The configuration for this quickstart has been pre-populated in `demo/mc2.yaml`. More on the configuration can be found [here](https://mc2-project.github.io/mc2/config.html). By default, the configuration has been set assuming you want to run Secure XGBoost. If you want to run Opaque SQL instead, comment out the Secure XGBoost section in the `local` part of the YAML configuration and comment in the Opaque SQL section.
@@ -68,11 +73,8 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
 1. Start the desired compute service within the container (Secure XGBoost or Opaque SQL). In a production environment, these compute services would be started in the cloud. Starting a compute service will start a listener that listens on port 50052.
 
     ```sh
-    # Start the Secure XGBoost service
+    # Start the Secure XGBoost service. Replace `--xgb` with `--sql` for Opaque SQL instead.
     mc2 launch --xgb
-
-    # Start the Opaque SQL service
-    mc2 launch --sql
     ```
 
     The Secure XGBoost service will take a few seconds to start, while the Opaque SQL service will take anywhere between 20-30 seconds to start. You can check whether the service is ready:
@@ -86,21 +88,15 @@ To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that c
     ```sh
     cd mc2/demo
 
-    # Specify the --xgb flag if running Secure XGBoost
+    # Specify the `--xgb` flag if running Secure XGBoost. Specify `--sql` for Opaque SQL instead.
     mc2 upload --xgb
-
-    # Specify the --sql flag if running Opaque SQL
-    # mc2 upload --sql
     ```
 
 1. Now, you're ready to run computation. Start computation through MC<sup>2</sup> according to the compute service.
 
     ```sh
-    # Specify the --xgb flag if running Secure XGBoost
+    # Specify the `--xgb` flag if running Secure XGBoost. Specify `--sql` for Opaque SQL instead.
     mc2 run --xgb
-
-    # Specify the --sql flag if running Opaque SQL
-    # mc2 run --sql
     ```
 
 1. Once computation has finished, download results. The source and destination of downloaded results can be specified in the configuration YAML under `cloud/results` and `local/results`, respectively. To also decrypt results, specify either `--xgb` or `--sql` to decrypt results outputted by Secure XGBoost or Opaque SQL, respectively.
