@@ -1,18 +1,22 @@
 # MC<sup>2</sup>: A Platform for Secure Analytics and Machine Learning
-Born out of research in the [UC Berkeley RISE Lab](https://rise.cs.berkeley.edu/), MC<sup>2</sup> is a platform for running secure analytics and machine learning on confidential data in an untrusted environment, like the cloud. MC<sup>2</sup> provides compute services that can be cryptographically trusted to correctly and securely perform computation on the data, without compromising data confidentiality.
+Born out of research in the [UC Berkeley RISE Lab](https://rise.cs.berkeley.edu/), MC<sup>2</sup> is a platform for running secure analytics and machine learning on encrypted data.
+With MC<sup>2</sup>, users can outsource their confidential data workloads to the cloud, while ensuring that the data is never exposed unencrypted to the cloud provider. 
+MC<sup>2</sup> also enables secure collaboration, i.e., multiple data owners can use the platform to jointly analyze their collective data, without revealing their individual data to each other.
 
-This repo contains the source code for the MC<sup>2</sup> client, which enables a user to interface with MC<sup>2</sup>'s cloud compute services. Actively maintained compute services include:
+MC<sup>2</sup> provides the following (actively maintained) secure computation services:
+* [Opaque SQL](https://github.com/mc2-project/opaque): Encrypted data analytics on Spark SQL using hardware enclaves
+* [Secure XGBoost](https://github.com/mc2-project/secure-xgboost): Collaborative XGBoost training and inference on encrypted data using hardware enclaves
+* [Federated XGBoost](https://github.com/mc2-project/federated-xgboost): Collaborative XGBoost in the federated setting
 
-* [Federated XGBoost](https://github.com/mc2-project/federated-xgboost): Collaborative XGBoost in the federated setting.
-* [Opaque SQL](https://github.com/mc2-project/opaque): Encrypted data analytics on Spark SQL using hardware enclaves.
-* [Secure XGBoost](https://github.com/mc2-project/secure-xgboost): Collaborative XGBoost training and inference on encrypted data using hardware enclaves.
+This repo contains the source code for the MC<sup>2</sup> client, which enables users to easily interface with MC<sup>2</sup> deployed remotely in the cloud. Currently, the client supports remote deployments of Secure XGBoost and Opaque SQL only. 
+Users can deploy the MC<sup>2</sup> client locally in order to run an end-to-end workflow as follows: 
+1. Launch Opaque SQL or Secure XGBoost in the cloud (instructions to do so can be found in each repository) 
+2. Use the MC<sup>2</sup> client to encrypt their data locally, transfer it to the cloud VMs, run scripts specifying the desired computation, and retrieve and view encrypted results.
 
-MC<sup>2</sup> also contains some research prototypes:
-
+The MC<sup>2</sup> project also includes research prototypes that develop new cryptographic techniques for secure computation. Please visit the individual project pages for more information:
 * [Cerebro](https://github.com/mc2-project/cerebro): A general purpose Python DSL for learning with secure multiparty computation.
 * [Delphi](https://github.com/mc2-project/delphi): Secure inference for deep neural networks.
 
-The Opaque SQL and Secure XGBoost cloud compute services require a local client to run an end-to-end workflow. In particular, once a user has launched VMs running Opaque SQL or Secure XGBoost (instructions to do so can be found in each repository), the user can encrypt their data and transfer it to such VMs, submit queries to specify the exact computation they want to run, and retrieve and view encrypted results.
 
 ## Table of Contents
 * [Quickstart](#quickstart)
