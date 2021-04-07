@@ -12,7 +12,7 @@ The MC<sup>2</sup> project also includes research prototypes that develop new cr
 * [Cerebro](https://github.com/mc2-project/cerebro): A general purpose Python DSL for learning with secure multiparty computation.
 * [Delphi](https://github.com/mc2-project/delphi): Secure inference for deep neural networks.
 
-This repository contains the source code for the MC<sup>2</sup> client, which enables users to easily interface with MC<sup>2</sup> services deployed remotely in the cloud. Currently, the client supports remote deployments of Secure XGBoost and Opaque SQL only. 
+This repository contains the source code for the **MC<sup>2</sup> client**, which enables users to easily interface with MC<sup>2</sup> services deployed remotely in the cloud. Currently, the client supports remote deployments of Secure XGBoost and Opaque SQL only. 
 To run an end-to-end MC<sup>2</sup> workflow:
 1. Launch Opaque SQL or Secure XGBoost in the cloud (instructions to do so can be found in the respective repositories) 
 2. Use the MC<sup>2</sup> client to encrypt data locally, transfer it to the cloud VMs, run scripts specifying the desired computation, and retrieve and view encrypted results.
