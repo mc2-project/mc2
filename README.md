@@ -25,7 +25,7 @@ Alternatively, to use the individual services without the MC<sup>2</sup> client,
 * [Contact](#contact)
 
 ## Quickstart
-To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that comes with pre-built versions of MC<sup>2</sup> Client, Opaque SQL, and Secure XGBoost, and all dependencies. This quickstart is completely self-contained within a container.
+To quickly get a flavor of MC<sup>2</sup>, you can work in a Docker image that comes with pre-built versions of [MC<sup>2</sup> Client](https://mc2-project.github.io/mc2/), [Opaque SQL](https://mc2-project.github.io/opaque-sql/), and [Secure XGBoost](https://mc2-project.github.io/secure-xgboost/), and all dependencies. This quickstart is completely self-contained within a container.
 
 1. You must have [Docker](https://docs.docker.com/get-docker/) installed. We recommend giving Docker at least 2 CPUs, 6 GB of memory, and 2 GB of swap space (instructions for [Mac](https://docs.docker.com/docker-for-mac/#resources), [Windows](https://docs.docker.com/docker-for-windows/#resources)). Without sufficient resources, the quickstart may not work.
 
@@ -120,4 +120,6 @@ For more thorough documentation on installation and usage, please visit:
 
 
 ## Contact
-For questions and general discussion, please reach out to mc2-dev@googlegroups.com.
+For general discussion, send a message to mc2-dev@googlegroups.com.
+
+For more specific questions, feel free to reach out to Chester <chester@eecs.berkeley.edu>, Rishabh <rishabhp@eecs.berkeley.edu>, and/or Wenting <wzheng@eecs.berkeley.edu>.
