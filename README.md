@@ -1,4 +1,7 @@
 # MC<sup>2</sup>: A Platform for Secure Analytics and Machine Learning
+
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
+
 Born out of research in the [UC Berkeley RISE Lab](https://rise.cs.berkeley.edu/), MC<sup>2</sup> is a platform for running secure analytics and machine learning on encrypted data.
 With MC<sup>2</sup>, users can outsource their confidential data workloads to the cloud, while ensuring that the data is never exposed unencrypted to the cloud provider. 
 MC<sup>2</sup> also enables secure collaboration, i.e., multiple data owners can use the platform to jointly analyze their collective data, without revealing their individual data to each other.
