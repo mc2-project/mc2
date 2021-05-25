@@ -126,5 +126,3 @@ For more thorough documentation on installation and usage, please visit:
 
 ## Contact
 For general discussion, send a message to mc2-dev@googlegroups.com.
-
-For more specific questions, feel free to reach out to Chester <chester@eecs.berkeley.edu>, Rishabh <rishabhp@eecs.berkeley.edu>, and/or Wenting <wzheng@eecs.berkeley.edu>.
