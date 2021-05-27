@@ -1,5 +1,7 @@
 # MC<sup>2</sup>: A Platform for Secure Analytics and Machine Learning
 
+![build](https://github.com/mc2-project/mc2/actions/workflows/main.yml/badge.svg)
+![docs](https://github.com/mc2-project/mc2/actions/workflows/docs.yml/badge.svg)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
 ![MC2 Overview](docs/img/mc2_workflow.jpeg)
