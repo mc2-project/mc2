@@ -8,26 +8,26 @@ user:
     # and run `mc2 init` to generate a key
     #
     # `mc2 init` will not overwrite anything at this path
-    symmetric_key: ${MC2_CLIENT_HOME}/quickstart/keys/user1_sym.key
+    symmetric_key: ${MC2_CLIENT_HOME}/playground/keys/user1_sym.key
 
     # Path to your private key and certificate
     # If you don't have a private key / certificate, specify paths here
     # and run `mc2 init` to generate a keypair
     #
     # `mc2 init` will not overwrite anything at this path
-    private_key: ${MC2_CLIENT_HOME}/quickstart/keys/user1.pem
-    certificate: ${MC2_CLIENT_HOME}/quickstart/keys/user1.crt
+    private_key: ${MC2_CLIENT_HOME}/playground/keys/user1.pem
+    certificate: ${MC2_CLIENT_HOME}/playground/keys/user1.crt
 
     # Path to CA certificate and private key
     # Needed if you want to generate a certificate signed by CA
-    root_certificate: ${MC2_CLIENT_HOME}/quickstart/keys/root.crt
-    root_private_key: ${MC2_CLIENT_HOME}/quickstart/keys/root.pem
+    root_certificate: ${MC2_CLIENT_HOME}/playground/keys/root.crt
+    root_private_key: ${MC2_CLIENT_HOME}/playground/keys/root.pem
 
 # Configuration for launching cloud resources
 launch:
     # The absolute path to your Azure configuraton
     # This needs to be an absolute path
-    azure_config: ${MC2_CLIENT_HOME}/quickstart/azure.yaml
+    azure_config: ${MC2_CLIENT_HOME}/playground/azure.yaml
 
     # # Manually specify the IP/uname/ssh_key of the head node or workers.
     # # If these values exist, they will override any values in `azure_config`.
@@ -76,12 +76,12 @@ upload:
 
     # Files to encrypt and upload
     src:
-      - ${MC2_CLIENT_HOME}/quickstart/data/opaquesql.csv
+      - ${MC2_CLIENT_HOME}/playground/data/opaquesql.csv
 
     # If you want to run Opaque SQL, you must also specify a schema,
     # one for each file you want to encrypt and upload
     schemas:
-      - ${MC2_CLIENT_HOME}/quickstart/data/opaquesql_schema.json
+      - ${MC2_CLIENT_HOME}/playground/data/opaquesql_schema.json
 
     # Directory to upload data to
     dst: /mc2/data
