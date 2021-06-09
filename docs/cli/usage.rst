@@ -20,6 +20,12 @@ Once you've populated a YAML file with your desired parameters, set the ``MC2_CO
     # An example config is at `demo/config.yaml`
     export MC2_CONFIG=/path/to/config/yaml
 
+Note that below, the ``mc2`` command is an alias for ``python3 mc2.py``. You may want to add the following line to your bashrc.
+
+.. code-block:: bash
+
+    alias mc2="python3 /path/to/mc2/mc2.py"
+
 Generating Keys
 ---------------
 If you don't already have a keypair and/or a symmetric key, you'll want to generate them so that you can interact with MC\ :sup:`2` cloud compute services in a cryptographically secure manner. MC\ :sup:`2` uses your certificate and private key to authenticate you to MC\ :sup:`2` compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn't see it in plaintext..
