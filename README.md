@@ -3,7 +3,9 @@
 ![build](https://github.com/mc2-project/mc2/actions/workflows/main.yml/badge.svg)
 ![docs](https://github.com/mc2-project/mc2/actions/workflows/docs.yml/badge.svg)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[<img src="https://img.shields.io/badge/slack-contact%20us-blueviolet?logo=slack">](https://join.slack.com/t/mc2-project/shared_invite/zt-rt3kxyy8-GS4KA0A351Ysv~GKwy8NEQ)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
+
 
 ![MC2 Overview](docs/img/mc2_workflow.jpeg)
 
