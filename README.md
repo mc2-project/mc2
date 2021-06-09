@@ -165,4 +165,4 @@ For more thorough documentation on installation and usage, please visit:
 
 
 ## Contact
-For general discussion, send a message to mc2-dev@googlegroups.com.
+Join our [Slack](https://join.slack.com/t/mc2-project/shared_invite/zt-rt3kxyy8-GS4KA0A351Ysv~GKwy8NEQ), open a [GitHub issue](https://github.com/mc2-project/mc2/issues), or send a message to mc2-dev@googlegroups.com.
