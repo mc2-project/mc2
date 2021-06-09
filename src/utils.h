@@ -3,7 +3,10 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include <type_traits>
+#include <math.h>
 #include <fstream>
+
 #include "crypto.h"
 
 // Print out a map<string, vector<float>>
@@ -67,4 +70,50 @@ void load_key(char* k_fname, char key[CIPHER_KEY_SIZE]) {
     keyfile.open(k_fname);
     keyfile.read(key, CIPHER_KEY_SIZE);
     keyfile.close();
+}
+
+// Convert a date to its integer representation
+int date_to_int(std::string&& date) {
+    struct tm tm = {0};
+    std::istringstream iss(date);
+    iss >> std::get_time(&tm, "%Y-%m-%d");
+    // mktime returns seconds since the epoch, but opaque expects days since
+    // the epoch
+    auto days_since_epoch = mktime(&tm) / (24 * 3600);
+    return days_since_epoch;
+}
+
+// Convert an integer to its date representation
+std::string int_to_date(int days_since_epoch) {
+    // `time_t` is represented as seconds since the epoch
+    time_t secs_since_epoch = days_since_epoch * 24 * 3600;
+    struct tm *tm = gmtime(&secs_since_epoch);
+    std::ostringstream oss;
+    oss << std::put_time(tm, "%Y-%m-%d");
+    return oss.str();
+}
+
+// This function ensures that decrypted floating point values have their types
+// correctly inferred in Spark. By default, if a floating point value is
+// equivalent to an integer, C++ will display it without a decimal + trailing
+// zero. However, this is incorrect behaivor in Spark.
+template<typename F>
+std::string fmt_floating(F value)
+{
+    static_assert(
+        std::is_floating_point<F>::value,
+        "Attempted to call fmt_decimal on value which isn't a floating point"
+    );
+    // Extract the integer part of the value. This is necessary since a simple
+    // cast can fail if the value is too large.
+    double int_part;
+    modf(value, &int_part);
+
+    std::ostringstream oss;
+    if (value == int_part) {
+        oss << value << ".0";
+    } else {
+        oss << value;
+    }
+    return oss.str();
 }

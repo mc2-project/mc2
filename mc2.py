@@ -7,124 +7,182 @@ import time
 
 import mc2client as mc2
 import mc2client.xgb as xgb
-import yaml
 
-
-def is_port_in_use(ip, port):
-    cmd = "nc -z {} {} && echo 'IN USE' || echo 'FREE'".format(ip, port)
-    ps = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = ps.communicate()
-    if out == b'IN USE\n':
-        return True
-    else:
-        return False
+from envyaml import EnvYAML
 
 
 parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers(help="Command to run.", dest="command")
 
-# Upload
+# -------------Init--------------------
+parser_init = subparsers.add_parser(
+    "init", help="Optionally generate a symmetric key and keypair"
+)
+
+# -------------Launch------------------
+parser_launch = subparsers.add_parser(
+    "launch", help="Launch Azure resources"
+)
+
+# -------------Start-------------------
+parser_start = subparsers.add_parser(
+    "start", help="Start services using specificed start up commands"
+)
+
+# -------------Upload----------------
 parser_upload = subparsers.add_parser(
     "upload", help="Encrypt and upload data."
 )
-parser_upload.add_argument("--sql", help="Encrypt data in Opaque SQL format", action="store_true")
-parser_upload.add_argument("--xgb", help="Encrypt data in Secure XGBoost format", action="store_true")
 
-# Run
+# -------------Run--------------------
 parser_run = subparsers.add_parser(
     "run", help="Attest the MC\ :sup:`2` deployment and run your script."
 )
-parser_run.add_argument("--sql", help="Run the Opaque SQL code specified in the config", action="store_true")
-parser_run.add_argument("--xgb", help="Run the Secure XGBoost code specified in the config", action="store_true")
 
-# Download
+# -------------Download---------------
 parser_download = subparsers.add_parser(
     "download", help="Download and decrypt results from your computation."
 )
-parser_download.add_argument("--sql", help="Decrypt data in Opaque SQL format", action="store_true")
-parser_download.add_argument("--xgb", help="Decrypt data in Secure XGBoost format", action="store_true")
 
-# Launch
-parser_launch = subparsers.add_parser(
-    "launch", help="Launch compute service using commands specified in config"
+# -------------Stop-------------------
+parser_stop = subparsers.add_parser(
+    "stop", help="Stop previously started service"
 )
-parser_launch.add_argument("--sql", help="Launch Opaque SQL service", action="store_true")
-parser_launch.add_argument("--xgb", help="Launch Secure XGBoost service", action="store_true")
 
-# Check
-parser_check = subparsers.add_parser(
-    "check", help="Check status of compute service"
+# -------------Teardown---------------
+parser_teardown = subparsers.add_parser(
+    "teardown", help="Teardown Azure resources"
 )
 
 if __name__ == "__main__":
-    mc2_config = os.environ.get("MC2_CONFIG")
-    if not mc2_config:
+    oc_config = os.environ.get("MC2_CONFIG")
+    if not oc_config:
         raise Exception("Please set the environment variable `MC2_CONFIG` to the path of your config file")
 
-    mc2.set_config(mc2_config)
+    mc2.set_config(oc_config)
     args = parser.parse_args()
-    config = yaml.safe_load(open(mc2_config).read())
+    config = EnvYAML(oc_config)
 
-    # All data that will be used during computation
-    data = config["local"]["data"]
+    if args.command == "init":
+        # Generate a private key and certificate
+        mc2.generate_keypair()
 
-    # Path to schemas for Opaque SQL execution
-    schemas = config["local"].get("schemas")
+        # Generate a CIPHER_KEY_SIZE byte symmetric key
+        mc2.generate_symmetric_key()
 
-    # Username to use to scp data to cloud
-    remote_username = config["cloud"]["remote_username"]
+    elif args.command == "launch":
+        config_launch = config["launch"]
 
-    # Remote data path
-    remote_data = config["cloud"]["data_dir"]
+        # If the nodes have been manually specified, don't do anything
+        if config_launch.get("head") or config_launch.get("workers"):
+            print("Node addresses have been manually specified in the config "\
+                  "... doing nothing")
+            quit()
 
-    # List of IPs to upload data to 
-    ips = config["cloud"]["nodes"]
+        # Create resource group
+        # Will do nothing if already exists
+        mc2.create_resource_group()
 
-    # Script to run
-    script = config["local"]["script"]
+        # Launch storage if desired
+        create_storage = config_launch.get("storage")
+        if create_storage:
+            mc2.create_storage()
 
-    # Remote path to results (a list)
-    remote_results = config["cloud"]["results"]
+        # Launch container if desired
+        create_container = config_launch.get("container")
+        if create_container:
+            mc2.create_container()
 
-    # Path to local results
-    local_results_dir = config["local"]["results"]
+        # Launch cluster if desired
+        create_cluster = config_launch.get("cluster")
+        if create_cluster:
+            mc2.create_cluster()
 
-    # TODO: upload data to multiple machines
-    if args.command == "upload":
+    elif args.command == "start":
+        config_start = config["start"]
+
+        # Get commands to run on head node
+        head_cmds = config_start.get("head", [])
+
+        # Get commands to run on worker nodes
+        worker_cmds = config_start.get("workers", [])
+
+        # Run commands
+        mc2.run_remote_cmds(head_cmds, worker_cmds)
+
+    elif args.command == "upload":
+        config_upload = config["upload"]
+        enc_format = config_upload.get("format")
+        data = config_upload.get("src", [])
+        schemas = config_upload.get("schemas", [])
+
+        if config_upload.get("storage") == "blob":
+            use_azure = True
+        else:
+            use_azure = False
+
         encrypted_data = [d + ".enc" for d in data]
+
         print("Encrypting and uploading data...")
 
+        dst_dir = config_upload.get("dst", "")
         for i in range(len(data)):
             # Encrypt data
-            if args.xgb:
-                mc2.encrypt_data(data[i], encrypted_data[i], None, "securexgboost")
-            elif args.sql:
+            if enc_format == "xgb":
+                mc2.encrypt_data(data[i], encrypted_data[i], None, "xgb")
+            elif enc_format == "sql":
                 if schemas is None:
                     raise Exception("Please specify a schema when uploading data for Opaque SQL")
-                mc2.encrypt_data(data[i], encrypted_data[i], schemas[i], "opaque")
+                # Remove temporary files from a previous run
+                if os.path.exists(encrypted_data[i]):
+                    if os.path.isdir(encrypted_data[i]):
+                        shutil.rmtree(encrypted_data[i])
+                    else:
+                        os.remove(encrypted_data[i])
+
+                mc2.encrypt_data(data[i], encrypted_data[i], schemas[i], "sql")
             else:
-                raise Exception("Specified format not supported")
+                raise Exception("Specified format {} not supported".format(enc_format))
 
             # Transfer data
             filename = os.path.basename(encrypted_data[i])
-            remote_path = os.path.join(remote_data, filename)
-            mc2.upload_file(encrypted_data[i], remote_path)
+            remote_path = filename
+            if dst_dir:
+                remote_path = os.path.join(dst_dir, filename)
+            mc2.upload_file(encrypted_data[i], remote_path, use_azure)
             print("Uploaded data to {}".format(remote_path))
 
+            # Remove temporary directory
+            if os.path.isdir(encrypted_data[i]):
+                shutil.rmtree(encrypted_data[i])
+            else:
+                os.remove(encrypted_data[i])
+
     elif args.command == "run":
-        if args.xgb:
-            # TODO: comment in rabit functionality if you want to run in distributed manner
-            # mc2.xgb.rabit.init()
-            mc2.attest()
-            print("Running script...")
-            exec(open(script).read())
-            # mc2.xgb.rabit.finalize()
-        elif args.sql:
+        config_run = config["run"]
+        script = config_run["script"]
+
+        if config_run["compute"] == "xgb":
+            print("run() unimplemented for secure-xgboost")
+            quit()
+        elif config_run["compute"] == "sql":
+            mc2.configure_job(config)
             mc2.opaquesql.run(script)
         else:
             raise Exception("Only XGBoost and SQL are currently supported")
 
     elif args.command == "download":
+        config_download = config["download"]
+        enc_format = config_download.get("format")
+
+        if config_download.get("storage") == "blob":
+            use_azure = True
+        else:
+            use_azure = False
+
+        remote_results = config_download.get("src", [])
+        local_results_dir = config_download["dst"]
+
         print("Downloading and decrypting data")
 
         # Create the local results directory if it doesn't exist
@@ -136,36 +194,49 @@ if __name__ == "__main__":
             local_result = os.path.join(local_results_dir, filename)
 
             # Fetch file
-            mc2.download_file(remote_result, local_result)
+            mc2.download_file(remote_result, local_result, use_azure)
             print("Downloaded result to ", local_result)
 
             # Decrypt data
-            if args.xgb:
-                mc2.decrypt_data(local_result, local_result + ".dec", "securexgboost")
+            if enc_format == "xgb":
+                mc2.decrypt_data(local_result, local_result + ".dec", "xgb")
                 print("Decrypted result saved to ", local_result + ".dec")
-            elif args.sql:
-                mc2.decrypt_data(local_result, local_result + ".dec", "opaque")
+            elif enc_format == "sql":
+                mc2.decrypt_data(local_result, local_result + ".dec", "sql")
                 print("Decrypted result saved to ", local_result + ".dec")
+            else:
+                raise Exception("Specified format {} not supported".format(enc_format))
 
-    elif args.command == "launch":
-        if args.xgb:
-            launch_cmds = config["cloud"]["launch"]["secure_xgboost"]
-            for cmd in launch_cmds:
-                split_cmd = cmd.split()
-                ps = subprocess.Popen(split_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                print("Launch command '{}' started with PID {}".format(cmd, ps.pid))
+            if os.path.isdir(local_result):
+                shutil.rmtree(local_result)
+            else:
+                os.remove(local_result)
 
-        elif args.sql:
-            launch_cmds = config["cloud"]["launch"]["opaque_sql"]
-            for cmd in launch_cmds:
-                split_cmd = cmd.split()
-                ps = subprocess.Popen(split_cmd, cwd=os.getenv("OPAQUE_HOME"), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                print("Launch command '{}' started with PID {}".format(cmd, ps.pid))
-        else:
-            raise Exception("Only Secure XGBoost and Opaque SQL are currently supported")
+    elif args.command == "stop":
+        print("Currently unsupported")
+        pass
 
-    elif args.command == "check":
-        if is_port_in_use("127.0.0.1", "50052"):
-            print("READY")
-        else:
-            print("NOT READY")
+    elif args.command == "teardown":
+        config_teardown = config["teardown"]
+
+        # If the nodes have been manually specified, don't do anything
+        if config["launch"].get("head") or config["launch"].get("workers"):
+            print("Node addresses have been manually specified in the config "\
+                  "... doing nothing")
+            quit()
+
+        delete_container = config_teardown.get("container")
+        if delete_container:
+            mc2.delete_container()
+
+        delete_storage = config_teardown.get("storage")
+        if delete_storage:
+            mc2.delete_storage()
+
+        delete_cluster = config_teardown.get("cluster")
+        if delete_cluster:
+            mc2.delete_cluster()
+
+        delete_resource_group = config_teardown.get("resource_group")
+        if delete_resource_group:
+            mc2.delete_resource_group()

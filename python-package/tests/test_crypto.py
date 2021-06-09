@@ -4,20 +4,22 @@ import pathlib
 
 import mc2client as mc2
 import pytest
+
 import yaml
+from envyaml import EnvYAML
 
 
 @pytest.fixture(autouse=True)
 def config(tmp_path):
     tests_dir = pathlib.Path(__file__).parent.absolute()
-    original_config_path = os.path.join(tests_dir, "config.yaml")
+    original_config_path = os.path.join(tests_dir, "test.yaml")
 
     test_cert = os.path.join(tmp_path, "test.crt")
     test_priv_key = os.path.join(tmp_path, "test.pem")
     test_symm_key = os.path.join(tmp_path, "test_sym.key")
 
     # Rewrite config YAML with test paths
-    config = yaml.safe_load(open(original_config_path).read())
+    config = EnvYAML(original_config_path)
     config["user"]["certificate"] = test_cert
     config["user"]["private_key"] = test_priv_key
     config["user"]["symmetric_key"] = test_symm_key
@@ -29,7 +31,7 @@ def config(tmp_path):
     test_config_path = os.path.join(tmp_path, "config.yaml")
 
     with open(test_config_path, "w") as out:
-        yaml.dump(config, out, default_flow_style=False)
+        yaml.dump(dict(config), out, default_flow_style=False)
 
     mc2.set_config(test_config_path)
     return tests_dir
@@ -68,10 +70,13 @@ def test_opaque_encryption(keys, data_paths, schema):
     plaintext, encrypted, decrypted = data_paths
 
     mc2.encrypt_data(
-        plaintext, encrypted, schema_file=schema, enc_format="opaque",
+        plaintext,
+        encrypted,
+        schema_file=schema,
+        enc_format="sql",
     )
 
-    mc2.decrypt_data(encrypted, decrypted, enc_format="opaque")
+    mc2.decrypt_data(encrypted, decrypted, enc_format="sql")
 
     # Remove first line (header) from original file,
     # as the decrypted copy doesn't have it
@@ -88,9 +93,11 @@ def test_securexgboost_encryption(keys, data_paths):
     plaintext, encrypted, decrypted = data_paths
 
     mc2.encrypt_data(
-        plaintext, encrypted, enc_format="securexgboost",
+        plaintext,
+        encrypted,
+        enc_format="xgb",
     )
 
-    mc2.decrypt_data(encrypted, decrypted, enc_format="securexgboost")
+    mc2.decrypt_data(encrypted, decrypted, enc_format="xgb")
 
     assert filecmp.cmp(plaintext, decrypted)

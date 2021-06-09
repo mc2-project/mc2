@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package opaque.protos;
+
+// The Client <-> Enclave service
+service ClientToEnclave {
+  // Client sends AttestationStatus to the Enclave, receives
+  // an evidence report for each enclave
+  rpc GetRemoteEvidence(AttestationStatus) returns (Evidences) {}
+
+  // After processing Evidence, Client sends encrypted shared key
+  // as Encrypted Data and receives AttestationStatus
+  rpc GetFinalAttestationResult(EncryptedKeys) returns (AttestationStatus) {}
+}
+
+message Evidences {
+  // A collection of `oe_evidence_msg_t` objects.
+  // includes attestation evidence, enclave public key, and nonce
+  repeated bytes evidences = 1;
+}
+
+message AttestationStatus {
+  // This is 0 if not attested or attestation failed,
+  // 1 if whichever node is sending it has completed
+  // attestation successfully
+  int32 status = 1;
+}
+
+message EncryptedKeys {
+  // A collection of encrypted `SignedKey` flatbuffer objects
+  repeated bytes keys = 1;
+}

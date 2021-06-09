@@ -1,5 +1,13 @@
 setuptools
+azure-mgmt-resource==10.0.0
+azure-mgmt-compute==10.0.0
+azure-mgmt-storage==10.0.0
+azure-mgmt-network==10.0.0
+azure-cli-core
+azure-storage-blob
+azure-identity
 cryptography==3.3.1
+flatbuffers
 grpcio
 grpcio-tools
 jsonschema
@@ -7,7 +15,7 @@ numproto
 numpy==1.19.5
 pandas
 paramiko
-pyopenssl
 pytest
 pyyaml
+envyaml
 scp

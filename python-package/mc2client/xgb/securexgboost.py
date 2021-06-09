@@ -96,7 +96,6 @@ class DMatrix(object):
         for user, path in data_dict.items():
             usernames.append(user)
             data.append(path)
-
         # Sort by username
         usernames, data = (
             list(x)
@@ -1557,25 +1556,3 @@ class Booster(object):
                 "Returning histogram as ndarray (as_pandas == True, but pandas is not installed)."
             )
         return nph
-
-def init(args=None):
-    """Initialize the rabit library with arguments"""
-
-    channel_addr = _CONF.get("remote_addr")
-    current_user = _CONF.get("current_user")
-
-    # FIXME: add signature to rabit init
-    with grpc.insecure_channel(channel_addr) as channel:
-        stub = remote_pb2_grpc.RemoteStub(channel)
-        response = stub.rpc_RabitInit(remote_pb2.RabitParams(params=remote_pb2.Status(status=1), username=current_user)) 
-
-
-def finalize():
-    """Finalize the process, notify tracker everything is done."""
-    channel_addr = _CONF.get("remote_addr")
-    current_user = _CONF.get("current_user")
-
-    # FIXME: add signature to rabit finalize
-    with grpc.insecure_channel(channel_addr) as channel:
-        stub = remote_pb2_grpc.RemoteStub(channel)
-        response = stub.rpc_RabitFinalize(remote_pb2.RabitParams(params=remote_pb2.Status(status=1), username=current_user)) 

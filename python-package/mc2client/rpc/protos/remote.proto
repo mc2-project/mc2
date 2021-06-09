@@ -20,19 +20,6 @@ package remote;
 
 // Interface exported by the server.
 service Remote {
-  // Get attestation report
-  // Status is a just a dummy argument and won't be used by the server
-  rpc rpc_get_remote_report_with_pubkey_and_nonce(Status) returns (Report) {}
-
-  // Send symmetric key encrypted with enclave public key, signature
-  rpc rpc_add_client_key(DataMetadata) returns (StatusMsg) {}
-
-  // Send symmetric key encrypted with enclave public key, signature, certificate
-  rpc rpc_add_client_key_with_certificate(DataMetadata) returns (StatusMsg) {}
-
-  // Get enclave's symmetric key, encypted with the client's symmetric key
-  rpc rpc_get_enclave_symm_key(Name) returns (EnclaveKey) {}
-
   // Send params of a DMatrix to the server for initialization
   // Returns the name assigned to this DMatrix
   rpc rpc_XGDMatrixCreateFromEncryptedFile(DMatrixAttrsRequest) returns (Name) {}
@@ -95,37 +82,6 @@ message Status {
   string exception = 2;
 }
 
-// A report returned by the enclave for attestation 
-message Report {
-  // Public key of enclave 
-  numproto.protobuf.NDArray pem_key = 1;
-
-  // Size of public key
-  uint32 pem_key_size = 2;
-
-  // Remote report of enclave
-  numproto.protobuf.NDArray remote_report = 3;
-
-  // Size of remote report
-  uint32 remote_report_size = 4;
-
-  // List of client names
-  repeated string client_list = 5;
-
-  // Size of client list
-  uint32 client_list_size = 6;
-
-  // Status of call
-  Status status = 7;
-
-  // Session nonce
-  numproto.protobuf.NDArray nonce = 8;
-
-  // Size of nonce
-  uint32 nonce_size = 9;
-
-}
-
 message SequenceNumber {
   // k byte random number generated at the start of the session
   numproto.protobuf.NDArray nonce = 1;
@@ -135,26 +91,6 @@ message SequenceNumber {
 
   // 4 byte counter that increments with each synchronized function call
   uint32 nonce_ctr = 3;
-}
-
-// Message from client to enclaves with information on how to retrieve
-// training/test data
-message DataMetadata {
-  // Symmetric key used to encrypt data file, encrypted with
-  // enclave public key
-  numproto.protobuf.NDArray enc_sym_key = 1;
-
-  // Length of sym_key
-  uint32 key_size = 2;
-
-  // Signature over encrypted symmetric key, signed with client private key
-  numproto.protobuf.NDArray signature = 3;
-
-  // Length of signature
-  uint32 sig_len = 4;
-
-  // Certificate
-  string certificate = 5;
 }
 
 // Params for the constructor of a DMatrix
@@ -437,18 +373,6 @@ message Integer {
     Status status = 2;
     numproto.protobuf.NDArray signature = 3;
     uint32 sig_len = 4;
-}
-
-// // Enclave's symmetric key (encrypted)
-message EnclaveKey {
-  // Encrypted key
-  numproto.protobuf.NDArray key = 1;
-
-  // Encrypted key size
-  uint32 size = 2;  
-
-  // Status
-  Status status = 3;
 }
 
 // Encrypted predictions served by enclave, to be decrypted at client

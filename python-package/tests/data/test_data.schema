@@ -1,1 +1,1 @@
-id:integer,firstname:string,lastname:string,age:integer,balance:float
+id:integer,firstname:string,lastname:string,age:integer,balance:float,join_date:date
