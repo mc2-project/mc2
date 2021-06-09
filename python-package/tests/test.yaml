@@ -5,29 +5,29 @@ user:
 
     # Path to your symmetric key - will be used for encryption/decryption
     # If you don't have a symmetric key, specify a path here 
-    # and run `opaque init` to generate a key
+    # and run `mc2 init` to generate a key
     #
-    # `opaque init` will not overwrite anything at this path
-    symmetric_key: ${MC2_CLIENT_HOME}/demo/keys/user1_sym.key
+    # `mc2 init` will not overwrite anything at this path
+    symmetric_key: keys/user1_sym.key
 
     # Path to your private key and certificate
     # If you don't have a private key / certificate, specify paths here
-    # and run `opaque init` to generate a keypair
+    # and run `mc2 init` to generate a keypair
     #
-    # `opaque init` will not overwrite anything at this path
-    private_key: ${MC2_CLIENT_HOME}/demo/keys/user1.pem
-    certificate: ${MC2_CLIENT_HOME}/demo/keys/user1.crt
+    # `mc2 init` will not overwrite anything at this path
+    private_key: keys/user1.pem
+    certificate: keys/user1.crt
 
     # Path to CA certificate and private key
     # Needed if you want to generate a certificate signed by CA
-    root_certificate: ${MC2_CLIENT_HOME}/demo/keys/root.crt
-    root_private_key: ${MC2_CLIENT_HOME}/demo/keys/root.pem
+    root_certificate: keys/root.crt
+    root_private_key: keys/root.pem
 
 # Configuration for launching cloud resources
 launch:
     # The absolute path to your Azure configuraton
     # This needs to be an absolute path
-    azure_config: ${MC2_CLIENT_HOME}/demo/azure.yaml
+    azure_config: /dummy/azure.yaml
 
     # # Manually specify the IP/uname/ssh_key of the head node or workers.
     # # If these values exist, they will override any values in `azure_config`.
@@ -60,7 +60,7 @@ start:
     workers:
       - echo "Hello from worker"
 
-# Configuration for `opaque upload`
+# Configuration for `mc2 upload`
 upload:
     # Whether to upload data to Azure blob storage or disk
     # Allowed values are `blob` or `disk`
@@ -75,12 +75,12 @@ upload:
 
     # Files to encrypt and upload
     src:
-      - ${MC2_CLIENT_HOME}/demo/opaquesql/data/opaquesql.csv
+      - data/test_data.csv
 
     # If you want to run Opaque SQL, you must also specify a schema,
     # one for each file you want to encrypt and upload
     schemas:
-      - ${MC2_CLIENT_HOME}/demo/opaquesql/data/opaquesql_schema.json
+      - data/test_data.schema
 
     # Directory to upload data to
     # FIXME: ignored if using Azure blob storage. Need to investigate if 
@@ -91,7 +91,7 @@ upload:
 # Computation configuration
 run:
     # Script to run
-    script: opaque_sql_demo.scala
+    script: opaquesql/opaquesql_example.scala
 
     # Compute service you're using
     # Choices are `xgb` or `sql`
@@ -110,7 +110,7 @@ run:
 
         # Path to MRSIGNER value to check
         # MRSIGNER is the key used to sign the built enclave
-        mrsigner: ${OPAQUE_CLIENT_HOME}/python-package/tests/keys/mc2_test_key.pub
+        mrsigner: keys/mc2_test_key.pub
 
 # Configuration for downloading results
 download:
