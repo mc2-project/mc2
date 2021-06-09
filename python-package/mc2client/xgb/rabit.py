@@ -1,6 +1,7 @@
 import grpc
 
 from ..core import _CONF
+from ..exceptions import MC2ClientConfigError
 from ..rpc import (  # pylint: disable=no-name-in-module
     remote_pb2,
     remote_pb2_grpc,
@@ -15,22 +16,21 @@ def init(args=None):
     current_user = _CONF.get("current_user")
 
     if channel_addr is None:
-        raise OpaqueClientConfigError(
+        raise MC2ClientConfigError(
             "Remote orchestrator IP not set. Run oc.create_cluster() \
             to launch VMs and configure IPs automatically or explicitly set it in the user YAML."
         )
 
     if current_user is None:
-        raise OpaqueClientConfigError("Username not set")
+        raise MC2ClientConfigError("Username not set")
 
     # FIXME: add signature to rabit init
     with grpc.insecure_channel(channel_addr) as channel:
         stub = remote_pb2_grpc.RemoteStub(channel)
-        response = _check_remote_call(
+        _check_remote_call(
             stub.rpc_RabitInit(
                 remote_pb2.RabitParams(
-                    params=remote_pb2.Status(status=1),
-                    username=current_user
+                    params=remote_pb2.Status(status=1), username=current_user
                 )
             )
         )
@@ -42,22 +42,21 @@ def finalize():
     current_user = _CONF.get("current_user")
 
     if channel_addr is None:
-        raise OpaqueClientConfigError(
+        raise MC2ClientConfigError(
             "Remote orchestrator IP not set. Run oc.create_cluster() \
             to launch VMs and configure IPs automatically or explicitly set it in the user YAML."
         )
 
     if current_user is None:
-        raise OpaqueClientConfigError("Username not set")
+        raise MC2ClientConfigError("Username not set")
 
     # FIXME: add signature to rabit finalize
     with grpc.insecure_channel(channel_addr) as channel:
         stub = remote_pb2_grpc.RemoteStub(channel)
-        response = _check_remote_call(
+        _check_remote_call(
             stub.rpc_RabitFinalize(
                 remote_pb2.RabitParams(
-                    params=remote_pb2.Status(status=1),
-                    username=current_user
+                    params=remote_pb2.Status(status=1), username=current_user
                 )
             )
         )

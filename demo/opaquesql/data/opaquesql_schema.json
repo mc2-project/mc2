@@ -1,0 +1,1 @@
+Age:integer,BMI:float,Glucose:integer,Insulin:float,HOMA:float,Leptin:float,Adiponectin:float,Resistin:float,MCP.1:float,Classification:integer

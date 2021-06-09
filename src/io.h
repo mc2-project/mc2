@@ -1,6 +1,6 @@
 #include "crypto.h"
-#include "Rows_generated.h"
-#include "EncryptedBlock_generated.h"
+#include "flatbuffers/Rows_generated.h"
+#include "flatbuffers/EncryptedBlock_generated.h"
 
 // Encrypt a file in Secure XGBoost encryption format
 int sxgb_encrypt_file(char* fname, char* e_fname, char* k_fname); 

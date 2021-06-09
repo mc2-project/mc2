@@ -3,14 +3,23 @@ python-package/mc2client/toolchain/__pycache__/
 __pycache__/
 python-package/build/
 python-package/dist/
-python-package/mc2client.egg-info/
+*.egg-info/
 src/build/
+
+# Auto-generated gRPC files
 python-package/mc2client/rpc/ndarray_pb2.py
 python-package/mc2client/rpc/ndarray_pb2_grpc.py
 python-package/mc2client/rpc/opaquesql_pb2.py
 python-package/mc2client/rpc/opaquesql_pb2_grpc.py
 python-package/mc2client/rpc/remote_pb2.py
 python-package/mc2client/rpc/remote_pb2_grpc.py
+python-package/mc2client/rpc/attest_pb2.py
+python-package/mc2client/rpc/attest_pb2_grpc.py
+
+# Auto-generated Flatbuffers files
+python-package/mc2client/toolchain/flatbuffers/tuix/*
+
+# Auto-generated documentation
 docs/_build/
 
 # Keys
@@ -20,5 +29,5 @@ docs/_build/
 # Any sample encrypted files
 *.enc
 
-# Results in demo
-demo/results/
+# Playground
+playground/

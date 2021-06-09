@@ -3,7 +3,7 @@
 To build the documentation locally, install the `sphinx` and `sphinx-argparse` Python packages, then build the documentation from this directory.
 
 ```sh
-# In opaque-client/docs/ directory
+# In mc2/docs/ directory
 sudo apt-get install -y enchant
 pip3 install furo numpydoc sphinx sphinx-argparse sphinx-copybutton sphinxcontrib-spelling
 make html

@@ -12,7 +12,7 @@ Global Configuration
 
 Cryptographic Utilities
 ~~~~~~~~~~~~~~~~~~~~~~~
-.. autofunction:: mc2client.attest
+.. autofunction:: mc2client.configure_job
 
 .. autofunction:: mc2client.decrypt_data
 
@@ -24,7 +24,27 @@ Cryptographic Utilities
 
 Cloud Management
 ~~~~~~~~~~~~~~~~
+.. autofunction:: mc2client.create_cluster
+
+.. autofunction:: mc2client.create_container
+
+.. autofunction:: mc2client.create_resource_group
+
+.. autofunction:: mc2client.create_storage
+
+.. autofunction:: mc2client.delete_cluster
+
+.. autofunction:: mc2client.delete_container
+
+.. autofunction:: mc2client.delete_resource_group
+
+.. autofunction:: mc2client.delete_storage
+
 .. autofunction:: mc2client.download_file
+
+.. autofunction:: mc2client.get_head_ip
+
+.. autofunction:: mc2client.get_worker_ips
 
 .. autofunction:: mc2client.upload_file
 

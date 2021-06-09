@@ -1,0 +1,149 @@
+# User configuration
+user:
+    # Your username - username should be specified in certificate
+    username: user1
+
+    # Path to your symmetric key - will be used for encryption/decryption
+    # If you don't have a symmetric key, specify a path here 
+    # and run `mc2 init` to generate a key
+    #
+    # `mc2 init` will not overwrite anything at this path
+    symmetric_key: ${MC2_CLIENT_HOME}/demo/keys/user1_sym.key
+
+    # Path to your private key and certificate
+    # If you don't have a private key / certificate, specify paths here
+    # and run `mc2 init` to generate a keypair
+    #
+    # `mc2 init` will not overwrite anything at this path
+    private_key: ${MC2_CLIENT_HOME}/demo/keys/user1.pem
+    certificate: ${MC2_CLIENT_HOME}/demo/keys/user1.crt
+
+    # Path to CA certificate and private key
+    # Needed if you want to generate a certificate signed by CA
+    root_certificate: ${MC2_CLIENT_HOME}/demo/keys/root.crt
+    root_private_key: ${MC2_CLIENT_HOME}/demo/keys/root.pem
+
+# Configuration for launching cloud resources
+launch:
+    # The absolute path to your Azure configuraton
+    # This needs to be an absolute path
+    azure_config: ${MC2_CLIENT_HOME}/demo/azure.yaml
+
+	# # Manually specify the IPs of and usernames/SSH private keys used to log
+	# # in to the head and worker nodes. If these values exist, Opaque Client
+	# # will not launch or try to use any Azure resources
+    # head:
+    #     ip: 98.171.139.74
+    #     username: mc2
+    #     ssh_key: ~/.ssh/id_rsa
+    # workers:
+    #   - ip: 98.171.139.77
+    #     username: mc2
+    #     ssh_key: ~/.ssh/id_rsa
+
+    # Whether to launch a cluster of VMs
+    cluster: true
+
+    # Whether to launch Azure blob storage
+    storage: true
+
+    # Whether to launch a storage container
+    container: true
+
+# Commands to start compute service
+start:
+    # Commands to run on head node
+    head:
+        - cd /home/mc2/opaque; build/sbt keys; build/sbt run
+
+    # Commands to run on worker nodes
+    workers:
+      - echo "Hello from worker"
+
+# Configuration for `mc2 upload`
+upload:
+    # Whether to upload data to Azure blob storage or disk
+    # Allowed values are `blob` or `disk`
+    # If `blob`, Azure CLI will be called to upload data
+    # Else, `scp` will be used
+    storage: disk
+
+    # Encryption format to use
+    # Options are `sql` if you want to use Opaque SQL
+    # or `xgb` if you want to use Secure XGBoost
+    format: sql
+
+    # Files to encrypt and upload
+    src:
+      - ${MC2_CLIENT_HOME}/demo/opaquesql/data/opaquesql.csv
+
+    # If you want to run Opaque SQL, you must also specify a schema,
+    # one for each file you want to encrypt and upload
+    schemas:
+      - ${MC2_CLIENT_HOME}/demo/opaquesql/data/opaquesql_schema.json
+
+    # Directory to upload data to
+    # FIXME: If storage is `blob` this value must be a file
+    # Need to investigate whether we can use directories in Azure blob storage
+    dst: /tmp/
+
+
+# Computation configuration
+run:
+    # Script to run
+    script: ${MC2_CLIENT_HOME}/demo/opaquesql/opaque_sql_demo.scala
+
+    # Compute service you're using
+    # Choices are `xgb` or `sql`
+    compute: sql
+
+    # Attestation configuration
+    attestation:
+        # Whether we are running in simulation mode
+        # If 0 (False), we are _not_ running in simulation mode,
+        # and should verify the attestation evidence
+        simulation_mode: 0
+
+        # MRENCLAVE value to check
+        # MRENCLAVE is a hash of the enclave build log
+        mrenclave: NULL
+
+        # Path to MRSIGNER value to check
+        # MRSIGNER is the key used to sign the built enclave
+        mrsigner: ${MC2_CLIENT_HOME}/python-package/tests/keys/mc2_test_signing_key.pub
+
+# Configuration for downloading results
+download:
+    # Whether to download data to Azure blob storage or disk
+    # Allowed values are `blob` or `disk`
+    # If `blob`, Azure CLI will be called to download data
+    # Else, `scp` will be used
+    storage: disk
+
+    # Format this data is encrypted with
+    format: sql
+
+    # Directory/file to download
+    # FIXME: If storage is `blob` this value must be a file
+    # Need to investigate whether we can use directories in Azure blob storage
+    src:
+      - /tmp/opaque_sql_result
+
+    # Local directory to download data to
+    dst: results/
+
+# Configuration for stopping services
+stop:
+
+# Configuration for deleting Azure resources
+teardown:
+
+    # Whether to terminate launched VMs
+    cluster: true
+
+    # Whether to terminate created Azure blob storage
+    storage: true
+
+    # Whether to terminate created storage container
+    container: true
+    resource_group: true

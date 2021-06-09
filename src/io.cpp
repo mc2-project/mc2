@@ -12,6 +12,8 @@
 #include "json.hpp"
 #include "utils.h"
 
+#include "context.h"
+
 // for convenience
 using json = nlohmann::ordered_json;
 
@@ -19,44 +21,6 @@ using json = nlohmann::ordered_json;
 #define MAX_ENCRYPTED_BLOCKS_SIZE 1000000000
 
 int sxgb_encrypt_file_with_keybuf(char* fname, char* e_fname, char* key) {
-    mbedtls_ctr_drbg_context ctr_drbg;
-    mbedtls_entropy_context entropy;
-    mbedtls_gcm_context gcm;
-
-    unsigned char iv[CIPHER_IV_SIZE];
-    unsigned char tag[CIPHER_TAG_SIZE];
-
-    // Initialize the entropy pool and the random source
-    mbedtls_entropy_init( &entropy );
-    mbedtls_ctr_drbg_init( &ctr_drbg );
-
-    // Initialize GCM context (just makes references valid) - makes the context ready for mbedtls_gcm_setkey()
-    mbedtls_gcm_init(&gcm);
-
-    // The personalization string should be unique to your application in order to add some
-    // personalized starting randomness to your random sources.
-    std::string pers = "aes generate key for MC^2";
-
-    // CTR_DRBG initial seeding Seed and setup entropy source for future reseeds
-    int ret = mbedtls_ctr_drbg_seed( &ctr_drbg, mbedtls_entropy_func, &entropy, (unsigned char *)pers.c_str(), pers.length() );
-    if( ret != 0 ) {
-        // LOG(FATAL) << "mbedtls_ctr_drbg_seed() failed - returned " << -ret;
-        std::cout << "mbedtls_ctr_drbg_seed() failed - returned " << -ret << std::endl;
-        return ret;
-    }
-
-    // Initialize the GCM context with our key and desired cipher
-    ret = mbedtls_gcm_setkey(&gcm,     // GCM context to be initialized
-        MBEDTLS_CIPHER_ID_AES,     // cipher to use (a 128-bit block cipher)
-        (unsigned char*) key,      // encryption key
-        CIPHER_KEY_SIZE * 8);      // key bits (must be 128, 192, or 256)
-
-    if( ret != 0 ) {
-    // LOG(FATAL) << "mbedtls_gcm_setkey failed to set the key for AES cipher - returned " << -ret;
-        std::cout << "mbedtls_gcm_setkey failed to set the key for AES cipher - returned "  << -ret << std::endl;
-        return ret;
-    }
-
     std::ifstream infile(fname);
     std::ofstream myfile;
     myfile.open(e_fname);
@@ -86,34 +50,29 @@ int sxgb_encrypt_file_with_keybuf(char* fname, char* e_fname, char* key) {
         // We use `<index>,<total>` as additional authenticated data to prevent tampering across lines
         std::stringstream ss;
         ss << index << "," << total;
-        std::string ss_str = ss.str();
+        std::string aad_str = ss.str();
 
-        unsigned char* encrypted = (unsigned char*) malloc(length*sizeof(char));
-        ret = encrypt_symm(
-            &gcm,
-            &ctr_drbg,
-            (const unsigned char*)line.c_str(),
+        // Encrypt the row
+        size_t ct_size = Context::getInstance().m_crypto->SymEncSize(length);
+        uint8_t* ct = new uint8_t[ct_size];
+        auto ret = Context::getInstance().m_crypto->SymEnc(
+            reinterpret_cast<const uint8_t*>(key),
+            reinterpret_cast<const uint8_t*>(line.c_str()),
+            reinterpret_cast<const uint8_t*>(aad_str.c_str()),
+            ct,
             length,
-            (unsigned char*)ss_str.c_str(),
-            ss_str.length(),
-            encrypted,
-            iv,
-            tag
-            );
-        if( ret != 0 ) {
-            // FIXME: logging
-            // LOG(FATAL) << "mbedtls_gcm_crypt_and_tag failed to encrypt the data - returned " << -ret;
-            std::cout << "mbedtls_gcm_crypt_and_tag failed to encrypt the data - returned " << -ret << std::endl;
+            aad_str.length()
+        );
+        if (ret != 0)
             return ret;
-        }
-        std::string encoded = data::base64_encode(iv, CIPHER_IV_SIZE);
+
+        // Encode the ciphertext 
         myfile
             << index << ","
-            << total << ","
-            << data::base64_encode(iv, CIPHER_IV_SIZE) << ","
-            << data::base64_encode(tag, CIPHER_TAG_SIZE) << ","
-            << data::base64_encode(encrypted, length) << "\n";
-        free(encrypted);
+            << total << ";"
+            << data::base64_encode(reinterpret_cast<unsigned char*>(ct), ct_size)
+            << "\n";
+        delete[] ct;
     }
     infile.close();
     myfile.close();
@@ -130,21 +89,6 @@ int sxgb_encrypt_file(char* fname, char* e_fname, char* k_fname) {
 
 
 int sxgb_decrypt_file_with_keybuf(char* fname, char* d_fname, char* key) {
-    mbedtls_gcm_context gcm;
-
-    // Initialize GCM context (just makes references valid) - makes the context ready for mbedtls_gcm_setkey()
-    mbedtls_gcm_init(&gcm);
-    int ret = mbedtls_gcm_setkey(&gcm,  // GCM context to be initialized
-        MBEDTLS_CIPHER_ID_AES,          // cipher to use (a 128-bit block cipher)
-        (const unsigned char*) key,     // encryption key
-        CIPHER_KEY_SIZE * 8);           // key bits (must be 128, 192, or 256)
-    if( ret != 0 ) {
-        // FIXME: logging error
-        printf( "mbedtls_gcm_setkey failed to set the key for AES cipher - returned -0x%04x\n", -ret );
-        // LOG(FATAL) << "mbedtls_gcm_setkey failed to set the key for AES cipher - returned " << -ret;
-        return ret;
-    }
-
     std::ifstream infile(fname);
     std::ofstream myfile;
     myfile.open(d_fname);
@@ -152,76 +96,46 @@ int sxgb_decrypt_file_with_keybuf(char* fname, char* d_fname, char* key) {
     std::string line;
     while (std::getline(infile, line)) {
         const char* data = line.c_str();
-        int index_pos = 0;
-        int total_pos = 0;
-        int iv_pos = 0;
-        int tag_pos = 0;
+        int aad_size = 0;
         int len = line.length();
 
+        // Find the semicolon delimiter to know where ciphertext begins
         for (int i = 0; i < len; i++) {
-            if (data[i] == ',') {
-                index_pos = i;
+            if (data[i] == ';') {
+                aad_size = i;
                 break;
             }
         }
-        for (int i = index_pos + 1; i < len; i++) {
-            if (data[i] == ',') {
-                total_pos = i;
-                break;
-            }
-        }
-        for (int i = total_pos + 1; i < len; i++) {
-            if (data[i] == ',') {
-                iv_pos = i;
-                break;
-            }
-        }
-        for (int i = iv_pos + 1; i < len; i++) {
-            if (data[i] == ',') {
-                tag_pos = i;
-                break;
-            }
-        }
-        assert(0 < index_pos);
-        assert(index_pos < total_pos);
-        assert(total_pos < iv_pos);
-        assert(iv_pos < tag_pos);
+        assert(0 < aad_size);
 
-        char *aad_str = (char*) malloc (total_pos + 1);
-        memcpy(aad_str, data, total_pos);
-        aad_str[total_pos] = 0;
+        // Allocate memory to deserialize the ciphertext. Base64 is a wasteful
+        // encoding so this buffer will always be large enough.
+        uint8_t* ct = new uint8_t[len - (aad_size + 1)]; // + 1 for the semicolon
+        auto ct_size = data::base64_decode(
+            data + aad_size + 1,
+            len - (aad_size + 1),
+            reinterpret_cast<char*>(ct));
 
-        size_t out_len;
-        char tag[CIPHER_TAG_SIZE];
-        char iv[CIPHER_IV_SIZE];
+        // Allocate memory for the plaintext
+        size_t pt_size = Context::getInstance().m_crypto->SymDecSize(ct_size);
+        uint8_t* pt = new uint8_t[pt_size+1];
 
-        char* ct = (char*) malloc(line.size() * sizeof(char));
+        auto ret = Context::getInstance().m_crypto->SymDec(
+            reinterpret_cast<const uint8_t*>(key),
+            ct,
+            reinterpret_cast<const uint8_t*>(data),
+            pt,
+            ct_size,
+            aad_size);
 
-        out_len = data::base64_decode(data + total_pos + 1, iv_pos - total_pos, iv);
-        assert(out_len == CIPHER_IV_SIZE);
-        out_len = data::base64_decode(data + iv_pos + 1, tag_pos - iv_pos, tag);
-        assert(out_len == CIPHER_TAG_SIZE);
-        out_len = data::base64_decode(data + tag_pos + 1, line.size() - tag_pos, ct);
-
-        unsigned char* decrypted = (unsigned char*) malloc((out_len + 1) * sizeof(char));
-        int ret = decrypt_symm(
-            &gcm,
-            (const unsigned char*) ct,
-            out_len,
-            (unsigned char*) iv,
-            (unsigned char*) tag,
-            (unsigned char*) aad_str,
-            strlen(aad_str),
-            decrypted);
-        decrypted[out_len] = '\0';
-        free(ct);
-        if (ret != 0) {
-            // FIXME: log error
-            // LOG(FATAL) << "mbedtls_gcm_auth_decrypt failed with error " << -ret;
-            std::cout << "mbedtls_gcm_auth_decrypt failed with error " << -ret << std::endl;
+        // The null character is necessary for the ostream copy
+        pt[pt_size] = '\0';
+        if (ret != 0)
             return ret;
-        }
-        myfile << decrypted << "\n";
+        myfile << pt << "\n";
+        
+        delete[] ct;
+        delete[] pt;
     }
     infile.close();
     myfile.close();
@@ -307,6 +221,13 @@ int OpaqueFileProcessor::opaque_encrypt_file(char* fname, char* schema_file, cha
                     tuix::CreateDoubleField(rows_builder, static_cast<double>(field.get<double>())).Union(),
                     false // FIXME: check whether field is null
                 );
+            } else if (field_type == "date") {
+                field_offset = tuix::CreateField(
+                    rows_builder,
+                    tuix::FieldUnion_DateField,
+                    tuix::CreateDateField(rows_builder, date_to_int(field.get())).Union(),
+                    false // FIXME: check whether field is null
+                );
             } else {
                 std::string field_string = field.get<std::string>();
                 std::vector<uint8_t> str_vec(field_string.begin(), field_string.end());
@@ -366,32 +287,21 @@ void OpaqueFileProcessor::finish_block() {
     uint8_t* serialized_block = rows_builder.GetBufferPointer();
     size_t serialized_block_len = rows_builder.GetSize();
 
-    uint8_t output[serialized_block_len];
-    uint8_t iv[CIPHER_IV_SIZE];
-    uint8_t tag[CIPHER_TAG_SIZE];
+    size_t ct_size = Context::getInstance().m_crypto->SymEncSize(serialized_block_len);
+    uint8_t ct[ct_size];
 
-    encrypt_symm(
+    Context::getInstance().m_crypto->SymEnc(
         symm_key,
         serialized_block,
-        serialized_block_len,
         NULL,
-        0,
-        output,
-        iv,
-        tag
-    );
-
-    size_t enc_rows_size = CIPHER_IV_SIZE + serialized_block_len + CIPHER_TAG_SIZE;
-
-    uint8_t ciphertext[enc_rows_size];
-    memcpy(ciphertext, iv, CIPHER_IV_SIZE);
-    memcpy(ciphertext + CIPHER_IV_SIZE, output, serialized_block_len);
-    memcpy(ciphertext + CIPHER_IV_SIZE + serialized_block_len, tag, CIPHER_TAG_SIZE);
+        ct,
+        serialized_block_len,
+        0);
 
     flatbuffers::Offset<tuix::EncryptedBlock> encrypted_block_offset = tuix::CreateEncryptedBlock(
         enc_blocks_builder,
         row_offsets.size(),
-        enc_blocks_builder.CreateVector(ciphertext, enc_rows_size)
+        enc_blocks_builder.CreateVector(ct, ct_size)
     );
 
     enc_block_offsets.push_back(encrypted_block_offset);
@@ -479,28 +389,22 @@ int OpaqueFileProcessor::opaque_decrypt_data(char** e_fnames, size_t num_encrypt
         for (int i = 0; i < encrypted_blocks->blocks()->size(); i++) {
             // Retrieve and decrypt each EncryptedBlock
             auto encrypted_block = encrypted_blocks->blocks()->Get(i);
-            uint8_t* enc_rows = (uint8_t*) encrypted_block->enc_rows()->data();
+            uint8_t* ct = (uint8_t*) encrypted_block->enc_rows()->data();
 
-            size_t decrypted_data_len = encrypted_block->enc_rows()->size() - CIPHER_IV_SIZE - CIPHER_TAG_SIZE;
+            size_t pt_size = Context::getInstance()
+                .m_crypto->SymDecSize(encrypted_block->enc_rows()->size());
+            uint8_t* pt = new uint8_t[pt_size];
 
-            uint8_t* iv = enc_rows;
-            uint8_t* ciphertext = enc_rows + CIPHER_IV_SIZE;
-            uint8_t* tag = enc_rows + CIPHER_IV_SIZE + decrypted_data_len;
-
-            uint8_t* plaintext = (uint8_t*) malloc(decrypted_data_len * sizeof(uint8_t));
-
-            int ret = decrypt_symm(
+            Context::getInstance().m_crypto->SymDec(
                 symm_key,
-                ciphertext,
-                decrypted_data_len,
-                iv,
-                tag,
+                ct,
                 NULL,
-                0,
-                plaintext
+                pt,
+                encrypted_block->enc_rows()->size(),
+                0
             );
 
-            auto rows = tuix::GetRows(plaintext);
+            auto rows = tuix::GetRows(pt);
             for (int j = 0; j < rows->rows()->size(); j++) {
                 auto row = rows->rows()->Get(j);
                 std::vector<std::string> output_row;
@@ -521,14 +425,13 @@ int OpaqueFileProcessor::opaque_decrypt_data(char** e_fnames, size_t num_encrypt
                                 output_row.push_back(ss.str());
                             } else if (field->value_type() == tuix::FieldUnion_FloatField) {
                                 auto field_value = static_cast<const tuix::FloatField*>(field->value())->value();
-                                std::ostringstream ss;
-                                ss << static_cast<float>(field_value);
-                                output_row.push_back(ss.str());
+                                output_row.push_back(fmt_floating(field_value));
                             } else if (field->value_type() == tuix::FieldUnion_DoubleField) {
                                 auto field_value = static_cast<const tuix::DoubleField*>(field->value())->value();
-                                std::ostringstream ss;
-                                ss << static_cast<double>(field_value);
-                                output_row.push_back(ss.str());
+                                output_row.push_back(fmt_floating(field_value));
+                            } else if (field->value_type() == tuix::FieldUnion_DateField) {
+                                int field_value = static_cast<const tuix::DateField*>(field->value())->value();
+                                output_row.push_back(int_to_date(field_value));
                             } else {
                                 // Field is a flatbuffers vector
                                 std::vector<char> field_string;
@@ -545,7 +448,7 @@ int OpaqueFileProcessor::opaque_decrypt_data(char** e_fnames, size_t num_encrypt
                 }
                 writer << output_row;
             }
-            free(plaintext);
+            delete[] pt;
         }
         free(file_buffer);
     }

@@ -1,18 +1,23 @@
 import ctypes
 import glob
+import math
 import os
 import pathlib
+import secrets
+import shutil
 import sys
+import subprocess
 
+import flatbuffers
 import grpc
 import numpy as np
-import yaml
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from hadoop.io import (  # pylint: disable=no-name-in-module
     BytesWritable,
     IntWritable,
     SequenceFile,
 )
+from envyaml import EnvYAML
 from numproto import ndarray_to_proto, proto_to_ndarray
 from OpenSSL import crypto
 from paramiko import AutoAddPolicy, SSHClient
@@ -25,9 +30,12 @@ from .exceptions import (
     MC2ClientConfigError,
 )
 from .rpc import (  # pylint: disable=no-name-in-module
-    remote_pb2,
-    remote_pb2_grpc,
+    attest_pb2,
+    attest_pb2_grpc
 )
+from .toolchain.node_provider import get_node_provider
+from .toolchain.toolchain import cluster, container, download, get_head_node_ip, get_worker_node_ips,resource_group, run_remote_cmds_on_cluster, storage, upload
+from .toolchain.flatbuffers.tuix import SignedKey
 
 # Load in C++ library
 curr_path = os.path.dirname(os.path.abspath(os.path.expanduser(__file__)))
@@ -52,7 +60,6 @@ _LIB = ctypes.CDLL(lib_path)
 
 # _CONF is a cache of data retrieved throughout processing
 _CONF = {}
-
 
 def _check_call(ret):
     """Check the return value of C API call
@@ -80,8 +87,12 @@ def _check_remote_call(ret):
     ret : proto
         return value from remote api calls
     """
-    channel_addr = _CONF["remote_addr"]
-    if channel_addr:
+    if _CONF["use_azure"]:
+        head_ip = get_head_node_ip(_CONF["azure_config"])
+    else:
+        head_ip = _CONF["head"]
+
+    if head_ip:
         if ret.status.status != 0:
             raise MC2ClientComputeError(ret.status.exception)
         else:
@@ -288,92 +299,82 @@ def proto_to_pointer(proto, ctype=ctypes.c_uint8):
     return pointer
 
 
-def encrypt_data_with_pk(data, data_len, pem_key, key_size):
+def encrypt_data_with_sym_key(data, sym_key):
     """
     Parameters
     ----------
-    data : byte array
-    data_len : int
-    pem_key : proto
-    key_size : int
+    data : bytes
+    sym_key : bytes
 
     Returns
     -------
-    encrypted_data : proto.NDArray
-    encrypted_data_size_as_int : int
+    encrypted_data : bytes
     """
-    # Cast data to char*
-    data = ctypes.c_char_p(data)
-    data_len = ctypes.c_size_t(data_len)
+    # Allocate memory that will be used to store the encrypted data
+    encrypted_data_size = _LIB.sym_enc_size(len(data))
+    encrypted_data = bytes(encrypted_data_size)
+    
+    # Encrypt the data with sym_key
+    _LIB.sym_enc(
+        ctypes.c_char_p(data),
+        ctypes.c_size_t(len(data)),
+        ctypes.c_char_p(sym_key),
+        ctypes.c_size_t(len(sym_key)),
+        ctypes.cast(encrypted_data, ctypes.POINTER(ctypes.c_uint8))
+    )
+    return encrypted_data
 
-    # Cast proto to pointer to pass into C++ encrypt_data_with_pk()
-    pem_key = proto_to_pointer(pem_key)
 
-    # Allocate memory that will be used to store the encrypted_data and encrypted_data_size
-    encrypted_data = np.zeros(1024).ctypes.data_as(ctypes.POINTER(ctypes.c_uint8))
-    encrypted_data_size = ctypes.c_size_t(1024)
+def encrypt_data_with_pk(data, pem_key):
+    """
+    Parameters
+    ----------
+    data : bytes
+    pem_key : bytes
+
+    Returns
+    -------
+    encrypted_data : bytes
+    """
+
+    # Allocate memory that will be used to store the encrypted data
+    encrypted_data_size = _LIB.asym_enc_size(len(data))
+    encrypted_data = bytes(encrypted_data_size)
 
     # Encrypt the data with pk pem_key
-    _LIB.encrypt_data_with_pk(
-        data,
-        data_len,
-        pem_key,
-        key_size,
-        encrypted_data,
-        ctypes.byref(encrypted_data_size),
+    _LIB.asym_enc(
+        ctypes.c_char_p(data),
+        ctypes.c_size_t(len(data)),
+        ctypes.cast(pem_key, ctypes.POINTER(ctypes.c_uint8)),
+        ctypes.c_size_t(len(pem_key)),
+        ctypes.cast(encrypted_data, ctypes.POINTER(ctypes.c_uint8)),
     )
-
-    # Cast the encrypted data back to a proto.NDArray (for RPC purposes) and return it
-    encrypted_data_size_as_int = encrypted_data_size.value
-    encrypted_data = pointer_to_proto(encrypted_data, encrypted_data_size_as_int)
-
-    return encrypted_data, encrypted_data_size_as_int
+    return encrypted_data
 
 
-def sign_data(key, data, data_size):
+def sign_data(keyfile, data):
     """
     Parameters
     ----------
     keyfile : str
-    data : proto.NDArray or str
-    data_size : int
+    data : bytes
 
     Returns
     -------
-    signature : proto.NDArray
-    sig_len_as_int : int
+    signature : bytes
     """
-    if not os.path.exists(key):
-        raise FileNotFoundError("Cannot find private key: {}".format(key))
-
-    # Cast the keyfile to a char*
-    keyfile = ctypes.c_char_p(str.encode(key))
-
-    # Cast data : proto.NDArray to pointer to pass into C++ sign_data() function
-    if isinstance(data, str):
-        data = c_str(data)
-    elif isinstance(data, ctypes.Array) and (data._type_ is ctypes.c_char):
-        pass
-    else:
-        # FIXME error handling for other types
-        data = proto_to_pointer(data)
-
-    data_size = ctypes.c_size_t(data_size)
-
-    # Allocate memory to store the signature and sig_len
-    signature = np.zeros(1024).ctypes.data_as(ctypes.POINTER(ctypes.c_uint8))
-    sig_len = ctypes.c_size_t(1024)
-
+    # Allocate memory to store the signature
+    sig_len = _LIB.asym_sign_size()
+    signature = bytes(sig_len)
+    
     # Sign data with key keyfile
-    _LIB.sign_data_with_keyfile(
-        keyfile, data, data_size, signature, ctypes.byref(sig_len)
+    _LIB.sign_using_keyfile(
+        ctypes.c_char_p(str.encode(keyfile)),
+        ctypes.cast(data, ctypes.POINTER(ctypes.c_uint8)),
+        ctypes.c_size_t(len(data)),
+        ctypes.cast(signature, ctypes.POINTER(ctypes.c_uint8)),
     )
-
-    # Cast the signature and sig_len back to a gRPC serializable format
-    sig_len_as_int = sig_len.value
-    signature = pointer_to_proto(signature, sig_len_as_int, nptype=np.uint8)
-
-    return signature, sig_len_as_int
+    return signature
 
 
 def convert_to_sequencefiles(cpp_encrypted_data):
@@ -467,11 +468,14 @@ def set_config(general_config):
         Path to config file
     """
     _CONF["general_config"] = general_config
-    config = yaml.safe_load(open(_CONF["general_config"]).read())
+    config = EnvYAML(_CONF["general_config"])
     _CONF["current_user"] = config["user"]["username"]
 
-    # Set optionally included configs
-    _CONF["remote_addr"] = config["cloud"].get("orchestrator")
+    # Networking configs
+    _CONF["head"] = config["launch"].get("head")
+    _CONF["workers"] = config["launch"].get("workers") or []
+    _CONF["azure_config"] = config["launch"].get("azure_config")
+    _CONF["use_azure"] = not (_CONF["head"] or _CONF["workers"])
 
 
 def generate_keypair(expiration=10 * 365 * 24 * 60 * 60):
@@ -487,12 +491,11 @@ def generate_keypair(expiration=10 * 365 * 24 * 60 * 60):
     if _CONF.get("general_config") is None:
         raise MC2ClientConfigError("Configuration not set")
 
-    user_config = yaml.safe_load(open(_CONF["general_config"]).read())["user"]
+    user_config = EnvYAML(_CONF["general_config"])["user"]
 
     username = user_config["username"]
     private_key_path = user_config["private_key"]
     cert_path = user_config["certificate"]
-    print(cert_path)
 
     root_cert_path = user_config["root_certificate"]
     root_private_key_path = user_config["root_private_key"]
@@ -515,7 +518,7 @@ def generate_keypair(expiration=10 * 365 * 24 * 60 * 60):
 
     # Generate the key
     key = crypto.PKey()
-    key.generate_key(crypto.TYPE_RSA, 3072)
+    key.generate_key(crypto.TYPE_RSA, _LIB.rsa_mod_size() * 8)
 
     with open(private_key_path, "wb") as priv_key_file:
         priv_key_file.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
@@ -556,9 +559,7 @@ def generate_symmetric_key(num_bytes=32):
     if _CONF.get("general_config") is None:
         raise MC2ClientConfigError("Configuration not set")
 
-    symmetric_key_path = yaml.safe_load(open(_CONF["general_config"]).read())["user"][
-        "symmetric_key"
-    ]
+    symmetric_key_path = EnvYAML(_CONF["general_config"])["user"]["symmetric_key"]
     if os.path.exists(symmetric_key_path):
         print(
             "Skipping symmetric key generation - key already exists at {}".format(
@@ -573,7 +574,7 @@ def generate_symmetric_key(num_bytes=32):
 
 
 def encrypt_data(
-    plaintext_file, encrypted_file, schema_file=None, enc_format="securexgboost"
+    plaintext_file, encrypted_file, schema_file=None, enc_format="xgb"
 ):
     """
     Encrypt a file in a certain format
@@ -586,9 +587,10 @@ def encrypt_data(
         Destination path of encrypted data
     schema_file : str
         Path to schema of data. Represented as comma separated column types.
-        Necessary for Opaque encryption format.
+        Necessary for Opaque SQL encryption format.
     enc_format : str
-        The format (i.e. Opaque or Secure XGBoost) to use for encryption
+        The format to use for encryption
+        Input `sql` if running Opaque SQL or `xgb` if running Secure XGBoost
     """
     if _CONF.get("general_config") is None:
         raise MC2ClientConfigError("Configuration not set")
@@ -600,22 +602,26 @@ def encrypt_data(
 
     cleaned_format = "".join(enc_format.split()).lower()
 
-    symmetric_key_path = yaml.safe_load(open(_CONF["general_config"]).read())["user"][
-        "symmetric_key"
-    ]
+    symmetric_key_path = EnvYAML(_CONF["general_config"])["user"]["symmetric_key"]
+
+    if not os.path.exists(plaintext_file):
+        raise CryptoError("File to encrypt not found at {}".format(plaintext_file))
 
     if not os.path.exists(symmetric_key_path):
         raise CryptoError("Symmetric key not found at {}".format(symmetric_key_path))
 
     result = ctypes.c_int()
-    if cleaned_format == "securexgboost":
+    if cleaned_format == "xgb":
         _LIB.sxgb_encrypt_data(
             c_str(plaintext_file),
             c_str(encrypted_file),
             c_str(symmetric_key_path),
             ctypes.byref(result),
         )
-    elif cleaned_format == "opaque":
+    elif cleaned_format == "sql":
+        if not os.path.exists(schema_file):
+            raise CryptoError("Schema not found at {}".format(schema_file))
+
         _LIB.opaque_encrypt_data(
             c_str(plaintext_file),
             c_str(schema_file),
@@ -642,7 +648,7 @@ def decrypt_data(encrypted_file, plaintext_file, enc_format):
     plaintext_file : str
         Path to decrypted data
     enc_format : str
-        The encryption format (i.e. Opaque or Secure XGBoost)
+        The encryption format (i.e. `sql` for Opaque SQL or `xgb` for Secure XGBoost)
     """
     if _CONF.get("general_config") is None:
         raise MC2ClientConfigError("Configuration not set")
@@ -654,9 +660,7 @@ def decrypt_data(encrypted_file, plaintext_file, enc_format):
 
     cleaned_format = "".join(enc_format.split()).lower()
 
-    symmetric_key_path = yaml.safe_load(open(_CONF["general_config"]).read())["user"][
-        "symmetric_key"
-    ]
+    symmetric_key_path = EnvYAML(_CONF["general_config"])["user"]["symmetric_key"]
 
     if not os.path.exists(symmetric_key_path):
         raise FileNotFoundError(
@@ -664,14 +668,14 @@ def decrypt_data(encrypted_file, plaintext_file, enc_format):
         )
 
     result = ctypes.c_int()
-    if cleaned_format == "securexgboost":
+    if cleaned_format == "xgb":
         _LIB.sxgb_decrypt_data(
             c_str(encrypted_file),
             c_str(plaintext_file),
             c_str(symmetric_key_path),
             ctypes.byref(result),
         )
-    elif cleaned_format == "opaque":
+    elif cleaned_format == "sql":
         # Convert from SequenceFile format to Flatbuffers bytes
         data_files = sorted(convert_from_sequencefiles(encrypted_file))
 
@@ -694,10 +698,49 @@ def decrypt_data(encrypted_file, plaintext_file, enc_format):
         raise CryptoError("Decryption failed")
 
 
-def upload_file(input_path, output_path):
+def create_storage():
     """
-    Upload file to the worker nodes specified
-    during configuration.
+    Create storage from configuration file
+    """
+    if _CONF.get("azure_config") is None:
+        raise MC2ClientConfigError("Azure configuration not set")
+
+    storage(_CONF["azure_config"], create=True)
+
+
+def delete_storage():
+    """
+    Delete storage from configuration file
+    """
+    if _CONF.get("azure_config") is None:
+        raise MC2ClientConfigError("Azure configuration not set")
+
+    storage(_CONF["azure_config"], create=False)
+
+
+def create_container():
+    """
+    Create container in storage from configuration file
+    """
+    if _CONF.get("azure_config") is None:
+        raise MC2ClientConfigError("Azure configuration not set")
+
+    container(_CONF["azure_config"], create=True)
+
+
+def delete_container():
+    """
+    Delete container in storage from configuration file
+    """
+    if _CONF.get("azure_config") is None:
+        raise MC2ClientConfigError("Azure configuration not set")
+
+    container(_CONF["azure_config"], create=False)
+
+
+def upload_file(input_path, output_path, use_azure=True):
+    """
+    Upload file to Azure storage or disk of all cluster VMs
 
     Parameters
     ----------
@@ -706,23 +749,58 @@ def upload_file(input_path, output_path):
     output_path : str
         Path to output file
     """
-    cloud_config = yaml.safe_load(open(_CONF["general_config"]).read())["cloud"]
-    remote_username = cloud_config.get("remote_username")
+    if not _CONF["use_azure"] and use_azure:
+        raise MC2ClientConfigError("Attempted to use Azure storage with"\
+                "node addresses manually configured")
 
-    worker_ips = cloud_config.get("nodes")
+    if _CONF["use_azure"] and _CONF.get("azure_config") is None:
+        raise MC2ClientConfigError("Azure configuration not set")
 
-    ips = worker_ips
+    if use_azure:
+        upload(_CONF["azure_config"], input_path, output_path)
+    else:
+        # TODO: the username used for SSH and the username specified in config.yaml should be the same
+        # there should only be one place to input the username across config.yaml and azure.yaml
+        if _CONF["use_azure"]:
+            azure_config = EnvYAML(_CONF["azure_config"], strict=False)
+            remote_username = azure_config["auth"]["ssh_user"]
+            ssh_key = azure_config["auth"]["ssh_private_key"]
+            head = {
+                "ip": get_head_ip(),
+                "username": remote_username,
+                "ssh_key": ssh_key
+            }
+            workers = [{"ip": ip, "username": remote_username} for ip in get_worker_ips()]
+        else:
+            head = _CONF["head"]
+            workers = _CONF["workers"]
 
-    for ip in ips:
-        ssh = _createSSHClient(ip, 22, remote_username)
-        scp = SCPClient(ssh.get_transport())
-        scp.put(input_path, output_path, recursive=True)
+        nodes = [head] + workers
+
+        for node in nodes:
+            if node["ip"] == "0.0.0.0" or node["ip"] == "127.0.0.1":
+                # Overwrite the destination path
+                if os.path.exists(output_path):
+                    if os.path.isdir(output_path):
+                        shutil.rmtree(output_path)
+                    else:
+                        os.remove(output_path)
+
+                # We're using a local deployment
+                if os.path.isdir(input_path):
+                    shutil.copytree(input_path, output_path)
+                else:
+                    shutil.copy2(input_path, output_path)
+            else:
+                # Use scp
+                ssh = _createSSHClient(node["ip"], 22, node["username"], node["ssh_key"])
+                scp = SCPClient(ssh.get_transport())
+                scp.put(input_path, output_path, recursive=True)
 
 
-def download_file(input_path, output_path):
+def download_file(input_path, output_path, use_azure=True):
     """
-    Download file from the first worker node
-    specified during configuration.
+    Download file from Azure storage or head node disk
 
     Parameters
     ----------
@@ -731,259 +809,260 @@ def download_file(input_path, output_path):
     output_path : str
         Path to output file
     """
-    cloud_config = yaml.safe_load(open(_CONF["general_config"]).read())["cloud"]
-    remote_username = cloud_config.get("remote_username")
+    if not _CONF["use_azure"] and use_azure:
+        raise MC2ClientConfigError("Attempted to use Azure storage with"\
+                "node addresses manually configured")
 
-    head_ip = cloud_config.get("nodes")[0]
+    if _CONF["use_azure"] and _CONF.get("azure_config") is None:
+        raise MC2ClientConfigError("Azure configuration not set")
 
-    if not head_ip:
-        raise MC2ClientConfigError(
-            "Remote orchestrator IP not set. Run oc.create_cluster() \
-            to launch VMs and configure IPs automatically or explicitly set it in the user YAML."
-        )
+    if use_azure:
+        download(_CONF["azure_config"], input_path, output_path)
+    else:  # use scp
+        if _CONF["use_azure"]:
+            azure_config = EnvYAML(_CONF["azure_config"], strict=False)
+            remote_username = azure_config["auth"]["ssh_user"]
+            ssh_key = azure_config["auth"]["ssh_private_key"]
+            head = {
+                "ip": get_head_node_ip(_CONF["azure_config"]),
+                "username": remote_username,
+                "ssh_key": ssh_key,
+            }
+        else:
+            head = _CONF["head"]
 
-    ssh = _createSSHClient(head_ip, 22, remote_username)
-    scp = SCPClient(ssh.get_transport())
-    scp.get(input_path, output_path, recursive=True)
+        if head["ip"] == "0.0.0.0" or head["ip"] == "127.0.0.1":
+            if os.path.isdir(input_path):
+                shutil.copytree(input_path, output_path)
+            else:
+                shutil.copy2(input_path, output_path)
+        else:
+            ssh = _createSSHClient(head["ip"], 22, head["username"], head["ssh_key"])
+            scp = SCPClient(ssh.get_transport())
+            scp.get(input_path, output_path, recursive=True)
 
 
-def attest():
+def create_cluster():
     """
-    Verify remote attestation report of enclave and extract its public key.
-    The report and public key are saved as instance attributes.
-    Parameters for attestation, e.g. whether to verify report,
-    whether to check client list, whether to check MRSIGNER/MRENCLAVE, can be specified in config YAML.
-
+    Create a cluster
     """
-    pem_key = ctypes.POINTER(ctypes.c_uint8)()
-    pem_key_size = ctypes.c_size_t()
-    nonce = ctypes.POINTER(ctypes.c_uint8)()
-    nonce_size = ctypes.c_size_t()
-    client_list = ctypes.POINTER(ctypes.c_char_p)()
-    client_list_size = ctypes.c_size_t()
-    remote_report = ctypes.POINTER(ctypes.c_uint8)()
-    remote_report_size = ctypes.c_size_t()
+    if _CONF.get("azure_config") is None:
+        raise MC2ClientConfigError("Azure configuration not set")
 
-    channel_addr = _CONF["remote_addr"]
+    cluster(_CONF["azure_config"], create=True)
 
-    if channel_addr is None:
-        raise MC2ClientConfigError(
-            "Remote orchestrator IP not set. Run oc.create_cluster() \
-            to launch VMs and configure IPs automatically or explicitly set it in the user YAML."
-        )
 
-    with grpc.insecure_channel(channel_addr) as channel:
-        stub = remote_pb2_grpc.RemoteStub(channel)
-        response = stub.rpc_get_remote_report_with_pubkey_and_nonce(
-            remote_pb2.Status(status=1)
-        )
+def delete_cluster():
+    """
+    Delete a cluster
+    """
+    if _CONF.get("azure_config") is None:
+        raise MC2ClientConfigError("Azure configuration not set")
 
-    pem_key = proto_to_ndarray(response.pem_key).ctypes.data_as(
-        ctypes.POINTER(ctypes.c_uint8)
-    )
-    pem_key_size = ctypes.c_size_t(response.pem_key_size)
-    nonce = proto_to_ndarray(response.nonce).ctypes.data_as(
-        ctypes.POINTER(ctypes.c_uint8)
-    )
-    nonce_size = ctypes.c_size_t(response.nonce_size)
-    client_list = from_pystr_to_cstr(list(response.client_list))
-    client_list_size = ctypes.c_size_t(response.client_list_size)
+    cluster(_CONF["azure_config"], create=False)
 
-    remote_report = proto_to_ndarray(response.remote_report).ctypes.data_as(
-        ctypes.POINTER(ctypes.c_uint8)
-    )
-    remote_report_size = ctypes.c_size_t(response.remote_report_size)
 
-    if _CONF.get("general_config") is None:
-        raise MC2ClientConfigError("Configuration not set")
+def create_resource_group():
+    """
+    Create a resource group
+    """
+    if _CONF.get("azure_config") is None:
+        raise MC2ClientConfigError("Azure configuration not set")
 
-    # Load config to see what parameters user has specified
-    attestation_config = yaml.safe_load(open(_CONF["general_config"]).read())[
-        "attestation"
-    ]
+    resource_group(_CONF["azure_config"], create=True)
+
+
+def delete_resource_group():
+    """
+    Delete a resource group
+    """
+    if _CONF.get("azure_config") is None:
+        raise MC2ClientConfigError("Azure configuration not set")
+
+    resource_group(_CONF["azure_config"], create=False)
+
+
+def get_head_ip():
+    """
+    Get IP address of head node of created cluster
+    """
+    return get_head_node_ip(_CONF["azure_config"])
+
+
+def get_worker_ips():
+    """
+    Get IP addresses of all worker nodes in created cluster
+    """
+    return get_worker_node_ips(_CONF["azure_config"])
+
+
+def run_remote_cmds(head_cmds, worker_cmds):
+    """
+    Remotely run commands on VMs in the Azure cluster
+
+    Parameters
+    ----------
+    head_cmds : list
+        List of commands to run on the head node
+    worker_cmds : list
+        List of commands to run on the worker nodes
+    """
+    if _CONF["use_azure"]:
+        # Run the commands on the azure cluster
+        run_remote_cmds_on_cluster(_CONF["azure_config"], head_cmds, worker_cmds)
+    else:
+        # Create a list with the node address + command
+        commands = ([(_CONF["head"], head_cmds)] +
+            [(worker, worker_cmds) for worker in _CONF["workers"]])
+
+        # SSH into each node and run the specified command or run in a
+        # subprocess if the IP is local
+        for (node, cmds) in commands:
+            if (node["ip"] == "0.0.0.0") or (node["ip"] == "127.0.0.1"):
+                # We're using a local deployment
+                for cmd in cmds:
+                    ps = subprocess.Popen(cmd, shell=True)
+                    print("Running {} locally created a process with PID {}".format(cmd, ps.pid))
+            else:
+                ssh = _createSSHClient(node["ip"], 22, node["username"], node["ssh_key"])
+                for cmd in cmds:
+                    ssh.exec_command(cmd)
+
+
+
+def configure_job(config):
+    """
+    Attest all of the worker enclaves and give them the shared symmetric key.
+    """
+    user_config = config["user"]
+    attestation_config = config["run"]["attestation"]
+
+    # Get the address of the head node's attestation gRPC listener
+    if _CONF["use_azure"]:
+        head_address = get_head_ip() + ":50051"
+    else:
+        head_address = _CONF["head"]["ip"] + ":50051"
+
+    # If we are not in simulation mode, get the enclave signing key
     simulation_mode = attestation_config.get("simulation_mode")
-    check_client_list = attestation_config.get("check_client_list")
-
-    mrenclave_hash = attestation_config.get("mrenclave")
-    if mrenclave_hash and mrenclave_hash != "NULL":
-        check_mrenclave = 1
-        expected_mrenclave = c_str(mrenclave_hash)
-        # TODO: should this be incremented?
-        expected_mrenclave_len = len(mrenclave_hash) + 1
-    else:
-        check_mrenclave = 0
-        expected_mrenclave = c_str("NULL")
-        expected_mrenclave_len = 0
-
-    mrsigner_public_key = attestation_config.get("mrsigner")
-    if mrsigner_public_key and mrsigner_public_key != "NULL":
-        check_mrsigner = 1
-        expected_mrsigner = c_str(mrsigner_public_key)
-        expected_mrsigner_len = len(mrsigner_public_key) + 1
-    else:
-        check_mrsigner = 0
-        expected_mrsigner = c_str("NULL")
-        expected_mrsigner_len = 0
-
-    verification_passes = ctypes.c_int()
-
-    # Verify attestation report
+    mrsigner_path = attestation_config["mrsigner"]
     if not simulation_mode:
-        # Check public key, nonce, client list is in report hash
-        _LIB.attest(
-            pem_key,
-            pem_key_size,
-            nonce,
-            nonce_size,
-            from_pystr_to_cstr(attestation_config.get("client_list")),
-            ctypes.c_size_t(len(attestation_config.get("client_list"))),
-            remote_report,
-            remote_report_size,
-            check_mrenclave,
-            expected_mrenclave,
-            ctypes.c_size_t(expected_mrenclave_len),
-            check_mrsigner,
-            expected_mrsigner,
-            ctypes.c_size_t(expected_mrsigner_len),
-            ctypes.byref(verification_passes),
-        )
+        if not os.path.exists(mrsigner_path):
+            raise FileNotFoundError("Enclave signing key not found at:",
+                    mrsigner_path)
+        else:
+            enclave_signer_pem = open(mrsigner_path).read()
+    else:
+        enclave_signer_pem = ""
 
-        if not verification_passes.value:
-            raise AttestationError("Remote attestation report verification failed")
+    # Attest the enclaves and obtain their public keys
+    _attest(head_address, simulation_mode, enclave_signer_pem)
 
-    # Verify client names match
-    if simulation_mode and check_client_list:
-        received_client_list = sorted(from_cstr_to_pystr(client_list, client_list_size))
-        expected_client_list = sorted(attestation_config.get("client_list"))
-        if received_client_list != expected_client_list:
-            raise AttestationError(
-                "Provided client list doesn't match that received from enclave"
-            )
-
-    # Set nonce, enclave public key, respective sizes
-    _CONF["enclave_pk"] = pem_key
-    _CONF["enclave_pk_size"] = pem_key_size
-    _CONF["nonce"] = nonce
-    _CONF["nonce_size"] = nonce_size
-    _CONF["nonce_ctr"] = 0
-
-    # Add client key to enclave
-    # TODO: figure out how to do this for both Secure XGBoost and Opaque
-    _add_client_key()
-    _get_enclave_symm_key()
-
-
-def _add_client_key():
-    """
-    Add private (symmetric) key to enclave.
-    This function encrypts the user's symmetric key using the enclave's public key,
-    and signs the ciphertext with the user's private key.
-    The signed message is sent to the enclave.
-    """
-    # Convert key to serialized numpy array
-    enclave_public_key_size = _CONF["enclave_pk_size"].value
-    enclave_public_key = ctypes2numpy(
-        _CONF["enclave_pk"], enclave_public_key_size, np.uint8
-    )
-    enclave_public_key = ndarray_to_proto(enclave_public_key)
-
-    # Convert nonce to serialized numpy array
-    nonce_size = _CONF["nonce_size"].value
-    nonce = ctypes2numpy(_CONF["nonce"], nonce_size, np.uint8)
-    nonce = ndarray_to_proto(nonce)
-
-    if _CONF.get("general_config") is None:
-        raise MC2ClientConfigError("Configuration not set")
-
-    user_config = yaml.safe_load(open(_CONF["general_config"]).read())["user"]
-
+    # Get the user's symmetric key
     symm_key_path = user_config["symmetric_key"]
     if not os.path.exists(symm_key_path):
         raise FileNotFoundError("Symmetric key not found at {}".format(symm_key_path))
     else:
-        _CONF["symm_key"] = symm_key_path
+        user_symm_key = open(symm_key_path, "rb").read()
 
+    # Get the user's private keyfile path
     priv_key_path = user_config["private_key"]
     if not os.path.exists(priv_key_path):
         raise FileNotFoundError("Private key not found at {}".format(priv_key_path))
-    else:
-        _CONF["private_key"] = priv_key_path
 
-    cert_path = user_config["certificate"]
-    if not os.path.exists(cert_path):
-        raise FileNotFoundError("Certificate not found at {}".format(cert_path))
+    # Sign the client's symmetric key
+    sig = sign_data(priv_key_path, user_symm_key)
 
-    with open(symm_key_path, "rb") as symm_keyfile:
-        user_symm_key = symm_keyfile.read()
-
-    with open(cert_path, "rb") as cert_file:
-        cert = cert_file.read()
-
-    enc_sym_key, enc_sym_key_size = encrypt_data_with_pk(
-        user_symm_key, len(user_symm_key), enclave_public_key, enclave_public_key_size
+    # Construct and encrypt the `SignedKey` flatbuffers object
+    key_bytes = _construct_signed_key_fb(
+        user_symm_key,
+        sig,
     )
 
-    # Sign the encrypted symmetric key
-    sig, sig_size = sign_data(priv_key_path, enc_sym_key, enc_sym_key_size)
+    # For each enclave public key, encrypt a signedkey object
+    enc_keys = []
+    for pk in _CONF["enclave_pks"]:
+        enc_keys.append(encrypt_data_with_pk(key_bytes, pk))
 
-    # Send the encrypted key to the enclave
-    channel_addr = _CONF["remote_addr"]
-    if channel_addr is None:
-        raise MC2ClientConfigError(
-            "Remote orchestrator IP not set. Run oc.create_cluster() \
-            to launch VMs and configure IPs automatically or explicitly set it in the user YAML."
+    # Return encrypted keys to the head node
+    with grpc.insecure_channel(head_address) as channel:
+        stub = attest_pb2_grpc.ClientToEnclaveStub(channel)
+        response = stub.GetFinalAttestationResult(
+            attest_pb2.EncryptedKeys(keys=enc_keys)
         )
 
-    if channel_addr:
-        with grpc.insecure_channel(channel_addr) as channel:
-            stub = remote_pb2_grpc.RemoteStub(channel)
-            stub.rpc_add_client_key_with_certificate(
-                remote_pb2.DataMetadata(
-                    certificate=cert,
-                    enc_sym_key=enc_sym_key,
-                    key_size=enc_sym_key_size,
-                    signature=sig,
-                    sig_len=sig_size,
-                )
-            )
 
-
-def _get_enclave_symm_key():
+def _attest(head_address, simulation_mode, mrsigner):
     """
-    Get enclave's symmetric key used to encrypt output common to all clients
+    Verify remote attestation report of enclaves and extract their public keys.
+    The public keys are saved as instance attributes. Parameters for
+    attestation, e.g. whether to verify report, whether to check
+    MRSIGNER/MRENCLAVE, can be specified in config YAML.
     """
-    user_config = yaml.safe_load(open(_CONF["general_config"]).read())["user"]
-    username = user_config["username"]
-
-    symm_key_path = user_config["symmetric_key"]
-    if not os.path.exists(symm_key_path):
-        raise FileNotFoundError("Symmetric key not found at {}".format(symm_key_path))
-
-    with open(symm_key_path, "rb") as symm_keyfile:
-        user_symm_key = symm_keyfile.read()
-
-    channel_addr = _CONF["remote_addr"]
-
-    if channel_addr is None:
-        raise MC2ClientConfigError(
-            "Remote orchestrator IP not set. Run oc.create_cluster() \
-            to launch VMs and configure IPs automatically or explicitly set it in the user YAML."
+    # Query enclave for attestation report
+    with grpc.insecure_channel(head_address) as channel:
+        stub = attest_pb2_grpc.ClientToEnclaveStub(channel)
+        response = stub.GetRemoteEvidence(
+            attest_pb2.AttestationStatus(status=0)
         )
+    
+    # Extract evidence list from response
+    evidence_list = response.evidences
 
-    if channel_addr:
-        with grpc.insecure_channel(channel_addr) as channel:
-            stub = remote_pb2_grpc.RemoteStub(channel)
-            response = stub.rpc_get_enclave_symm_key(remote_pb2.Name(username=username))
+    # Extract public keys from the evidence
+    pk_list = []
+    pk_size = _LIB.cipher_pk_size()
+    for msg in evidence_list:
+        # Allocate memory for enclave public key
+        pk_bytes = bytes(pk_size)
+        _LIB.get_public_key(
+            ctypes.cast(msg, ctypes.POINTER(ctypes.c_uint8)),
+            ctypes.cast(pk_bytes, ctypes.POINTER(ctypes.c_uint8))
+        )
+        pk_list.append(pk_bytes)
 
-            enc_key_serialized = response.key
-            enc_key_size = ctypes.c_size_t(response.size)
-            enc_key = proto_to_pointer(enc_key_serialized)
+    # Verify attestation report
+    if not simulation_mode:
+        for msg in evidence_list:
+            if _LIB.attest_evidence(
+                ctypes.c_char_p(mrsigner.encode("utf-8")),
+                ctypes.c_size_t(len(mrsigner)+1),
+                ctypes.cast(msg, ctypes.POINTER(ctypes.c_uint8)),
+                ctypes.c_size_t(len(msg)),
+                ):
+                raise AttestationError("Remote attestation report verification failed")
 
-    # Decrypt the key and save it
-    c_char_p_key = ctypes.c_char_p(user_symm_key)
-    enclave_symm_key = ctypes.POINTER(ctypes.c_uint8)()
+    # Set enclave public keys in the config
+    _CONF["enclave_pks"] = pk_list
 
-    _LIB.decrypt_enclave_key(
-        c_char_p_key, enc_key, enc_key_size, ctypes.byref(enclave_symm_key)
-    )
-    _CONF["enclave_sym_key"] = enclave_symm_key
+
+def _construct_signed_key_fb(sym_key, sig):
+    """
+    Constructs the `SignedKey` flatbuffers object, and outputs it's byte
+    representation
+
+    Parameters
+    ----------
+    sym_key : bytes
+        The client symmetric key
+    sig : bytes
+        Signature over `sym_key`
+
+    Returns:
+        root : bytearray
+    """
+    builder = flatbuffers.Builder(200)
+
+    # Serialize vectors
+    fb_sym_key = builder.CreateByteVector(sym_key)
+    fb_sig = builder.CreateByteVector(sig)
+
+    # Construct the `SignedKey` object
+    SignedKey.SignedKeyStart(builder)
+    SignedKey.SignedKeyAddKey(builder, fb_sym_key)
+    SignedKey.SignedKeyAddSig(builder, fb_sig)
+    signed_key = SignedKey.SignedKeyEnd(builder)
+    builder.Finish(signed_key)
+
+    # Output the resulting bytes
+    return bytes(builder.Output())

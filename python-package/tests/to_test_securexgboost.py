@@ -3,10 +3,11 @@ import os
 import pathlib
 import shutil
 
-import mc2client as mc2
 import numpy as np
+import mc2client as mc2
 import pytest
-import yaml
+
+from envyaml import EnvYAML
 
 # Note: to run this test, you'll need to start a gRPC orchestrator and an enclave running Secure XGBoost
 # Follow the demo here to do so: https://secure-xgboost.readthedocs.io/en/latest/tutorials/outsourced.html
@@ -29,7 +30,7 @@ def config(tmp_path):
     test_symm_key = os.path.join(tmp_path, "keys", "user1_sym.key")
 
     # Rewrite config YAML with test paths
-    config = yaml.safe_load(open(original_config_path).read())
+    config = EnvYAML(original_config_path)
     config["user"]["certificate"] = test_cert
     config["user"]["private_key"] = test_priv_key
     config["user"]["symmetric_key"] = test_symm_key
@@ -41,7 +42,7 @@ def config(tmp_path):
     test_config_path = os.path.join(tmp_path, "config.yaml")
 
     with open(test_config_path, "w") as out:
-        yaml.dump(config, out, default_flow_style=False)
+        yaml.dump(dict(config), out, default_flow_style=False)
 
     mc2.set_config(test_config_path)
     return tests_dir

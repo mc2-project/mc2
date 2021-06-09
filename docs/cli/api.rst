@@ -1,7 +1,9 @@
 CLI Reference
 =============
 
+See the :doc:`Configuration <../config/config>` section on how to specify parameters for each command.
+
 .. argparse::
    :filename: ../mc2.py
    :func: parser
-   :prog: python3 mc2.py
+   :prog: mc2

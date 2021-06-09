@@ -22,8 +22,8 @@ sys.path.insert(0, curr_path)
 # -- Project information -----------------------------------------------------
 
 project = "MC<sup>2</sup> Client"
-copyright = "2021, MC2 Contributors"
-author = "MC2 Contributors"
+copyright = "2021, MC2 Team"
+author = "MC2 Team"
 
 # The full version, including alpha/beta/rc tags
 #  release = "0.0.1"
@@ -67,7 +67,7 @@ html_theme_options = {
     "light_css_variables": {
         "color-brand-primary": "#00B0FF",
         "color-brand-content": "#00B0FF",
-        "color-admonition-background": "orange",
+        "color-admonition-background": "#3681da",
     },
 }
 
