@@ -18,7 +18,6 @@ python-package/mc2client/rpc/attest_pb2_grpc.py
 
 # Auto-generated Flatbuffers files
 python-package/mc2client/toolchain/flatbuffers/tuix/*
-python-package/mc2client/toolchain/flatbuffers/tms/*
 
 # Auto-generated documentation
 docs/_build/
