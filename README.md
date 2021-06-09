@@ -2,6 +2,7 @@
 
 ![build](https://github.com/mc2-project/mc2/actions/workflows/main.yml/badge.svg)
 ![docs](https://github.com/mc2-project/mc2/actions/workflows/docs.yml/badge.svg)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
 ![MC2 Overview](docs/img/mc2_workflow.jpeg)
