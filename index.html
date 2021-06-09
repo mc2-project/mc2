@@ -19,7 +19,7 @@
   --color-code-foreground: black;
   --color-brand-primary: #00B0FF;
   --color-brand-content: #00B0FF;
-  --color-admonition-background: orange;
+  --color-admonition-background: #3681da;
   
   }
   @media (prefers-color-scheme: dark) {
@@ -36,7 +36,7 @@
   --color-code-foreground: black;
   --color-brand-primary: #00B0FF;
   --color-brand-content: #00B0FF;
-  --color-admonition-background: orange;
+  --color-admonition-background: #3681da;
   
   }
   .override-dark {
@@ -118,13 +118,19 @@
   <p><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">Global Configuration</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="python/index.html">Python Interface</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opaquesql_usage.html">Usage with Opaque SQL</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="config/index.html">Configuration</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="config/config.html">Global Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config/azure.html">Azure Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="python/index.html">Python Interface</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="python/usage.html">Python Package Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python/api.html">API Reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="cli/index.html">CLI Interface</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="cli/index.html">CLI Interface</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label for="toctree-checkbox-3"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="cli/usage.html">CLI Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/api.html">CLI Reference</a></li>
 </ul>
@@ -145,18 +151,34 @@
         </label>
         <section id="welcome-to-mc2-client-s-documentation">
 <h1>Welcome to MC<sup>2</sup> Client’s documentation!<a class="headerlink" href="#welcome-to-mc2-client-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Born out of research from the <a class="reference external" href="https://rise.cs.berkeley.edu/">UC Berkeley RISE Lab</a>, MC<sup>2</sup> is a platform for running secure analytics and machine learning in an untrusted environment, like the cloud. MC<sup>2</sup> provides compute services that can be cryptographically trusted to correctly and securely perform computation even when the machines they run on have been compromised. MC<sup>2</sup> is open-source and is freely available on <a class="reference external" href="https://github.com/mc2-project/mc2">GitHub</a>.</p>
-<p>MC<sup>2</sup> Client enables users of MC<sup>2</sup>’s secure cloud compute services to remotely interface with MC<sup>2</sup>’s cloud services from their local machine. Currently, MC<sup>2</sup> supports <a class="reference external" href="https://mc2-project.github.io/opaque/">Opaque SQL</a>, a secure framework for SQL analytics built on top of Apache Spark, and <a class="reference external" href="https://secure-xgboost.readthedocs.io/en/latest/">Secure XGBoost</a>, a secure library for training (and learning from) gradient boosted decision tree models. Users will first need to start a compute service in the cloud, and then run MC<sup>2</sup> Client locally.</p>
-<p>MC<sup>2</sup> Client provides two interfaces, a Python interface and a command line interface, to enable a user to encrypt and upload their data, write and remotely run code, and retrieve results.</p>
+<p>MC<sup>2</sup> Client is a local trusted client that enables users to securely interface with the MC<sup>2</sup> ecosystem. In particular, MC<sup>2</sup> Client allows users to initialize their identities, launch MC<sup>2</sup>-loaded VMs and other resources on Azure Confidential Computing, start and stop MC<sup>2</sup> compute services (Opaque SQL and Secure XGBoost), transfer their encrypted sensitive data to the cloud for processing, and remotely run secure computation on their data.</p>
+<p>MC<sup>2</sup> Client provides two interfaces, a <a class="reference internal" href="python/usage.html"><span class="doc">Python interface</span></a> and a <a class="reference internal" href="cli/usage.html"><span class="doc">command line interface</span></a>. Both rely on a <a class="reference internal" href="config/config.html"><span class="doc">configuration file</span></a> to configure MC<sup>2</sup> Client; the command line interface is simpler but less flexible, while the Python interface gives users finer grained control over what they want to do.</p>
+<p>While MC<sup>2</sup> currently offers various compute services, the client is currently only compatible with Opaque SQL. We are currently in the midst of updating Secure XGBoost to be compatible with the client.</p>
 <div class="toctree-wrapper compound">
 <p><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">Global Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="config.html#user-configuration">User Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="config.html#cloud">Cloud</a></li>
-<li class="toctree-l2"><a class="reference internal" href="config.html#local">Local</a></li>
-<li class="toctree-l2"><a class="reference internal" href="config.html#attestation">Attestation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#building-with-docker-for-a-local-deployment">Building with Docker for a local deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#building-from-source">Building from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#azure-login">Azure Login</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#docker-quickstart">Docker Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#azure-quickstart">Azure Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="opaquesql_usage.html">Usage with Opaque SQL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="opaquesql_usage.html#start">Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opaquesql_usage.html#upload">Upload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opaquesql_usage.html#run">Run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opaquesql_usage.html#download">Download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opaquesql_usage.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="config/index.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="config/config.html">Global Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config/azure.html">Azure Configuration</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="python/index.html">Python Interface</a><ul>
@@ -190,7 +212,7 @@
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2021, MC2 Contributors
+              Copyright &#169; 2021, MC2 Team
             |
             Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
               and

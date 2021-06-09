@@ -17,7 +17,7 @@
   --color-code-foreground: black;
   --color-brand-primary: #00B0FF;
   --color-brand-content: #00B0FF;
-  --color-admonition-background: orange;
+  --color-admonition-background: #3681da;
   
   }
   @media (prefers-color-scheme: dark) {
@@ -34,7 +34,7 @@
   --color-code-foreground: black;
   --color-brand-primary: #00B0FF;
   --color-brand-content: #00B0FF;
-  --color-admonition-background: orange;
+  --color-admonition-background: #3681da;
   
   }
   .override-dark {
@@ -116,13 +116,19 @@
   <p><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">Global Configuration</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="python/index.html">Python Interface</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opaquesql_usage.html">Usage with Opaque SQL</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="config/index.html">Configuration</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="config/config.html">Global Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config/azure.html">Azure Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="python/index.html">Python Interface</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="python/usage.html">Python Package Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python/api.html">API Reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="cli/index.html">CLI Interface</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="cli/index.html">CLI Interface</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label for="toctree-checkbox-3"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="cli/usage.html">CLI Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/api.html">CLI Reference</a></li>
 </ul>
@@ -144,13 +150,23 @@
         
 <section class="genindex-section">
   <h1 id="index">Index</h1>
-  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#U"><strong>U</strong></a></div>
+  <div class="genindex-jumpbox"><a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#U"><strong>U</strong></a></div>
 </section>
-<section id="A" class="genindex-section">
-  <h2>A</h2>
+<section id="C" class="genindex-section">
+  <h2>C</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="python/api.html#mc2client.attest">attest() (in module mc2client)</a>
+        <li><a href="python/api.html#mc2client.configure_job">configure_job() (in module mc2client)</a>
+</li>
+        <li><a href="python/api.html#mc2client.create_cluster">create_cluster() (in module mc2client)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="python/api.html#mc2client.create_container">create_container() (in module mc2client)</a>
+</li>
+        <li><a href="python/api.html#mc2client.create_resource_group">create_resource_group() (in module mc2client)</a>
+</li>
+        <li><a href="python/api.html#mc2client.create_storage">create_storage() (in module mc2client)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -162,8 +178,16 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="python/api.html#mc2client.decrypt_data">decrypt_data() (in module mc2client)</a>
 </li>
+        <li><a href="python/api.html#mc2client.delete_cluster">delete_cluster() (in module mc2client)</a>
+</li>
+        <li><a href="python/api.html#mc2client.delete_container">delete_container() (in module mc2client)</a>
+</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="python/api.html#mc2client.delete_resource_group">delete_resource_group() (in module mc2client)</a>
+</li>
+        <li><a href="python/api.html#mc2client.delete_storage">delete_storage() (in module mc2client)</a>
+</li>
         <li><a href="python/api.html#mc2client.download_file">download_file() (in module mc2client)</a>
 </li>
     </ul></td>
@@ -186,9 +210,13 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="python/api.html#mc2client.generate_keypair">generate_keypair() (in module mc2client)</a>
 </li>
+        <li><a href="python/api.html#mc2client.generate_symmetric_key">generate_symmetric_key() (in module mc2client)</a>
+</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="python/api.html#mc2client.generate_symmetric_key">generate_symmetric_key() (in module mc2client)</a>
+        <li><a href="python/api.html#mc2client.get_head_ip">get_head_ip() (in module mc2client)</a>
+</li>
+        <li><a href="python/api.html#mc2client.get_worker_ips">get_worker_ips() (in module mc2client)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -224,7 +252,7 @@
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2021, MC2 Contributors
+              Copyright &#169; 2021, MC2 Team
             |
             Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
               and

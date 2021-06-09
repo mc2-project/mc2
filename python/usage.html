@@ -19,7 +19,7 @@
   --color-code-foreground: black;
   --color-brand-primary: #00B0FF;
   --color-brand-content: #00B0FF;
-  --color-admonition-background: orange;
+  --color-admonition-background: #3681da;
   
   }
   @media (prefers-color-scheme: dark) {
@@ -36,7 +36,7 @@
   --color-code-foreground: black;
   --color-brand-primary: #00B0FF;
   --color-brand-content: #00B0FF;
-  --color-admonition-background: orange;
+  --color-admonition-background: #3681da;
   
   }
   .override-dark {
@@ -118,13 +118,19 @@
   <p><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../config.html">Global Configuration</a></li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Python Interface</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../opaquesql_usage.html">Usage with Opaque SQL</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../config/index.html">Configuration</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../config/config.html">Global Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config/azure.html">Azure Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Python Interface</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Python Package Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html">API Reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../cli/index.html">CLI Interface</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../cli/index.html">CLI Interface</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label for="toctree-checkbox-3"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../cli/usage.html">CLI Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/api.html">CLI Reference</a></li>
 </ul>
@@ -156,15 +162,15 @@ Type <span class="s2">"help"</span>, <span class="s2">"copyright"</span>, <span 
 </div>
 <section id="configuring-mc2-client">
 <h2>Configuring MC<sup>2</sup> Client<a class="headerlink" href="#configuring-mc2-client" title="Permalink to this headline">¶</a></h2>
-<p>Before running anything, you’ll need to create a YAML file specifying certain parameters, e.g. the paths to your keys, what to check during remote attestation, and the path to your Azure configuration. Exact instructions on configuration are <a class="reference internal" href="../config.html"><span class="doc">here</span></a>.</p>
+<p>Before running anything, you’ll need to create a YAML file specifying certain parameters, e.g. the paths to your keys, what to check during remote attestation, and the path to your Azure configuration. Exact instructions on configuration are <a class="reference internal" href="../config/config.html"><span class="doc">here</span></a>.</p>
 <p>Once you’ve populated a YAML file with your desired parameters, set the path to your configuration file.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># An example config is at `demo/mc2.yaml`</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># An example config is at `demo/config.yaml`</span>
 <span class="n">mc2</span><span class="o">.</span><span class="n">set_config</span><span class="p">(</span><span class="s2">"/path/to/config.yaml"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
-<section id="generating-keys">
-<h2>Generating Keys<a class="headerlink" href="#generating-keys" title="Permalink to this headline">¶</a></h2>
+<section id="key-generation">
+<h2>Key Generation<a class="headerlink" href="#key-generation" title="Permalink to this headline">¶</a></h2>
 <p>If you don’t already have a keypair and/or a symmetric key, you’ll want to generate them so that you can interact with MC<sup>2</sup> cloud compute services in a cryptographically secure manner. MC<sup>2</sup> uses your certificate and private key to authenticate you to MC<sup>2</sup> compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn’t see it in plaintext..</p>
 <p>MC<sup>2</sup> Client provides a function to generate a certificate and corresponding private key, and a function to generate a symmetric key. You should have specified paths for your certificate, private key, and symmetric key during configuration. These functions will output the certificate, private key, and symmetric key to these paths.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate a certificate and corresponding private key</span>
@@ -177,32 +183,11 @@ Type <span class="s2">"help"</span>, <span class="s2">"copyright"</span>, <span 
 </section>
 <section id="encrypting-and-decrypting-files">
 <h2>Encrypting and Decrypting Files<a class="headerlink" href="#encrypting-and-decrypting-files" title="Permalink to this headline">¶</a></h2>
-<p>MC<sup>2</sup> Client will use the symmetric key you specified during configuration to encrypt your sensitive data and decrypt sensitive results outputted by the MC<sup>2</sup> compute services. If you don’t yet have a symmetric key, see the above section on <a class="reference internal" href="#generating-keys"><span class="std std-ref">Generating Keys</span></a>.</p>
-<p>MC<sup>2</sup> Client encrypts your data into two different formats, depending on which compute service you plan to use: <code class="docutils literal notranslate"><span class="pre">opaque</span></code> or <code class="docutils literal notranslate"><span class="pre">securexgboost</span></code>. <code class="docutils literal notranslate"><span class="pre">opaque</span></code> format is for the Opaque SQL compute service, while <code class="docutils literal notranslate"><span class="pre">securexgboost</span></code> is for Secure XGBoost.</p>
-<section id="securexgboost-format">
-<h3><code class="docutils literal notranslate"><span class="pre">securexgboost</span></code> Format<a class="headerlink" href="#securexgboost-format" title="Permalink to this headline">¶</a></h3>
-<p>If you plan on using the Secure XGBoost compute service, you’ll want to encrypt your data in <code class="docutils literal notranslate"><span class="pre">securexgboost</span></code> format. For this format, you’ll need to specify the path to the plaintext data and a path for MC<sup>2</sup> Client to output the encrypted data, as well as the encryption format.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Encrypt data in `securexgboost` format</span>
-<span class="n">mc2</span><span class="o">.</span><span class="n">encrypt_data</span><span class="p">(</span>
-    <span class="s2">"/path/to/plaintext/data"</span><span class="p">,</span>
-    <span class="s2">"/path/to/output/encrypted/data"</span><span class="p">,</span>
-    <span class="n">enc_format</span><span class="o">=</span><span class="s2">"securexgboost"</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p>To decrypt data encrypted in <code class="docutils literal notranslate"><span class="pre">securexgboost</span></code> format, you’ll need to specify the path to the encrypted data, a path for MC<sup>2</sup> Client to output the decrypted data, and the encryption format.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Decrypt data encrypted in `securexgboost` format</span>
-<span class="n">mc2</span><span class="o">.</span><span class="n">decrypt_data</span><span class="p">(</span>
-    <span class="s2">"/path/to/encrypted/data"</span><span class="p">,</span>
-    <span class="s2">"/path/to/decrypted/data"</span><span class="p">,</span>
-    <span class="n">enc_format</span><span class="o">=</span><span class="s2">"securexgboost"</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="opaque-format">
-<h3><code class="docutils literal notranslate"><span class="pre">opaque</span></code> Format<a class="headerlink" href="#opaque-format" title="Permalink to this headline">¶</a></h3>
-<p>If you plan on using the Opaque SQL compute service, you’ll want to encrypt your data in <code class="docutils literal notranslate"><span class="pre">opaque</span></code> format. For this format, you’ll first need to create a file specifying the schema of the data.</p>
+<p>MC<sup>2</sup> Client will use the symmetric key you specified during configuration to encrypt your sensitive data and decrypt sensitive results outputted by the MC<sup>2</sup> compute services. If you don’t yet have a symmetric key, see the above section on <a class="reference internal" href="../cli/usage.html#generating-keys"><span class="std std-ref">Generating Keys</span></a>.</p>
+<p>MC<sup>2</sup> Client encrypts your data into two different formats, depending on which compute service you plan to use: <code class="docutils literal notranslate"><span class="pre">sql</span></code> or <code class="docutils literal notranslate"><span class="pre">xgb</span></code>. <code class="docutils literal notranslate"><span class="pre">sql</span></code> format is for the Opaque SQL compute service, while <code class="docutils literal notranslate"><span class="pre">xgb</span></code> is for Secure XGBoost.</p>
+<section id="sql-format">
+<h3><code class="docutils literal notranslate"><span class="pre">sql</span></code> Format<a class="headerlink" href="#sql-format" title="Permalink to this headline">¶</a></h3>
+<p>If you plan on using the Opaque SQL compute service, you’ll want to encrypt your data in <code class="docutils literal notranslate"><span class="pre">sql</span></code> format. For this format, you’ll first need to create a file specifying the schema of the data.</p>
 <p>The schema must be written in the following format:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>col_1_name:col_1_type,col_2_name:col_2_type,col_3_name:col_3_type
 </pre></div>
@@ -220,57 +205,110 @@ Type <span class="s2">"help"</span>, <span class="s2">"copyright"</span>, <span 
 <li><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></li>
 </ul>
 <p>If the data in your column is not of any of these types, MC<sup>2</sup> Client will by default encrypt it as a string type.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Data to be encrypted in <code class="docutils literal notranslate"><span class="pre">xgb</span></code> format should contain a header row, i.e., the first row should be a comma-separated list of column names.</p>
+</div>
 <p>To encrypt the data, you’ll need to specify the path to the plaintext data, a path for MC<sup>2</sup> Client to output the encrypted data, the path to the schema of the data, and the encryption format.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Encrypt data in `opaque` format</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Encrypt data in `sql` format</span>
 <span class="n">mc2</span><span class="o">.</span><span class="n">encrypt_data</span><span class="p">(</span>
     <span class="s2">"/path/to/plaintext/data"</span><span class="p">,</span>
     <span class="s2">"/path/to/output/encrypted/data"</span><span class="p">,</span>
     <span class="n">schema_file</span><span class="o">=</span><span class="s2">"/path/to/schema"</span><span class="p">,</span>
-    <span class="n">enc_format</span><span class="o">=</span><span class="s2">"opaque"</span><span class="p">,</span>
+    <span class="n">enc_format</span><span class="o">=</span><span class="s2">"sql"</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>To decrypt data encrypted in <code class="docutils literal notranslate"><span class="pre">opaque</span></code> format, you’ll need to specify the path to the encrypted data, a path for MC<sup>2</sup> Client to output the decrypted data, and the encryption format.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Decrypt data encrypted in `opaque` format</span>
+<p>To decrypt data encrypted in <code class="docutils literal notranslate"><span class="pre">sql</span></code> format, you’ll need to specify the path to the encrypted data, a path for MC<sup>2</sup> Client to output the decrypted data, and the encryption format.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Decrypt data encrypted in `sql` format</span>
 <span class="n">mc2</span><span class="o">.</span><span class="n">decrypt_data</span><span class="p">(</span>
     <span class="s2">"/path/to/encrypted/data"</span><span class="p">,</span>
     <span class="s2">"/path/to/decrypted/data"</span><span class="p">,</span>
-    <span class="n">enc_format</span><span class="o">=</span><span class="s2">"opaque"</span><span class="p">,</span>
+    <span class="n">enc_format</span><span class="o">=</span><span class="s2">"sql"</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </section>
 </section>
-<section id="remote-attestation">
-<h2>Remote Attestation<a class="headerlink" href="#remote-attestation" title="Permalink to this headline">¶</a></h2>
-<p>Before using MC<sup>2</sup> compute services, you’ll want to attest the MC<sup>2</sup> cluster in the cloud to authenticate all the enclaves and to ensure that the expected code has been properly loaded into each enclave. Attestation parameters, e.g. what values to check, are specified during <a class="reference internal" href="../config.html"><span class="doc">configuration</span></a>. MC<sup>2</sup> Client will retrieve these parameters under the hood and attest accordingly.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remotely attest the MC2 cluster</span>
-<span class="n">mc2</span><span class="o">.</span><span class="n">attest</span><span class="p">()</span>
+<section id="azure-resource-management">
+<h2>Azure Resource Management<a class="headerlink" href="#azure-resource-management" title="Permalink to this headline">¶</a></h2>
+<p>Before you can work with Azure through MC<sup>2</sup> Client, you must first login to Azure through the command line. See how to do so <a class="reference internal" href="../install.html#azure-login"><span class="std std-ref">here</span></a>.</p>
+<p>You can spin up and delete resources using MC<sup>2</sup> Client. For example, before running anything on an MC<sup>2</sup> compute service, you’ll need to create file storage. You’ll also need to create an enclave-enabled cluster. When launching these resources using MC<sup>2</sup> Client, you must first specify Azure-specific configuration parameters in a YAML file. An example can be found in <code class="docutils literal notranslate"><span class="pre">demo/azure.yaml</span></code>.</p>
+<p>In particular, note the following important fields:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cluster_name</span></code> : name of the cluster to use</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_workers</span></code> : the total number of workers to launch</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">provider.resource_group</span></code> : the name of an existing resource group that you want to launch the resources in</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">provider.storage_name</span></code> : name of the Azure storage you want to use</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">provider.container_name</span></code> : name of the container you want to transfer data to or from</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">auth</span></code> : the username and SSH keys to use when spinning up VMs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*node*.azure_arm_parameters.vmSize</span></code> : size of the VM you want to launch as the head node. See <a class="reference external" href="https://docs.microsoft.com/en-us/azure/virtual-machines/dcv2-series">here</a> for all options for SGX-enabled VMs.</p></li>
+</ul>
+<p>If you haven’t already launched resources for MC<sup>2</sup> compute to use, you can do so with MC<sup>2</sup> Client.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create resource group with name specified in Azure config YAML</span>
+<span class="n">mc2</span><span class="o">.</span><span class="n">create_resource_group</span><span class="p">()</span>
+
+<span class="c1"># Create Azure file storage with name specified in Azure config YAML</span>
+<span class="n">mc2</span><span class="o">.</span><span class="n">create_storage</span><span class="p">()</span>
+
+<span class="c1"># Create container with name specified in Azure config YAML</span>
+<span class="c1"># You can only create the container after you create storage</span>
+<span class="n">mc2</span><span class="o">.</span><span class="n">create_container</span><span class="p">()</span>
+
+<span class="c1"># Create a cluster with parameters specified in Azure config YAML</span>
+<span class="n">mc2</span><span class="o">.</span><span class="n">create_cluster</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Once you’ve finished using MC<sup>2</sup> compute services, you can also delete your resources using MC<sup>2</sup> Client.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delete container with name specified in Azure config YAML</span>
+<span class="n">mc2</span><span class="o">.</span><span class="n">delete_container</span><span class="p">()</span>
+
+<span class="c1"># Delete Azure file storage with name specified</span>
+<span class="c1"># in Azure config YAML</span>
+<span class="n">mc2</span><span class="o">.</span><span class="n">delete_storage</span><span class="p">()</span>
+
+<span class="c1"># Delete the cluster specified by `cluster_name`</span>
+<span class="c1"># in Azure config YAML</span>
+<span class="n">mc2</span><span class="o">.</span><span class="n">delete_cluster</span><span class="p">()</span>
+
+<span class="c1"># Delete resource group specified in Azure config YAML</span>
+<span class="n">mc2</span><span class="o">.</span><span class="n">delete_resource_group</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
-<section id="data-transfer">
-<h2>Data Transfer<a class="headerlink" href="#data-transfer" title="Permalink to this headline">¶</a></h2>
-<p>Once you’ve encrypted your data, you can upload your encrypted data to the worker nodes specified in your config YAML.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Upload your data to your worker nodes</span>
-<span class="c1"># Opaque Client will transfer your data to the IPs</span>
-<span class="c1"># specified in config YAML</span>
+<section id="remote-attestation">
+<h2>Remote Attestation<a class="headerlink" href="#remote-attestation" title="Permalink to this headline">¶</a></h2>
+<p>Before using MC<sup>2</sup> compute services, you’ll want to attest the MC<sup>2</sup> cluster in the cloud to authenticate all the enclaves and to ensure that the expected code has been properly loaded into each enclave. Attestation parameters, e.g. what values to check, are specified during <a class="reference internal" href="../config/config.html"><span class="doc">configuration</span></a>. MC<sup>2</sup> Client will retrieve these parameters under the hood and attest accordingly.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remotely attest the Opaque cluster</span>
+<span class="n">mc2</span><span class="o">.</span><span class="n">configure_job</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="azure-file-transfer">
+<h2>Azure File Transfer<a class="headerlink" href="#azure-file-transfer" title="Permalink to this headline">¶</a></h2>
+<p>Once you’ve encrypted your data and set up your Azure storage, you can upload your encrypted data to the Azure storage specified in your Azure config YAML. For more details about this configuration, see <a class="reference internal" href="#azure-resource-management"><span class="std std-ref">Azure Resource Management</span></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Upload your data to Azure</span>
+<span class="c1"># MC2 Client will transfer your data to the Azure container</span>
+<span class="c1"># specified in Azure config YAML</span>
 <span class="n">mc2</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
     <span class="s2">"/local/path/to/encrypted/data"</span><span class="p">,</span>
-    <span class="s2">"/name/of/file/on/server"</span>
+    <span class="s2">"/name/of/file/in/Azure/container"</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>Similarly, you can download any data outputted by MC<sup>2</sup> compute services to your Azure containers. MC<sup>2</sup> compute services will, before outputting data, encrypt the data with your symmetric key (as specified during configuration), so any data outputted to the Azure containers will be encrypted.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download encrypted data</span>
-<span class="c1"># MC2 Client will look for the data</span>
-<span class="c1"># specified in the `cloud` --&gt; `results`</span>
-<span class="c1"># section in the config YAML</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download encrypted data from Azure</span>
+<span class="c1"># MC2 Client will look for the data from the Azure container</span>
+<span class="c1"># specified in Azure config YAML</span>
 <span class="n">mc2</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span>
-    <span class="s2">"/file/to/fetch/"</span><span class="p">,</span>
+    <span class="s2">"/file/to/fetch/in/Azure/container"</span><span class="p">,</span>
     <span class="s2">"/local/path/to/download/data/to"</span>
 <span class="p">)</span>
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If nodes have been manually configured (via the <code class="docutils literal notranslate"><span class="pre">head</span></code> or <code class="docutils literal notranslate"><span class="pre">workers</span></code> fields in the <code class="docutils literal notranslate"><span class="pre">launch</span></code> section) and are locally hosted (i.e. <code class="docutils literal notranslate"><span class="pre">ip</span></code> is <code class="docutils literal notranslate"><span class="pre">0.0.0.0</span></code> or <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code>) then these commands will simply copy the file on the local machine.</p>
 </div>
 </section>
 </section>
@@ -302,7 +340,7 @@ Type <span class="s2">"help"</span>, <span class="s2">"copyright"</span>, <span 
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2021, MC2 Contributors
+              Copyright &#169; 2021, MC2 Team
             |
             Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
               and
@@ -331,14 +369,14 @@ Type <span class="s2">"help"</span>, <span class="s2">"copyright"</span>, <span 
             <ul>
 <li><a class="reference internal" href="#">Python Package Usage</a><ul>
 <li><a class="reference internal" href="#configuring-mc2-client">Configuring MC<sup>2</sup> Client</a></li>
-<li><a class="reference internal" href="#generating-keys">Generating Keys</a></li>
+<li><a class="reference internal" href="#key-generation">Key Generation</a></li>
 <li><a class="reference internal" href="#encrypting-and-decrypting-files">Encrypting and Decrypting Files</a><ul>
-<li><a class="reference internal" href="#securexgboost-format"><code class="docutils literal notranslate"><span class="pre">securexgboost</span></code> Format</a></li>
-<li><a class="reference internal" href="#opaque-format"><code class="docutils literal notranslate"><span class="pre">opaque</span></code> Format</a></li>
+<li><a class="reference internal" href="#sql-format"><code class="docutils literal notranslate"><span class="pre">sql</span></code> Format</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#azure-resource-management">Azure Resource Management</a></li>
 <li><a class="reference internal" href="#remote-attestation">Remote Attestation</a></li>
-<li><a class="reference internal" href="#data-transfer">Data Transfer</a></li>
+<li><a class="reference internal" href="#azure-file-transfer">Azure File Transfer</a></li>
 </ul>
 </li>
 </ul>

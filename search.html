@@ -16,7 +16,7 @@
   --color-code-foreground: black;
   --color-brand-primary: #00B0FF;
   --color-brand-content: #00B0FF;
-  --color-admonition-background: orange;
+  --color-admonition-background: #3681da;
   
   }
   @media (prefers-color-scheme: dark) {
@@ -33,7 +33,7 @@
   --color-code-foreground: black;
   --color-brand-primary: #00B0FF;
   --color-brand-content: #00B0FF;
-  --color-admonition-background: orange;
+  --color-admonition-background: #3681da;
   
   }
   .override-dark {
@@ -115,13 +115,19 @@
   <p><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">Global Configuration</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="python/index.html">Python Interface</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opaquesql_usage.html">Usage with Opaque SQL</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="config/index.html">Configuration</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="config/config.html">Global Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config/azure.html">Azure Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="python/index.html">Python Interface</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="python/usage.html">Python Package Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python/api.html">API Reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="cli/index.html">CLI Interface</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="cli/index.html">CLI Interface</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label for="toctree-checkbox-3"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="cli/usage.html">CLI Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/api.html">CLI Reference</a></li>
 </ul>
@@ -160,7 +166,7 @@
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2021, MC2 Contributors
+              Copyright &#169; 2021, MC2 Team
             |
             Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
               and

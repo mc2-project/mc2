@@ -5,41 +5,188 @@ Below, you'll find guides on how to use the MC\ :sup:`2` Client command line int
 
 .. code-block:: python
 
-    import mc2client as oc
+    import mc2client as mc2
+
+The CLI relies heavily on a configuration file in which you can specify the parameters for each command as explained in the next section.
 
 Configuring MC\ :sup:`2` Client
 -------------------------
-Before running anything, you'll need to create a YAML file specifying certain parameters, e.g. the paths to your keys, what to check during remote attestation, and the path to your Azure configuration. Exact instructions on configuration are :doc:`here <../config>`.
+Before running anything, you'll need to create a configuration YAML file specifying certain parameters. More on configuration is :doc:`here <../config/config>`.
 
 Once you've populated a YAML file with your desired parameters, set the ``MC2_CONFIG`` environment variable to the path to your configuration file.
 
 .. code-block:: bash
 
+    # An example config is at `demo/config.yaml`
     export MC2_CONFIG=/path/to/config/yaml
+
+Note that below, the ``mc2`` command is an alias for ``python3 mc2.py``. You may want to add the following line to your bashrc.
+
+.. code-block:: bash
+
+    alias mc2="python3 /path/to/mc2/mc2.py"
+
+Generating Keys
+---------------
+If you don't already have a keypair and/or a symmetric key, you'll want to generate them so that you can interact with MC\ :sup:`2` cloud compute services in a cryptographically secure manner. MC\ :sup:`2` uses your certificate and private key to authenticate you to MC\ :sup:`2` compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn't see it in plaintext..
+
+You can generate a certificate and corresponding private key, and a symmetric key, through the CLI. You should have specified paths for your certificate, private key, and symmetric key during configuration. If something already exists at either the certificate or private key path, MC\ :sup:`2` Client will skip generating the certificate and private key. If something already exists at the symmetric key path, MC\ :sup:`2` Client will skip generating the symmetric key.
+
+.. code-block:: bash
+
+    # Generate a certificate, corresponding private key, and symmetric key
+    # If something exists at any paths specified in the config,
+    # MC2 Client will skip generation.
+    $ mc2 init
+
+*Note that, by default, Opaque Client uses a pre-generated RSA public key for enclave verification. This key should be not be used in a production environment.* 
+
+Launching Cloud Resources
+-------------------------
+You can use MC\ :sup:`2` Client to launch resources in Azure. In particular, you can create a cluster of VMs, Azure blob storage, and a storage container. This section in the configuration looks as follows.
+
+.. code-block:: yaml
+
+   launch:
+      # The absolute path to your Azure configuraton
+      # This needs to be an absolute path
+      azure_config: /path/to/azure.yaml
+
+      # Whether to launch a cluster of VMs
+      cluster: {true, false}
+
+      # Whether to launch Azure blob storage
+      storage: {true, false}
+
+      # Whether to launch a storage container
+      container: {true, false}
+
+You will also need to specify details for the Azure resources you want to launch in a separate configuration file. An example of the file can be found in ``demo/azure.yaml``.
+
+In particular, note the following important sections in the Azure configuration that you will likely want to modify.
+
+.. code-block:: yaml
+
+   # An unique identifier for the head node and workers of this cluster.
+   cluster_name: default
+
+   # The total number of workers nodes to launch in addition to the head
+   # node. This number should be >= 0.
+   num_workers: 0
+
+   # Cloud-provider specific configuration.
+   provider:
+      type: azure
+
+      # Location of resources
+      location: eastus
+
+      # Name of resource group that will contain your launched resources
+      resource_group: mc2-client-dev
+
+      # Name of Azure blob storage you want to create
+      storage_name: mc2storage
+
+      # Name of storage container you want to create
+      container_name: blob-container-1
+
+      # If left blank, the default subscription ID from Azure CLI will be used
+      subscription_id:
+
+   # How MC2 will authenticate with newly launched nodes.
+   auth:
+      # The username used to SSH into created VMs
+      ssh_user: mc2
+
+      # you must specify paths to matching private and public key pair files
+      # use `ssh-keygen -t rsa -b 4096` to generate a new ssh key pair
+      ssh_private_key: ~/.ssh/id_rsa
+      ssh_public_key: ~/.ssh/id_rsa.pub
+
+
+To launch the resources, run the following command:
+
+.. code-block:: bash
+   
+   mc2 launch
+
+.. note::
+	If nodes have been manually configured (via the ``head`` or ``workers`` fields in the ``launch`` section), this command will not do anything.
+
+
+Starting Compute Services Remotely
+----------------------------------
+To run computation, you'll need to remotely start the compute services. You can specify commands to start the compute services using MC\ :sup:`2` Client through configuration. MC\ :sup:`2` Client will remotely run these commands on each VM in the Azure cluster.
+
+.. code-block:: yaml
+
+   start:
+      # Commands to run on head node
+      head:
+      - echo "Hello from head"
+
+      # Commands to run on worker nodes
+      workers:
+      - echo "Hello from worker"
+
+
+To start the services, run the following command:
+
+.. code-block:: bash
+
+   mc2 start
+
+.. note::
+	If nodes have been manually configured (via the ``head`` or ``workers`` fields in the ``launch`` section) and are locally hosted (i.e. ``ip`` is ``0.0.0.0`` or ``127.0.0.1``) then the commands will be run in a local subprocess.
 
 
 Encrypting and Uploading Data
 -----------------------------
-MC\ :sup:`2` Client will use the symmetric key you specified during configuration to encrypt your sensitive data and decrypt sensitive results outputted by the MC\ :sup:`2` compute services. If you don't yet have a symmetric key, see the above section on :ref:`Generating Keys`.
+MC\ :sup:`2` Client will use the symmetric key you specified during configuration to encrypt your sensitive data. If you don't yet have a symmetric key, see the above section on :ref:`Generating Keys`.
 
-MC\ :sup:`2` Client encrypts your data into two different formats, depending on which compute service you plan to use: ``opaque`` or ``securexgboost``. ``opaque`` format is for the Opaque SQL compute service, while ``securexgboost`` is for Secure XGBoost. You should specify the data you will use during computation (and hence should encrypt and upload) and the nodes you're using for computation, i.e., where you want to upload your data during the :doc:`configuration step <../config>`.
+.. code-block:: yaml
 
-MC\ :sup:`2` Client will encrypt and upload your data in one step through the command line.
+   upload:
+      # Whether to upload data to Azure blob storage or disk
+      # Allowed values are `blob` or `disk`
+      # If `blob`, Azure CLI will be called to upload data
+      # Else, `scp` will be used
+      storage: {blob, disk}
 
-Secure XGBoost Format
-~~~~~~~~~~~~~~~~~~~~~
-If you plan on using the Secure XGBoost compute service, you'll want to encrypt your data in ``securexgboost`` format. To do so, specify the ``--xgb`` option.
+      # Encryption format to use
+      # Options are `sql` if you want to use Opaque SQL
+      # or `xgb` if you want to use Secure XGBoost
+      format: {sql, xgb}
+
+      # Files to encrypt and upload
+      src:
+        - /path/to/your/data.csv
+
+      # If you want to run Opaque SQL, you must also specify a schema,
+      # one for each file you want to encrypt and upload
+      schemas:
+      - /path/to/opaquesql_schema.json
+
+      # Directory to upload data to
+      dst: dst_dir
+
+
+To encrypt and upload your data, run the following command:
 
 .. code-block:: bash
 
-    # Encrypt data in `securexgboost` format and upload it 
-    # to a location readable by the Secure XGBoost compute service.
-    mc2 upload --xgb
+   mc2 upload
+
+.. note::
+	If nodes have been manually configured (via the ``head`` or ``workers`` fields in the ``launch`` section) and are locally hosted (i.e. ``ip`` is ``0.0.0.0`` or ``127.0.0.1``) then the file will be copied to ``dst`` on the local machine.
 
 
-Opaque SQL Format
-~~~~~~~~~~~~~~~~~
-If you plan on using the Opaque SQL compute service, you'll want to encrypt your data in ``opaque`` format -- specify the ``--sql`` option. For this format, you'll first need to create a file specifying the schema of the data.
+.. _sqlformat:
+
+Note on ``sql`` Format
+~~~~~~~~~~~~~~~~~~~~~~
+
+If you plan on using the Opaque SQL compute service, you'll want to encrypt your data in ``sql`` format. For this format, you'll first need to create a file specifying the schema of the data.
 
 The schema must be written in the following format:
 
@@ -54,7 +201,7 @@ For example, if your data has 3 columns, named ``age`` of type ``integer``, ``ra
     age:integer,rank:float,animal:string
 
 
-Currently, MC\ :sup:`2` Client supports the following types with Opaque SQL:
+Currently, Opaque SQL supports the following types:
 
 - ``integer``
 - ``long``
@@ -64,42 +211,106 @@ Currently, MC\ :sup:`2` Client supports the following types with Opaque SQL:
 
 If the data in your column is not of any of these types, MC\ :sup:`2` Client will by default encrypt it as a string type. 
 
-**Note**: Currently, you must include a header with all data you'll use with Opaque SQL. The header should be a comma-separated list of column names.
-
-.. code-block:: bash
-
-    # Encrypt data in `opaque` format
-    mc2 upload --sql
-
 
 Running Computation
 -------------------
-To perform computation, first write a script that contains the Python (in the case of Secure XGBoost) or the Scala (in the case of Opaque SQL) code that you want to run. Example scripts can be found in ``demo/``. Specify this script in the :doc:`configuration YAML <../config>`. You can then remotely run this script using MC\ :sup:`2` Client.
+To run computation, you should specify a script to run in the configuration. In addition, when you initiate computation, MC\ :sup:`2` Client will under the hood attest the enclave deployment before actually running the computation. Attestation ensures that all enclaves were built and loaded with the proper code and that they were properly initialized. You will also need to specify some configuration values for attestation.
+
+.. code-block:: yaml
+
+   # Computation configuration
+   run:
+      # Script to run
+      script: opaque_sql_demo.scala
+
+      # Compute service you're using
+      # Choices are `xgb` or `sql`
+      compute: {xgb, sql}
+
+      # Attestation configuration
+      attestation:
+         # Whether we are running in simulation mode
+         # If 0 (False), we are _not_ running in simulation mode,
+         # and should verify the attestation evidence
+         simulation_mode: {0, 1}
+
+         # Path to MRENCLAVE value to check
+         # MRENCLAVE is a hash of the enclave build log
+         mrenclave: NULL
+
+         # Path to MRSIGNER value to check
+         # MRSIGNER is the key used to sign the built enclave
+        mrsigner: ${OPAQUE_CLIENT_HOME}/python-package/tests/keys/mc2_test_key.pub
+
+      # The client consortium. Each username is mapped to a public key and
+      # release policy
+      consortium:
+       - username:
+           public_key: /path/to/user/public/key
+           release_policy: {true,false}
+
+Begin computation by running the following command:
+
+.. code-block:: bash 
+   
+   mc2 run
+
+Downloading and Decrypting Data
+-------------------------------
+MC\ :sup:`2` Client will use the symmetric key you specified during configuration to decrypt computation results. If you don't yet have a symmetric key, see the above section on :ref:`Generating Keys`. You should download results from where the compute services saved the results.
+
+.. code-block:: yaml
+
+   # Configuration for downloading results
+   download:
+       # Whether to upload data to Azure blob storage or disk
+       # Allowed values are `blob` or `disk`
+       # If `blob`, Azure CLI will be called to upload data
+       # Else, `scp` will be used
+       storage: {blob, disk}
+
+       # Format this data is encrypted with
+       format: {xgb, sql}
+
+       # Directory/file to download
+       src:
+         - securexgb_train.csv.enc
+
+       # Local directory to download data to
+       dst: results/
+
+
+To encrypt and upload your data, run the following command:
 
 .. code-block:: bash
 
-    # Run your Secure XGBoost or Opaque SQL computation
-    mc2 run --xgb/--sql
+   mc2 download
 
-As part of this step, MC\ :sup:`2` Client will perform remote attestation to authenticate all enclaves and ensure that the expected code has been properly loaded into each enclave. Attestation parameters, e.g. what values to check, are also specified during :doc:`configuration <../config>`. MC\ :sup:`2` Client will retrieve these parameters under the hood and attest accordingly.
+.. note::
+	If nodes have been manually configured (via the ``head`` or ``workers`` fields in the ``launch`` section) and are locally hosted (i.e. ``ip`` is ``0.0.0.0`` or ``127.0.0.1``) then the file will be copied from ``src`` to ``dst`` on the local machine.
 
-Decrypting and Downloading Results
-----------------------------------
-Once your computation has finished, you can download and, optionally, decrypt the results. All compute services included with MC\ :sup:`2` will only save encrypted results to disk, i.e. it will not expose any results in plaintext. You should specify the source of the transfer, i.e. the paths of the results on the cloud, and the destination of the transfer, i.e. the local directory to which you want to save results, during :doc:`configuration <../config>`.
+Stopping Compute Services
+-------------------------
+Not implemented
 
+Terminating Azure Resources
+---------------------------
+You can use MC\ :sup:`2` Client to terminate your launched Azure resources. Specify which resources you want to terminate in the configuration.
+
+.. code-block:: yaml
+
+   teardown:
+      # Whether to terminate launched VMs
+      cluster: {true, false}
+
+      # Whether to terminate created Azure blob storage
+      storage: {true, false}
+
+      # Whether to terminate created storage container
+      container: {true, false}
+
+To terminate desired resources, run the following command:
 
 .. code-block:: bash
-
-    # Retrieve results from the first worker node,
-    # as specified during configuration.
-    mc2 download
-
-    # Optionally, if you want to also decrypt results
-    # encrypted during Secure XGBoost computation,
-    # specify the --xgb flag.
-    mc2 download --xgb
-
-    # Optionally, if you want to also decrypt results
-    # encrypted during Opaque SQL computation,
-    # specify the --sql flag.
-    mc2 download --sql
+   
+   mc2 teardown

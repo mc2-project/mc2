@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Global Configuration" href="config.html" /><link rel="prev" title="Welcome to MC2 Client’s documentation!" href="index.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Quickstart" href="quickstart.html" /><link rel="prev" title="Welcome to MC2 Client’s documentation!" href="index.html" />
 
     <meta name="generator" content="sphinx-3.0.3, furo 2021.04.11.beta34"/>
         <title>Installation - MC2 Client documentation</title>
@@ -19,7 +19,7 @@
   --color-code-foreground: black;
   --color-brand-primary: #00B0FF;
   --color-brand-content: #00B0FF;
-  --color-admonition-background: orange;
+  --color-admonition-background: #3681da;
   
   }
   @media (prefers-color-scheme: dark) {
@@ -36,7 +36,7 @@
   --color-code-foreground: black;
   --color-brand-primary: #00B0FF;
   --color-brand-content: #00B0FF;
-  --color-admonition-background: orange;
+  --color-admonition-background: #3681da;
   
   }
   .override-dark {
@@ -97,7 +97,7 @@
       <a href="index.html"><div class="brand">MC<sup>2</sup> Client  documentation</div></a>
     </div>
     <div class="header-right">
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
     </div>
@@ -118,13 +118,19 @@
   <p><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">Global Configuration</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="python/index.html">Python Interface</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opaquesql_usage.html">Usage with Opaque SQL</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="config/index.html">Configuration</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="config/config.html">Global Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config/azure.html">Azure Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="python/index.html">Python Interface</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="python/usage.html">Python Package Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python/api.html">API Reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="cli/index.html">CLI Interface</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="cli/index.html">CLI Interface</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label for="toctree-checkbox-3"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="cli/usage.html">CLI Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/api.html">CLI Reference</a></li>
 </ul>
@@ -140,11 +146,29 @@
   <main class="main">
     <div class="content">
       <article role="main">
-        <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+        <label class="toc-overlay-icon toc-content-icon" for="__toc">
           <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
         </label>
         <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>You can install MC<sup>2</sup> Client from source or choose to build a Docker image from a provided Dockerfile with MC<sup>2</sup> Client, Opaque SQL, and all dependencies pre-installed. Building the Docker image is much faster than building from source (takes about 7 min), but should be used for development/testing purposes only.</p>
+<section id="building-with-docker-for-a-local-deployment">
+<h2>Building with Docker for a local deployment<a class="headerlink" href="#building-with-docker-for-a-local-deployment" title="Permalink to this headline">¶</a></h2>
+<p>To quickly play with MC<sup>2</sup> Client and Opaque SQL locally, you can use the provided Dockerfile to build a container (takes ~7 min) with all MC<sup>2</sup> Client and Opaque SQL dependencies. To do so, you must have <a class="reference external" href="https://docs.docker.com/get-docker/">Docker</a> installed.</p>
+<p>The container will have the contents of this <code class="docutils literal notranslate"><span class="pre">mc2</span></code> directory at <code class="docutils literal notranslate"><span class="pre">/mc2/client</span></code>. Opaque SQL will be at <code class="docutils literal notranslate"><span class="pre">/mc2/opaque-sql</span></code></p>
+<p>For ease of use, we recommend that you create a directory within your host <code class="docutils literal notranslate"><span class="pre">mc2</span></code> directory that will serve as your playground, and then mount your <code class="docutils literal notranslate"><span class="pre">playground</span></code> directory to the Docker container. Mounting will ensure that changes you make in your <code class="docutils literal notranslate"><span class="pre">playground</span></code> directory outside the container will be reflected inside the container, and vice versa. If you’re bringing your own data, you can either copy your data over to your playground directory, or separately mount your data directory to the container.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clone the `mc2` repo</span>
+<span class="c1"># Build a Docker image called `mc2_img`</span>
+docker build -t mc2_img .
+
+<span class="c1"># Run the container, mounting your playground to the container, and open a shell into the container</span>
+docker run -it -v &lt;/absolute/path/to/mc2/playground&gt;:/mc2/client/playground mc2_img /bin/bash
+</pre></div>
+</div>
+</section>
+<section id="building-from-source">
+<h2>Building from Source<a class="headerlink" href="#building-from-source" title="Permalink to this headline">¶</a></h2>
+<p>To install MC<sup>2</sup> Client, you’ll need to be running Ubuntu 18.04. Ubuntu 16.04 should also work but is untested.</p>
 <p>MC<sup>2</sup> Client is written in both C++ and Python. As a result, we’ll have to first build the C++ source, and then build and install the Python package.</p>
 <ol class="arabic simple">
 <li><p>Install dependencies.</p></li>
@@ -153,25 +177,38 @@
 wget https://github.com/Kitware/CMake/releases/download/v3.15.6/cmake-3.15.6-Linux-x86_64.sh
 sudo bash cmake-3.15.6-Linux-x86_64.sh --skip-license --prefix<span class="o">=</span>/usr/local
 
+<span class="c1"># Open Enclave</span>
+<span class="nb">echo</span> <span class="s1">'deb [arch=amd64] https://download.01.org/intel-sgx/sgx_repo/ubuntu bionic main'</span> <span class="p">|</span> sudo tee /etc/apt/sources.list.d/intel-sgx.list <span class="o">&amp;&amp;</span> <span class="se">\</span>
+wget -qO - https://download.01.org/intel-sgx/sgx_repo/ubuntu/intel-sgx-deb.key <span class="p">|</span> sudo apt-key add - <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nb">echo</span> <span class="s2">"deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-7 main"</span> <span class="p">|</span> sudo tee /etc/apt/sources.list.d/llvm-toolchain-bionic-7.list <span class="o">&amp;&amp;</span> <span class="se">\</span>
+wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key <span class="p">|</span> sudo apt-key add - <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nb">echo</span> <span class="s2">"deb [arch=amd64] https://packages.microsoft.com/ubuntu/18.04/prod bionic main"</span> <span class="p">|</span> sudo tee /etc/apt/sources.list.d/msprod.list <span class="o">&amp;&amp;</span> <span class="se">\</span>
+wget -qO - https://packages.microsoft.com/keys/microsoft.asc <span class="p">|</span> sudo apt-key add - <span class="o">&amp;&amp;</span> <span class="se">\</span>
+sudo apt update
+sudo apt -y install clang-8 libssl-dev gdb libsgx-enclave-common libsgx-quote-ex libprotobuf10 libsgx-dcap-ql libsgx-dcap-ql-dev az-dcap-client open-enclave<span class="o">=</span><span class="m">0</span>.12.0
+
+<span class="c1"># Azure CLI</span>
+curl -sL https://aka.ms/InstallAzureCLIDeb <span class="p">|</span> sudo bash
+
 <span class="c1"># Mbed TLS and Pip</span>
 sudo apt-get install -y libmbedtls-dev python3-pip
+pip3 install --upgrade pip
 
 <span class="c1"># MC2 Client Python package dependencies</span>
-git clone --recursive https://github.com/mc2-project/mc2.git
+git clone https://github.com/mc2-project/mc2.git
 <span class="nb">cd</span> mc2
 pip3 install -r requirements.txt
 <span class="nb">cd</span> ..
 
-<span class="c1"># `sequencefile` Python package</span>
+<span class="c1"># Opaque Systems `sequencefile` Python package</span>
 git clone https://github.com/opaque-systems/sequencefile.git
 <span class="nb">cd</span> sequencefile
 sudo python3 setup.py install
 <span class="nb">cd</span> ..
 </pre></div>
 </div>
-<p>Additionally, install Open Enclave by following these <a class="reference external" href="https://github.com/openenclave/openenclave/blob/master/docs/GettingStartedDocs/install_oe_sdk-Ubuntu_18.04.md">instructions</a>. Be sure to install Open Enclave 0.12.0 in Step 3 by specifying <code class="docutils literal notranslate"><span class="pre">open-enclave=0.12.0</span></code>.</p>
 <ol class="arabic simple" start="2">
-<li><p>Build the C++ source.</p></li>
+<li><p>Clone the MC<sup>2</sup> Client GitHub repo and build the C++ source.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> mc2/src
 mkdir build
@@ -194,21 +231,30 @@ Python 3.8.7 (default, Dec 30 2020, 10:13:08)
 [Clang 12.0.0 (clang-1200.0.32.28)] on darwin
 Type "help", "copyright", "credits" or "license" for more information.
 
-&gt;&gt;&gt; import mc2client as oc
+&gt;&gt;&gt; import mc2client as mc2
 </pre></div>
 </div>
+</section>
+<section id="azure-login">
+<h2>Azure Login<a class="headerlink" href="#azure-login" title="Permalink to this headline">¶</a></h2>
+<p>If you want to manage your Azure resources using MC<sup>2</sup> Client, authenticate to Azure and set your subscription ID. Find your subscription ID by following <a class="reference external" href="https://docs.microsoft.com/en-us/azure/media-services/latest/how-to-set-azure-subscription?tabs=portal">these instructions</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az login
+az account <span class="nb">set</span> -s &lt;YOUR_SUBSCRIPTION_ID&gt;
+</pre></div>
+</div>
+</section>
 </section>
 
       </article>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="config.html">
+          <a class="next-page" href="quickstart.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Global Configuration</div>
+                <div class="title">Quickstart</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -226,7 +272,7 @@ Type "help", "copyright", "credits" or "license" for more information.
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2021, MC2 Contributors
+              Copyright &#169; 2021, MC2 Team
             |
             Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
               and
@@ -241,8 +287,29 @@ Type "help", "copyright", "credits" or "license" for more information.
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#building-with-docker-for-a-local-deployment">Building with Docker for a local deployment</a></li>
+<li><a class="reference internal" href="#building-from-source">Building from Source</a></li>
+<li><a class="reference internal" href="#azure-login">Azure Login</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

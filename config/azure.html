@@ -1,0 +1,350 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Python Interface" href="../python/index.html" /><link rel="prev" title="Global Configuration" href="config.html" />
+
+    <meta name="generator" content="sphinx-3.0.3, furo 2021.04.11.beta34"/>
+        <title>Azure Configuration - MC2 Client documentation</title>
+      <link rel="stylesheet" href="../_static/styles/furo.css?digest=59ab60ac09ea94ccfe6deddff6d715cce948a6fc">
+    <link rel="stylesheet" href="../_static/pygments.css">
+    <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../_static/pygments_dark.css">
+    
+
+
+<style>
+  :root {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  --color-brand-primary: #00B0FF;
+  --color-brand-content: #00B0FF;
+  --color-admonition-background: #3681da;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+
+  /* For allowing end-user-specific overrides */
+  .override-light {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  --color-brand-primary: #00B0FF;
+  --color-brand-content: #00B0FF;
+  --color-admonition-background: #3681da;
+  
+  }
+  .override-dark {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+</style><link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" href="../_static/styles/furo-extensions.css?digest=d391b54134226e4196576da3bdb6dddb7e05ba2b"></head>
+  <body dir="">
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke-width="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z"/>
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <line x1="10" y1="12" x2="20" y2="12" />
+      <line x1="6" y1="18" x2="20" y2="18" />
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      class="feather feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      class="feather feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">MC<sup>2</sup> Client  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">MC<sup>2</sup> Client  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html">
+  <input class="sidebar-search" placeholder=Search name="q">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../opaquesql_usage.html">Usage with Opaque SQL</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Configuration</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="config.html">Global Configuration</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Azure Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../python/index.html">Python Interface</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../python/usage.html">Python Package Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/api.html">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../cli/index.html">CLI Interface</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label for="toctree-checkbox-3"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cli/usage.html">CLI Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli/api.html">CLI Reference</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+      </div>
+      
+    </div>
+  </aside>
+  <main class="main">
+    <div class="content">
+      <article role="main">
+        <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+        </label>
+        <section id="azure-configuration">
+<h1>Azure Configuration<a class="headerlink" href="#azure-configuration" title="Permalink to this headline">¶</a></h1>
+<p>MC<sup>2</sup> Client provides an interface to directly launch Azure resources – you can launch VMs, blob storage accounts, or storage containers. To do so, you’ll need to configure some parameters that will tell MC<sup>2</sup> Client how to set up your Azure resources. You should specify the path to this configuration in the <code class="docutils literal notranslate"><span class="pre">["launch"]["azure_config"]</span></code> section of your <a class="reference internal" href="config.html"><span class="doc">Global Configuration</span></a>.</p>
+<p>Below is an example of the Azure configuration with comments about each field.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># An unique identifier for the head node and workers of this cluster.</span>
+<span class="nt">cluster_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
+
+<span class="c1"># The total number of workers nodes to launch in addition to the head</span>
+<span class="c1"># node. This number should be &gt;= 0.</span>
+<span class="nt">num_workers</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+
+<span class="c1"># Cloud-provider specific configuration.</span>
+<span class="nt">provider</span><span class="p">:</span>
+   <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
+   <span class="c1"># https://docs.microsoft.com/en-us/azure/confidential-computing/virtual-machine-solutions</span>
+
+   <span class="c1"># Location of resources</span>
+   <span class="c1"># For a full list of regions that have VMs with enclave support,</span>
+   <span class="c1"># go to the following link and look for DCs-v2 series VMs</span>
+   <span class="c1"># https://azure.microsoft.com/en-us/global-infrastructure/services/?products=virtual-machines&amp;regions=all</span>
+   <span class="nt">location</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">eastus</span>
+
+   <span class="c1"># The name of the resource group that will contain all resources</span>
+   <span class="nt">resource_group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mc2-client-dev</span>
+
+   <span class="c1"># The name of the storage account to create</span>
+   <span class="nt">storage_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mc2storage</span>
+
+   <span class="c1"># The name of the storage container to create</span>
+   <span class="nt">container_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">blob-container-1</span>
+
+   <span class="c1"># If left blank or commented out, the default subscription ID</span>
+   <span class="c1"># from the Azure CLI will be used</span>
+   <span class="c1"># subscription_id:</span>
+
+<span class="c1"># How MC2 will authenticate with newly launched nodes.</span>
+<span class="nt">auth</span><span class="p">:</span>
+   <span class="c1"># The username to use to SSH to launched nodes</span>
+   <span class="nt">ssh_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mc2</span>
+
+   <span class="c1"># You must specify paths to matching private and public key pair files</span>
+   <span class="c1"># Use `ssh-keygen -t rsa -b 4096` to generate a new SSH key pair</span>
+   <span class="nt">ssh_private_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">~/.ssh/id_rsa</span>
+   <span class="nt">ssh_public_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">~/.ssh/id_rsa.pub</span>
+
+<span class="c1"># Provider-specific config for the head node, e.g. instance type.</span>
+<span class="nt">head_node</span><span class="p">:</span>
+   <span class="nt">azure_arm_parameters</span><span class="p">:</span>
+      <span class="c1"># https://docs.microsoft.com/en-us/azure/confidential-computing/virtual-machine-solutions</span>
+      <span class="c1"># The DCs_v2 VMs support Intel SGX</span>
+      <span class="nt">vmSize</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Standard_DC2s_v2</span>
+
+      <span class="c1"># If launching a minimal Ubuntu machine</span>
+      <span class="c1"># (and manually installing using setup commands)</span>
+      <span class="nt">imagePublisher</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Canonical</span>
+      <span class="nt">imageOffer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">UbuntuServer</span>
+      <span class="nt">imageSku</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">18_04-lts-gen2</span>
+      <span class="nt">imageVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">latest</span>
+
+<span class="c1"># Provider-specific config for worker nodes, e.g. instance type.</span>
+<span class="nt">worker_nodes</span><span class="p">:</span>
+   <span class="nt">azure_arm_parameters</span><span class="p">:</span>
+      <span class="c1"># https://docs.microsoft.com/en-us/azure/confidential-computing/virtual-machine-solutions</span>
+      <span class="c1"># The DCs_v2 VMs support Intel SGX</span>
+      <span class="nt">vmSize</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Standard_DC2s_v2</span>
+
+      <span class="c1"># If launching a minimal Ubuntu machine</span>
+      <span class="c1"># (and manually installing using setup commands)</span>
+      <span class="nt">imagePublisher</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Canonical</span>
+      <span class="nt">imageOffer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">UbuntuServer</span>
+      <span class="nt">imageSku</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">18_04-lts-gen2</span>
+      <span class="nt">imageVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">latest</span>
+
+<span class="c1">##############################################################################</span>
+<span class="c1">#       Everything below this can be ignored - you likely won't have to      #</span>
+<span class="c1">#       modify it.                                                           #</span>
+<span class="c1">##############################################################################</span>
+
+<span class="c1"># Files or directories to copy to the head and worker nodes. The format is a</span>
+<span class="c1"># dictionary from REMOTE_PATH: LOCAL_PATH, e.g.</span>
+<span class="nt">file_mounts</span><span class="p">:</span> <span class="p p-Indicator">{</span>
+   <span class="c1"># This script installs Open Enclave</span>
+   <span class="s">"~/install_oe.sh"</span><span class="nt"> </span><span class="p">:</span> <span class="s">"scripts/install_oe.sh"</span><span class="p p-Indicator">,</span>
+
+   <span class="c1"># This script builds Spark 3.1.1 from source</span>
+   <span class="s">"~/build_spark.sh"</span><span class="nt"> </span><span class="p">:</span> <span class="s">"scripts/build_spark.sh"</span><span class="p p-Indicator">,</span>
+
+   <span class="c1"># This script downloads a pre-built Spark 3.1.1 binary</span>
+   <span class="s">"~/install_spark.sh"</span><span class="nt"> </span><span class="p">:</span> <span class="s">"scripts/install_spark.sh"</span><span class="p p-Indicator">,</span>
+
+   <span class="c1"># This script builds Opaque SQL from source</span>
+   <span class="s">"~/build_opaque.sh"</span><span class="nt"> </span><span class="p">:</span> <span class="s">"scripts/build_opaque.sh"</span><span class="p p-Indicator">,</span>
+
+   <span class="c1"># This script installs Secure XGBoost from source</span>
+   <span class="s">"~/install_secure_xgboost.sh"</span><span class="nt"> </span><span class="p">:</span> <span class="s">"scripts/install_secure_xgboost.sh"</span>
+<span class="p p-Indicator">}</span>
+
+<span class="c1"># List of commands that will be run before `setup_commands`. If docker is</span>
+<span class="c1"># enabled, these commands will run outside the container and before docker</span>
+<span class="c1"># is setup.</span>
+<span class="nt">initialization_commands</span><span class="p">:</span>
+   <span class="c1"># Get rid of annoying Ubuntu message</span>
+   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">touch ~/.sudo_as_admin_successful</span>
+
+<span class="c1"># List of shell commands to run to set up nodes.</span>
+<span class="c1"># Note: Use empty list if using image</span>
+<span class="nt">setup_commands</span><span class="p">:</span>
+   <span class="c1"># This script installs Open Enclave on the node</span>
+   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">chmod +x ~/install_oe.sh</span>
+   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">source ~/install_oe.sh</span>
+   <span class="c1"># This script installs Apache Spark on the node</span>
+   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">chmod +x ~/install_spark.sh</span>
+   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">source ~/install_spark.sh</span>
+   <span class="c1"># This script installs Opaque SQL on the node</span>
+   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">chmod +x ~/build_opaque.sh</span>
+   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">source ~/build_opaque.sh</span>
+   <span class="c1"># This script installs Secure XGBoost on the node</span>
+   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">chmod +x ~/install_secure_xgboost.sh</span>
+   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">source ~/install_secure_xgboost.sh</span>
+
+<span class="c1"># Custom commands that will be run on the head node after common setup.</span>
+<span class="c1"># Set to empty list if using image</span>
+<span class="nt">head_setup_commands</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+
+<span class="c1"># Custom commands that will be run on worker nodes after common setup.</span>
+<span class="c1"># Set to empty list if using image</span>
+<span class="nt">worker_setup_commands</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+
+<span class="c1"># Command to start MC2 on the head node.</span>
+<span class="c1"># Set to empty list if using image</span>
+<span class="nt">head_start_mc2_commands</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd $SPARK_HOME; ./sbin/start-master.sh</span>
+
+<span class="c1"># Command to start MC2 on worker nodes.</span>
+<span class="c1"># Set to empty list if using image</span>
+<span class="nt">worker_start_mc2_commands</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd $SPARK_HOME; ./sbin/start-slave.sh $MC2_HEAD_IP:7077</span>
+</pre></div>
+</div>
+</section>
+
+      </article>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../python/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Python Interface</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="config.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Global Configuration</div>
+                
+              </div>
+            </a>
+        </div>
+
+        <div class="related-information">
+              Copyright &#169; 2021, MC2 Team
+            |
+            Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+              and
+              <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+              <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+            |
+            <a class="muted-link" href="../_sources/config/azure.rst.txt"
+               rel="nofollow">
+              Show Source
+            </a>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </main>
+</div>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/main.js?digest=e931d09b2a40c1bb82b542effe772014573baf67"></script></body>
+</html>

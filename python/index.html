@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Python Package Usage" href="usage.html" /><link rel="prev" title="Global Configuration" href="../config.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Python Package Usage" href="usage.html" /><link rel="prev" title="Azure Configuration" href="../config/azure.html" />
 
     <meta name="generator" content="sphinx-3.0.3, furo 2021.04.11.beta34"/>
         <title>Python Interface - MC2 Client documentation</title>
@@ -19,7 +19,7 @@
   --color-code-foreground: black;
   --color-brand-primary: #00B0FF;
   --color-brand-content: #00B0FF;
-  --color-admonition-background: orange;
+  --color-admonition-background: #3681da;
   
   }
   @media (prefers-color-scheme: dark) {
@@ -36,7 +36,7 @@
   --color-code-foreground: black;
   --color-brand-primary: #00B0FF;
   --color-brand-content: #00B0FF;
-  --color-admonition-background: orange;
+  --color-admonition-background: #3681da;
   
   }
   .override-dark {
@@ -118,13 +118,19 @@
   <p><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../config.html">Global Configuration</a></li>
-<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Python Interface</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../opaquesql_usage.html">Usage with Opaque SQL</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../config/index.html">Configuration</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../config/config.html">Global Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config/azure.html">Azure Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Python Interface</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="usage.html">Python Package Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html">API Reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../cli/index.html">CLI Interface</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../cli/index.html">CLI Interface</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label for="toctree-checkbox-3"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../cli/usage.html">CLI Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/api.html">CLI Reference</a></li>
 </ul>
@@ -145,19 +151,19 @@
         </label>
         <section id="python-interface">
 <h1>Python Interface<a class="headerlink" href="#python-interface" title="Permalink to this headline">¶</a></h1>
-<p>To install the Python package, check out the <a class="reference internal" href="../install.html"><span class="doc">Installation Guide</span></a>. Below, find links to an introduction to the Opaque Client Python package as well as an API reference.</p>
+<p>To install the Python package, check out the <a class="reference internal" href="../install.html"><span class="doc">Installation Guide</span></a>. Below, find links to an introduction to the MC<sup>2</sup> Client Python package as well as an API reference.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Python Package Usage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="usage.html#configuring-mc2-client">Configuring MC<sup>2</sup> Client</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#generating-keys">Generating Keys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#key-generation">Key Generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="usage.html#encrypting-and-decrypting-files">Encrypting and Decrypting Files</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="usage.html#securexgboost-format"><code class="docutils literal notranslate"><span class="pre">securexgboost</span></code> Format</a></li>
-<li class="toctree-l3"><a class="reference internal" href="usage.html#opaque-format"><code class="docutils literal notranslate"><span class="pre">opaque</span></code> Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#sql-format"><code class="docutils literal notranslate"><span class="pre">sql</span></code> Format</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#azure-resource-management">Azure Resource Management</a></li>
 <li class="toctree-l2"><a class="reference internal" href="usage.html#remote-attestation">Remote Attestation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#data-transfer">Data Transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#azure-file-transfer">Azure File Transfer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
@@ -183,21 +189,21 @@
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../config.html">
+          <a class="prev-page" href="../config/azure.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Global Configuration</div>
+                <div class="title">Azure Configuration</div>
                 
               </div>
             </a>
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2021, MC2 Contributors
+              Copyright &#169; 2021, MC2 Team
             |
             Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
               and

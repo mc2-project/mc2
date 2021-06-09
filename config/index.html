@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="CLI Usage" href="usage.html" /><link rel="prev" title="API Reference" href="../python/api.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Global Configuration" href="config.html" /><link rel="prev" title="Usage with Opaque SQL" href="../opaquesql_usage.html" />
 
     <meta name="generator" content="sphinx-3.0.3, furo 2021.04.11.beta34"/>
-        <title>CLI Interface - MC2 Client documentation</title>
+        <title>Configuration - MC2 Client documentation</title>
       <link rel="stylesheet" href="../_static/styles/furo.css?digest=59ab60ac09ea94ccfe6deddff6d715cce948a6fc">
     <link rel="stylesheet" href="../_static/pygments.css">
     <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../_static/pygments_dark.css">
@@ -120,9 +120,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../opaquesql_usage.html">Usage with Opaque SQL</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../config/index.html">Configuration</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../config/config.html">Global Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../config/azure.html">Azure Configuration</a></li>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Configuration</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="config.html">Global Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="azure.html">Azure Configuration</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../python/index.html">Python Interface</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -130,9 +130,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../python/api.html">API Reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">CLI Interface</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label for="toctree-checkbox-3"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="usage.html">CLI Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html">CLI Reference</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../cli/index.html">CLI Interface</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label for="toctree-checkbox-3"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cli/usage.html">CLI Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli/api.html">CLI Reference</a></li>
 </ul>
 </li>
 </ul>
@@ -149,41 +149,25 @@
         <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
           <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
         </label>
-        <section id="cli-interface">
-<h1>CLI Interface<a class="headerlink" href="#cli-interface" title="Permalink to this headline">¶</a></h1>
-<p>MC<sup>2</sup> Client’s command line interface requires the <code class="docutils literal notranslate"><span class="pre">mc2client</span></code> Python package to be installed. Follow the instructions <a class="reference internal" href="../install.html"><span class="doc">here</span></a> to install the Python package if you haven’t yet done so. Below are links to CLI usage examples as well as an API reference.</p>
+        <section id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<p>Before using MC<sup>2</sup> Client, you should configure it by filling out two YAML files. One YAML file is for MC<sup>2</sup> Client global configuration. The other is for Azure resource configuration – specifying your keys for authentication, filling out names of resources you want to create, etc.</p>
 <div class="toctree-wrapper compound">
+<p><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">CLI Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#configuring-mc2-client">Configuring MC<sup>2</sup> Client</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#generating-keys">Generating Keys</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#launching-cloud-resources">Launching Cloud Resources</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#starting-compute-services-remotely">Starting Compute Services Remotely</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#encrypting-and-uploading-data">Encrypting and Uploading Data</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="usage.html#note-on-sql-format">Note on <code class="docutils literal notranslate"><span class="pre">sql</span></code> Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Global Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="config.html#user-configuration">User Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#launch">Launch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#start">Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#upload">Upload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#run">Run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#download">Download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#stop">Stop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#teardown">Teardown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#example">Example</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#running-computation">Running Computation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#downloading-and-decrypting-data">Downloading and Decrypting Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#stopping-compute-services">Stopping Compute Services</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#terminating-azure-resources">Terminating Azure Resources</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">CLI Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api.html#Positional Arguments">Positional Arguments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#Sub-commands:">Sub-commands:</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api.html#init">init</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#launch">launch</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#start">start</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#upload">upload</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#run">run</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#download">download</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#stop">stop</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#teardown">teardown</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="azure.html">Azure Configuration</a></li>
 </ul>
 </div>
 </section>
@@ -192,23 +176,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="usage.html">
+          <a class="next-page" href="config.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">CLI Usage</div>
+                <div class="title">Global Configuration</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../python/api.html">
+          <a class="prev-page" href="../opaquesql_usage.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">API Reference</div>
+                <div class="title">Usage with Opaque SQL</div>
                 
               </div>
             </a>
@@ -222,7 +206,7 @@
               <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
               <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
             |
-            <a class="muted-link" href="../_sources/cli/index.rst.txt"
+            <a class="muted-link" href="../_sources/config/index.rst.txt"
                rel="nofollow">
               Show Source
             </a>

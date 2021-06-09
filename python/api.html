@@ -19,7 +19,7 @@
   --color-code-foreground: black;
   --color-brand-primary: #00B0FF;
   --color-brand-content: #00B0FF;
-  --color-admonition-background: orange;
+  --color-admonition-background: #3681da;
   
   }
   @media (prefers-color-scheme: dark) {
@@ -36,7 +36,7 @@
   --color-code-foreground: black;
   --color-brand-primary: #00B0FF;
   --color-brand-content: #00B0FF;
-  --color-admonition-background: orange;
+  --color-admonition-background: #3681da;
   
   }
   .override-dark {
@@ -118,13 +118,19 @@
   <p><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../config.html">Global Configuration</a></li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Python Interface</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../opaquesql_usage.html">Usage with Opaque SQL</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../config/index.html">Configuration</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../config/config.html">Global Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config/azure.html">Azure Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Python Interface</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="usage.html">Python Package Usage</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">API Reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../cli/index.html">CLI Interface</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../cli/index.html">CLI Interface</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label for="toctree-checkbox-3"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../cli/usage.html">CLI Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/api.html">CLI Reference</a></li>
 </ul>
@@ -168,12 +174,9 @@
 <section id="cryptographic-utilities">
 <h2>Cryptographic Utilities<a class="headerlink" href="#cryptographic-utilities" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="mc2client.attest">
-<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">attest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.attest" title="Permalink to this definition">¶</a></dt>
-<dd><p>Verify remote attestation report of enclave and extract its public key.
-The report and public key are saved as instance attributes.
-Parameters for attestation, e.g. whether to verify report,
-whether to check client list, whether to check MRSIGNER/MRENCLAVE, can be specified in config YAML.</p>
+<dt id="mc2client.configure_job">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">configure_job</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.configure_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attest all of the worker enclaves and give them the shared symmetric key.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="mc2client.decrypt_data">
@@ -186,7 +189,7 @@ whether to check client list, whether to check MRSIGNER/MRENCLAVE, can be specif
 </dd>
 <dt><strong>plaintext_file</strong><span class="classifier">str</span></dt><dd><p>Path to decrypted data</p>
 </dd>
-<dt><strong>enc_format</strong><span class="classifier">str</span></dt><dd><p>The encryption format (i.e. Opaque or Secure XGBoost)</p>
+<dt><strong>enc_format</strong><span class="classifier">str</span></dt><dd><p>The encryption format (i.e. <cite>sql</cite> for Opaque SQL or <cite>xgb</cite> for Secure XGBoost)</p>
 </dd>
 </dl>
 </dd>
@@ -194,7 +197,7 @@ whether to check client list, whether to check MRSIGNER/MRENCLAVE, can be specif
 </dd></dl>
 <dl class="py function">
 <dt id="mc2client.encrypt_data">
-<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">encrypt_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plaintext_file</span></em>, <em class="sig-param"><span class="n">encrypted_file</span></em>, <em class="sig-param"><span class="n">schema_file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">enc_format</span><span class="o">=</span><span class="default_value">'securexgboost'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.encrypt_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">encrypt_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plaintext_file</span></em>, <em class="sig-param"><span class="n">encrypted_file</span></em>, <em class="sig-param"><span class="n">schema_file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">enc_format</span><span class="o">=</span><span class="default_value">'xgb'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.encrypt_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encrypt a file in a certain format</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -204,9 +207,10 @@ whether to check client list, whether to check MRSIGNER/MRENCLAVE, can be specif
 <dt><strong>encrypted_file</strong><span class="classifier">str</span></dt><dd><p>Destination path of encrypted data</p>
 </dd>
 <dt><strong>schema_file</strong><span class="classifier">str</span></dt><dd><p>Path to schema of data. Represented as comma separated column types.
-Necessary for Opaque encryption format.</p>
+Necessary for Opaque SQL encryption format.</p>
 </dd>
-<dt><strong>enc_format</strong><span class="classifier">str</span></dt><dd><p>The format (i.e. Opaque or Secure XGBoost) to use for encryption</p>
+<dt><strong>enc_format</strong><span class="classifier">str</span></dt><dd><p>The format to use for encryption
+Input <cite>sql</cite> if running Opaque SQL or <cite>xgb</cite> if running Secure XGBoost</p>
 </dd>
 </dl>
 </dd>
@@ -243,10 +247,49 @@ specified by user in config YAML passed to <cite>set_config()</cite></p>
 <section id="cloud-management">
 <h2>Cloud Management<a class="headerlink" href="#cloud-management" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
+<dt id="mc2client.create_cluster">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">create_cluster</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.create_cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a cluster</p>
+</dd></dl>
+<dl class="py function">
+<dt id="mc2client.create_container">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">create_container</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.create_container" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create container in storage from configuration file</p>
+</dd></dl>
+<dl class="py function">
+<dt id="mc2client.create_resource_group">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">create_resource_group</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.create_resource_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a resource group</p>
+</dd></dl>
+<dl class="py function">
+<dt id="mc2client.create_storage">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">create_storage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.create_storage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create storage from configuration file</p>
+</dd></dl>
+<dl class="py function">
+<dt id="mc2client.delete_cluster">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">delete_cluster</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.delete_cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a cluster</p>
+</dd></dl>
+<dl class="py function">
+<dt id="mc2client.delete_container">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">delete_container</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.delete_container" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete container in storage from configuration file</p>
+</dd></dl>
+<dl class="py function">
+<dt id="mc2client.delete_resource_group">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">delete_resource_group</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.delete_resource_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a resource group</p>
+</dd></dl>
+<dl class="py function">
+<dt id="mc2client.delete_storage">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">delete_storage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.delete_storage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete storage from configuration file</p>
+</dd></dl>
+<dl class="py function">
 <dt id="mc2client.download_file">
-<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">download_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_path</span></em>, <em class="sig-param"><span class="n">output_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.download_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Download file from the first worker node
-specified during configuration.</p>
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">download_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_path</span></em>, <em class="sig-param"><span class="n">output_path</span></em>, <em class="sig-param"><span class="n">use_azure</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.download_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download file from Azure storage or head node disk</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -259,10 +302,19 @@ specified during configuration.</p>
 </dl>
 </dd></dl>
 <dl class="py function">
+<dt id="mc2client.get_head_ip">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">get_head_ip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.get_head_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get IP address of head node of created cluster</p>
+</dd></dl>
+<dl class="py function">
+<dt id="mc2client.get_worker_ips">
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">get_worker_ips</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.get_worker_ips" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get IP addresses of all worker nodes in created cluster</p>
+</dd></dl>
+<dl class="py function">
 <dt id="mc2client.upload_file">
-<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">upload_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_path</span></em>, <em class="sig-param"><span class="n">output_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.upload_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Upload file to the worker nodes specified
-during configuration.</p>
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">upload_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_path</span></em>, <em class="sig-param"><span class="n">output_path</span></em>, <em class="sig-param"><span class="n">use_azure</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.upload_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload file to Azure storage or disk of all cluster VMs</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -304,7 +356,7 @@ during configuration.</p>
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2021, MC2 Contributors
+              Copyright &#169; 2021, MC2 Team
             |
             Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
               and
