@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="600" height="220" src="docs/img/logo.png">
+  <img width="300" height="110" src="docs/img/logo.png">
 </p>
 # A Platform for Secure Analytics and Machine Learning
 
