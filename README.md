@@ -1,6 +1,7 @@
 <p align="center">
-  <img width="600" height="220" src="docs/img/logo.png">
+  <img width="1200" height="440" src="docs/img/logo.png">
 </p>
+
 
 # A Platform for Secure Analytics and Machine Learning
 
