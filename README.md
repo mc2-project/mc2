@@ -1,4 +1,7 @@
-# ![MC2 Logo](docs/img/logo.png) A Platform for Secure Analytics and Machine Learning
+<p align="center">
+  <img width="1200" height="440" src="docs/img/logo.png">
+</p>
+# A Platform for Secure Analytics and Machine Learning
 
 ![build](https://github.com/mc2-project/mc2/actions/workflows/main.yml/badge.svg)
 ![docs](https://github.com/mc2-project/mc2/actions/workflows/docs.yml/badge.svg)
