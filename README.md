@@ -1,8 +1,16 @@
-# MC<sup>2</sup>: A Platform for Secure Analytics and Machine Learning
+<p align="center">
+  <img width="575" height="211" src="docs/img/logo.png">
+</p>
+
+
+# A Platform for Secure Analytics and Machine Learning
 
 ![build](https://github.com/mc2-project/mc2/actions/workflows/main.yml/badge.svg)
 ![docs](https://github.com/mc2-project/mc2/actions/workflows/docs.yml/badge.svg)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[<img src="https://img.shields.io/badge/slack-contact%20us-blueviolet?logo=slack">](https://join.slack.com/t/mc2-project/shared_invite/zt-rt3kxyy8-GS4KA0A351Ysv~GKwy8NEQ)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
+
 
 ![MC2 Overview](docs/img/mc2_workflow.jpeg)
 
@@ -165,4 +173,4 @@ For more thorough documentation on installation and usage, please visit:
 
 
 ## Contact
-For general discussion, send a message to mc2-dev@googlegroups.com.
+Join our [Slack](https://join.slack.com/t/mc2-project/shared_invite/zt-rt3kxyy8-GS4KA0A351Ysv~GKwy8NEQ), open a [GitHub issue](https://github.com/mc2-project/mc2/issues), or send a message to mc2-dev@googlegroups.com.
