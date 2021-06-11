@@ -2,6 +2,7 @@ import filecmp
 import os
 import pathlib
 import shutil
+import yaml
 
 import numpy as np
 import mc2client as mc2

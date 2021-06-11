@@ -23,7 +23,7 @@ mc2.delete_container()
 
 print("Deleting storage")
 mc2.delete_storage()
-  
+
 print("Deleting cluster")
 mc2.delete_cluster()
 

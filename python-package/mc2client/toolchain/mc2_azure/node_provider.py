@@ -31,6 +31,10 @@ VM_NAME_UUID_LEN = 8
 
 logger = logging.getLogger(__name__)
 
+# Acquire the Azure logger and set the log level to WARNING
+azure_logger = logging.getLogger("azure")
+azure_logger.setLevel(logging.WARNING)
+
 
 def synchronized(f):
     def wrapper(self, *args, **kwargs):

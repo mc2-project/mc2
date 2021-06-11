@@ -1,17 +1,17 @@
-#include <vector>
-#include <numeric>
-#include <map>
-#include <string>
-#include <iostream>
-#include <type_traits>
-#include <math.h>
 #include <fstream>
+#include <iostream>
+#include <map>
+#include <math.h>
+#include <numeric>
+#include <string>
+#include <type_traits>
+#include <vector>
 
 #include "crypto.h"
 
 // Print out a map<string, vector<float>>
 void print_map(std::map<std::string, std::vector<double>> dict) {
-    for (const auto& pair : dict) {
+    for (const auto &pair : dict) {
         std::cout << pair.first << ": ";
         for (float x : pair.second) {
             std::cout << x << ", ";
@@ -21,7 +21,7 @@ void print_map(std::map<std::string, std::vector<double>> dict) {
 }
 
 void print_map(std::map<std::string, std::string> dict) {
-    for (const auto& pair : dict) {
+    for (const auto &pair : dict) {
         std::cout << pair.first << ": ";
         std::cout << std::boolalpha << pair.second << std::endl;
         std::cout << std::endl;
@@ -29,23 +29,23 @@ void print_map(std::map<std::string, std::string> dict) {
 }
 
 void print_map_keys(std::map<std::string, std::vector<double>> dict) {
-  for (const auto& pair : dict) {
-    if (pair.first.length() > 20) continue;
-    std::cout << pair.first << std::endl;
-  }
+    for (const auto &pair : dict) {
+        if (pair.first.length() > 20)
+            continue;
+        std::cout << pair.first << std::endl;
+    }
 }
 
-
-// Print integers instead of bytes for encryption debugging. 
-int print_bytes(uint8_t* data, size_t len) {
+// Print integers instead of bytes for encryption debugging.
+int print_bytes(uint8_t *data, size_t len) {
     for (int i = 0; i < len; i++) {
-        std::cout << (int) data[i] << " ";
+        std::cout << (int)data[i] << " ";
     }
     std::cout << std::endl;
 }
 
 // Delete a double pointer.
-void delete_double_ptr(unsigned char** src, size_t num) {
+void delete_double_ptr(unsigned char **src, size_t num) {
     for (int i = 0; i < num; i++) {
         delete src[i];
     }
@@ -53,19 +53,19 @@ void delete_double_ptr(unsigned char** src, size_t num) {
 }
 
 // Split a string by delimiter
-std::vector<std::string> split (const std::string &s, char delim) {
+std::vector<std::string> split(const std::string &s, char delim) {
     std::vector<std::string> result;
-    std::stringstream ss (s);
+    std::stringstream ss(s);
     std::string item;
 
     while (std::getline(ss, item, delim)) {
-        result.push_back (item);
+        result.push_back(item);
     }
 
     return result;
 }
 
-void load_key(char* k_fname, char key[CIPHER_KEY_SIZE]) {
+void load_key(char *k_fname, char key[CIPHER_KEY_SIZE]) {
     std::ifstream keyfile;
     keyfile.open(k_fname);
     keyfile.read(key, CIPHER_KEY_SIZE);
@@ -73,7 +73,7 @@ void load_key(char* k_fname, char key[CIPHER_KEY_SIZE]) {
 }
 
 // Convert a date to its integer representation
-int date_to_int(std::string&& date) {
+int date_to_int(std::string &&date) {
     struct tm tm = {0};
     std::istringstream iss(date);
     iss >> std::get_time(&tm, "%Y-%m-%d");
@@ -97,13 +97,10 @@ std::string int_to_date(int days_since_epoch) {
 // correctly inferred in Spark. By default, if a floating point value is
 // equivalent to an integer, C++ will display it without a decimal + trailing
 // zero. However, this is incorrect behaivor in Spark.
-template<typename F>
-std::string fmt_floating(F value)
-{
+template <typename F> std::string fmt_floating(F value) {
     static_assert(
         std::is_floating_point<F>::value,
-        "Attempted to call fmt_decimal on value which isn't a floating point"
-    );
+        "Attempted to call fmt_decimal on value which isn't a floating point");
     // Extract the integer part of the value. This is necessary since a simple
     // cast can fail if the value is too large.
     double int_part;

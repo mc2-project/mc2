@@ -53,7 +53,7 @@ def create_or_delete_resource_group(config, create):
         params["tags"] = config["provider"]["tags"]
 
     if create:
-        logger.info("Creating Resource Group: %s", resource_group)
+        logger.info("Creating/Updating Resource Group: %s", resource_group)
         resource_client.resource_groups.create_or_update(
             resource_group_name=resource_group, parameters=params
         )
@@ -61,7 +61,6 @@ def create_or_delete_resource_group(config, create):
         logger.info("Deleting Resource Group: %s", resource_group)
         delete_async_op = resource_client.resource_groups.delete(resource_group)
         delete_async_op.wait()
-
 
 
 def _configure_resource_group(config):

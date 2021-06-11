@@ -1,0 +1,20 @@
+repos:
+-   repo: https://github.com/ambv/black
+    rev: 21.6b0
+    hooks:
+    - id: black
+      language_version: python3
+-   repo: https://gitlab.com/pycqa/flake8
+    rev: 3.9.2
+    hooks:
+    - id: flake8
+-   repo: https://github.com/pocc/pre-commit-hooks
+    rev: v1.1.1
+    hooks:
+    - id: clang-format
+      exclude: ^(src/include/(csv.hpp|json.hpp|base64.h)) 
+      args: 
+      - -i
+      - --style=file
+      - --fallback-style=Chromium    
+
