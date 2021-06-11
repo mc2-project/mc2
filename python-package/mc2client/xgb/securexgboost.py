@@ -43,11 +43,11 @@ except ImportError:
 
     # pylint: disable=too-few-public-methods
     class MultiIndex(object):
-        """ dummy for pandas.MultiIndex """
+        """dummy for pandas.MultiIndex"""
 
     # pylint: disable=too-few-public-methods
     class DataFrame(object):
-        """ dummy for pandas.DataFrame """
+        """dummy for pandas.DataFrame"""
 
     PANDAS_INSTALLED = False
 

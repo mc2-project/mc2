@@ -2,6 +2,7 @@ import ctypes
 import glob
 import math
 import os
+import logging
 import pathlib
 import secrets
 import shutil
@@ -29,12 +30,19 @@ from .exceptions import (
     MC2ClientComputeError,
     MC2ClientConfigError,
 )
-from .rpc import (  # pylint: disable=no-name-in-module
-    attest_pb2,
-    attest_pb2_grpc
-)
+from .rpc import attest_pb2, attest_pb2_grpc  # pylint: disable=no-name-in-module
 from .toolchain.node_provider import get_node_provider
-from .toolchain.toolchain import cluster, container, download, get_head_node_ip, get_worker_node_ips,resource_group, run_remote_cmds_on_cluster, storage, upload
+from .toolchain.toolchain import (
+    cluster,
+    container,
+    download,
+    get_head_node_ip,
+    get_worker_node_ips,
+    resource_group,
+    run_remote_cmds_on_cluster,
+    storage,
+    upload,
+)
 from .toolchain.flatbuffers.tuix import SignedKey
 
 # Load in C++ library
@@ -58,8 +66,31 @@ else:
 
 _LIB = ctypes.CDLL(lib_path)
 
+# Configure logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# create console handler and set level to debug
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO)
+
+# create formatter
+formatter = logging.Formatter(
+    "%(asctime)s - %(levelname)s - %(message)s", "%Y-%m-%d %H:%M:%S"
+)
+
+# add formatter to ch
+ch.setFormatter(formatter)
+
+# add ch to logger
+logger.addHandler(ch)
+
+# Ensure that each logging message is only logged once
+logger.propagate = False
+
 # _CONF is a cache of data retrieved throughout processing
 _CONF = {}
+
 
 def _check_call(ret):
     """Check the return value of C API call
@@ -313,14 +344,14 @@ def encrypt_data_with_sym_key(data, sym_key):
     # Allocate memory that will be used to store the encrypted data
     encrypted_data_size = _LIB.sym_enc_size(len(data))
     encrypted_data = bytes(encrypted_data_size)
-    
+
     # Encrypt the data with sym_key
     _LIB.sym_enc(
         ctypes.c_char_p(data),
         ctypes.c_size_t(len(data)),
         ctypes.c_char_p(sym_key),
         ctypes.c_size_t(len(sym_key)),
-        ctypes.cast(encrypted_data, ctypes.POINTER(ctypes.c_uint8))
+        ctypes.cast(encrypted_data, ctypes.POINTER(ctypes.c_uint8)),
     )
     return encrypted_data
 
@@ -366,7 +397,7 @@ def sign_data(keyfile, data):
     # Allocate memory to store the signature
     sig_len = _LIB.asym_sign_size()
     signature = bytes(sig_len)
-    
+
     # Sign data with key keyfile
     _LIB.sign_using_keyfile(
         ctypes.c_char_p(str.encode(keyfile)),
@@ -501,7 +532,7 @@ def generate_keypair(expiration=10 * 365 * 24 * 60 * 60):
     root_private_key_path = user_config["root_private_key"]
 
     if os.path.exists(private_key_path):
-        print(
+        logger.warning(
             "Skipping keypair generation - private key already exists at {}".format(
                 private_key_path
             )
@@ -509,7 +540,7 @@ def generate_keypair(expiration=10 * 365 * 24 * 60 * 60):
         return
 
     if os.path.exists(cert_path):
-        print(
+        logger.warning(
             "Skipping keypair generation - certificate already exists at {}".format(
                 cert_path
             )
@@ -522,6 +553,8 @@ def generate_keypair(expiration=10 * 365 * 24 * 60 * 60):
 
     with open(private_key_path, "wb") as priv_key_file:
         priv_key_file.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
+
+    logger.info("Generated private key and outputted to {}".format(private_key_path))
 
     # Generate the certificate signing request
     ca_cert = crypto.load_certificate(crypto.FILETYPE_PEM, open(root_cert_path).read())
@@ -546,6 +579,8 @@ def generate_keypair(expiration=10 * 365 * 24 * 60 * 60):
     with open(cert_path, "wb") as cert_file:
         cert_file.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert))
 
+    logger.info("Generated certificate and outputted to {}".format(cert_path))
+
 
 def generate_symmetric_key(num_bytes=32):
     """
@@ -561,7 +596,7 @@ def generate_symmetric_key(num_bytes=32):
 
     symmetric_key_path = EnvYAML(_CONF["general_config"])["user"]["symmetric_key"]
     if os.path.exists(symmetric_key_path):
-        print(
+        logger.warning(
             "Skipping symmetric key generation - key already exists at {}".format(
                 symmetric_key_path
             )
@@ -572,10 +607,12 @@ def generate_symmetric_key(num_bytes=32):
     with open(symmetric_key_path, "wb") as symm_key:
         symm_key.write(key)
 
+    logger.info(
+        "Generated symmetric key and outputted to {}".format(symmetric_key_path)
+    )
 
-def encrypt_data(
-    plaintext_file, encrypted_file, schema_file=None, enc_format="xgb"
-):
+
+def encrypt_data(plaintext_file, encrypted_file, schema_file=None, enc_format="xgb"):
     """
     Encrypt a file in a certain format
 
@@ -618,6 +655,11 @@ def encrypt_data(
             c_str(symmetric_key_path),
             ctypes.byref(result),
         )
+        logger.info(
+            "Encrypted {} in xgb format and outputted to {}".format(
+                plaintext_file, encrypted_file
+            )
+        )
     elif cleaned_format == "sql":
         if not os.path.exists(schema_file):
             raise CryptoError("Schema not found at {}".format(schema_file))
@@ -630,6 +672,11 @@ def encrypt_data(
             ctypes.byref(result),
         )
         convert_to_sequencefiles(encrypted_file)
+        logger.info(
+            "Encrypted {} in sql format and outputted to {}".format(
+                plaintext_file, encrypted_file
+            )
+        )
     else:
         raise CryptoError("Encryption format not currently supported")
 
@@ -675,6 +722,11 @@ def decrypt_data(encrypted_file, plaintext_file, enc_format):
             c_str(symmetric_key_path),
             ctypes.byref(result),
         )
+        logger.info(
+            "Decrypted {} in xgb format and outputted to {}".format(
+                encrypted_file, plaintext_file
+            )
+        )
     elif cleaned_format == "sql":
         # Convert from SequenceFile format to Flatbuffers bytes
         data_files = sorted(convert_from_sequencefiles(encrypted_file))
@@ -691,6 +743,11 @@ def decrypt_data(encrypted_file, plaintext_file, enc_format):
         # Remove intermediate Flatbuffers bytes files
         for tmp_file in data_files:
             os.remove(tmp_file)
+        logger.info(
+            "Decrypted {} in sql format and outputted to {}".format(
+                encrypted_file, plaintext_file
+            )
+        )
     else:
         raise CryptoError("Encryption format not currently supported")
 
@@ -750,13 +807,15 @@ def upload_file(input_path, output_path, use_azure=True):
         Path to output file
     """
     if not _CONF["use_azure"] and use_azure:
-        raise MC2ClientConfigError("Attempted to use Azure storage with"\
-                "node addresses manually configured")
+        raise MC2ClientConfigError(
+            "Attempted to use Azure storage with" "node addresses manually configured"
+        )
 
     if _CONF["use_azure"] and _CONF.get("azure_config") is None:
         raise MC2ClientConfigError("Azure configuration not set")
 
     if use_azure:
+        logger.info("Uploading {} to Azure blob storage".format(input_path))
         upload(_CONF["azure_config"], input_path, output_path)
     else:
         # TODO: the username used for SSH and the username specified in config.yaml should be the same
@@ -768,9 +827,11 @@ def upload_file(input_path, output_path, use_azure=True):
             head = {
                 "ip": get_head_ip(),
                 "username": remote_username,
-                "ssh_key": ssh_key
+                "ssh_key": ssh_key,
             }
-            workers = [{"ip": ip, "username": remote_username} for ip in get_worker_ips()]
+            workers = [
+                {"ip": ip, "username": remote_username} for ip in get_worker_ips()
+            ]
         else:
             head = _CONF["head"]
             workers = _CONF["workers"]
@@ -787,13 +848,21 @@ def upload_file(input_path, output_path, use_azure=True):
                         os.remove(output_path)
 
                 # We're using a local deployment
+                logger.info(
+                    "Using local deployment. Copying {} to {}".format(
+                        input_path, output_path
+                    )
+                )
                 if os.path.isdir(input_path):
                     shutil.copytree(input_path, output_path)
                 else:
                     shutil.copy2(input_path, output_path)
             else:
                 # Use scp
-                ssh = _createSSHClient(node["ip"], 22, node["username"], node["ssh_key"])
+                logger.info("Uploading {} to disk of {}".format(input_path, node["ip"]))
+                ssh = _createSSHClient(
+                    node["ip"], 22, node["username"], node["ssh_key"]
+                )
                 scp = SCPClient(ssh.get_transport())
                 scp.put(input_path, output_path, recursive=True)
 
@@ -810,13 +879,15 @@ def download_file(input_path, output_path, use_azure=True):
         Path to output file
     """
     if not _CONF["use_azure"] and use_azure:
-        raise MC2ClientConfigError("Attempted to use Azure storage with"\
-                "node addresses manually configured")
+        raise MC2ClientConfigError(
+            "Attempted to use Azure storage with" "node addresses manually configured"
+        )
 
     if _CONF["use_azure"] and _CONF.get("azure_config") is None:
         raise MC2ClientConfigError("Azure configuration not set")
 
     if use_azure:
+        logger.info("Downloading {} from Azure blob storage".format(input_path))
         download(_CONF["azure_config"], input_path, output_path)
     else:  # use scp
         if _CONF["use_azure"]:
@@ -832,11 +903,15 @@ def download_file(input_path, output_path, use_azure=True):
             head = _CONF["head"]
 
         if head["ip"] == "0.0.0.0" or head["ip"] == "127.0.0.1":
+            logger.info(
+                "Using local deployment. Copying data from {}".format(input_path)
+            )
             if os.path.isdir(input_path):
                 shutil.copytree(input_path, output_path)
             else:
                 shutil.copy2(input_path, output_path)
         else:
+            logger.info("Downloading {} from disk of {}".format(input_path, head["ip"]))
             ssh = _createSSHClient(head["ip"], 22, head["username"], head["ssh_key"])
             scp = SCPClient(ssh.get_transport())
             scp.get(input_path, output_path, recursive=True)
@@ -912,8 +987,9 @@ def run_remote_cmds(head_cmds, worker_cmds):
         run_remote_cmds_on_cluster(_CONF["azure_config"], head_cmds, worker_cmds)
     else:
         # Create a list with the node address + command
-        commands = ([(_CONF["head"], head_cmds)] +
-            [(worker, worker_cmds) for worker in _CONF["workers"]])
+        commands = [(_CONF["head"], head_cmds)] + [
+            (worker, worker_cmds) for worker in _CONF["workers"]
+        ]
 
         # SSH into each node and run the specified command or run in a
         # subprocess if the IP is local
@@ -922,12 +998,18 @@ def run_remote_cmds(head_cmds, worker_cmds):
                 # We're using a local deployment
                 for cmd in cmds:
                     ps = subprocess.Popen(cmd, shell=True)
-                    print("Running {} locally created a process with PID {}".format(cmd, ps.pid))
+                    logger.info(
+                        "Running {} locally created a process with PID {}".format(
+                            cmd, ps.pid
+                        )
+                    )
             else:
-                ssh = _createSSHClient(node["ip"], 22, node["username"], node["ssh_key"])
+                ssh = _createSSHClient(
+                    node["ip"], 22, node["username"], node["ssh_key"]
+                )
                 for cmd in cmds:
+                    logger.info("Running {} remotely on {}".format(cmd, node["ip"]))
                     ssh.exec_command(cmd)
-
 
 
 def configure_job(config):
@@ -948,8 +1030,7 @@ def configure_job(config):
     mrsigner_path = attestation_config["mrsigner"]
     if not simulation_mode:
         if not os.path.exists(mrsigner_path):
-            raise FileNotFoundError("Enclave signing key not found at:",
-                    mrsigner_path)
+            raise FileNotFoundError("Enclave signing key not found at:", mrsigner_path)
         else:
             enclave_signer_pem = open(mrsigner_path).read()
     else:
@@ -985,11 +1066,10 @@ def configure_job(config):
         enc_keys.append(encrypt_data_with_pk(key_bytes, pk))
 
     # Return encrypted keys to the head node
+    logger.info("Sending client key to enclave")
     with grpc.insecure_channel(head_address) as channel:
         stub = attest_pb2_grpc.ClientToEnclaveStub(channel)
-        response = stub.GetFinalAttestationResult(
-            attest_pb2.EncryptedKeys(keys=enc_keys)
-        )
+        stub.GetFinalAttestationResult(attest_pb2.EncryptedKeys(keys=enc_keys))
 
 
 def _attest(head_address, simulation_mode, mrsigner):
@@ -1002,10 +1082,8 @@ def _attest(head_address, simulation_mode, mrsigner):
     # Query enclave for attestation report
     with grpc.insecure_channel(head_address) as channel:
         stub = attest_pb2_grpc.ClientToEnclaveStub(channel)
-        response = stub.GetRemoteEvidence(
-            attest_pb2.AttestationStatus(status=0)
-        )
-    
+        response = stub.GetRemoteEvidence(attest_pb2.AttestationStatus(status=0))
+
     # Extract evidence list from response
     evidence_list = response.evidences
 
@@ -1017,7 +1095,7 @@ def _attest(head_address, simulation_mode, mrsigner):
         pk_bytes = bytes(pk_size)
         _LIB.get_public_key(
             ctypes.cast(msg, ctypes.POINTER(ctypes.c_uint8)),
-            ctypes.cast(pk_bytes, ctypes.POINTER(ctypes.c_uint8))
+            ctypes.cast(pk_bytes, ctypes.POINTER(ctypes.c_uint8)),
         )
         pk_list.append(pk_bytes)
 
@@ -1026,10 +1104,10 @@ def _attest(head_address, simulation_mode, mrsigner):
         for msg in evidence_list:
             if _LIB.attest_evidence(
                 ctypes.c_char_p(mrsigner.encode("utf-8")),
-                ctypes.c_size_t(len(mrsigner)+1),
+                ctypes.c_size_t(len(mrsigner) + 1),
                 ctypes.cast(msg, ctypes.POINTER(ctypes.c_uint8)),
                 ctypes.c_size_t(len(msg)),
-                ):
+            ):
                 raise AttestationError("Remote attestation report verification failed")
 
     # Set enclave public keys in the config

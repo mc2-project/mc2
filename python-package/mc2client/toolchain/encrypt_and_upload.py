@@ -1,6 +1,7 @@
 # Import the needed management objects from the libraries. The azure.common library
 # is installed automatically with the other libraries.
 import os
+import logging
 
 from azure.common.client_factory import get_client_from_cli_profile
 from azure.mgmt.storage import StorageManagementClient
@@ -10,6 +11,13 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 container_client = None
+
+# Get Opaque Client loger
+logger = logging.getLogger(__name__)
+
+# Acquire the Azure logger and set the log level to WARNING
+azure_logger = logging.getLogger("azure")
+azure_logger.setLevel(logging.WARNING)
 
 
 class CryptoUtil(object):
@@ -71,8 +79,11 @@ def create_storage(config):
     )
 
     if not availability_result.name_available:
-        # TODO: add logging warning
-        print("Storage account {} already exists, skipping storage account creation".format(storage_name))
+        logger.warning(
+            "Storage account {} already exists, skipping storage account creation".format(
+                storage_name
+            )
+        )
         return
 
     # The name is available, so provision the account
@@ -85,7 +96,7 @@ def create_storage(config):
     # Long-running operations return a poller object; calling poller.result()
     # waits for completion.
     account_result = poller.result()
-    print(f"Provisioned storage account {account_result.name}")
+    logger.info(f"Provisioned storage account {account_result.name}")
 
 
 def terminate_storage(config):
@@ -98,6 +109,8 @@ def terminate_storage(config):
         rg_name, storage_name, {"location": location, "kind": "StorageV2"}
     )
 
+    logger.info("Terminated storage account {}".format(storage_name))
+
 
 def create_container(config):
     container_name = ""
@@ -105,15 +118,21 @@ def create_container(config):
         blob_service_client = get_blob_service_client(config)
         container_name = config["container_name"]
         blob_service_client.create_container(container_name)
-    except ResourceExistsError as e:
-        # TODO: add logging warning
-        print("The specified container {} already exists".format(container_name))
+        logger.info(f"Provisioned storage container {container_name}")
+    except ResourceExistsError:
+        logger.warning(
+            "The specified container {} already exists, skipping storage container creation".format(
+                container_name
+            )
+        )
+
 
 def terminate_container(config):
     blob_service_client = get_blob_service_client(config)
     container_name = config["container_name"]
     container_client = blob_service_client.get_container_client(container_name)
     container_client.delete_container()
+    logger.info("Terminated storage container {}".format(container_name))
 
 
 # Obtain the management object for resources, using the credentials from the CLI login.

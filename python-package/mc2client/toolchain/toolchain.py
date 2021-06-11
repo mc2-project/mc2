@@ -35,7 +35,6 @@ from .util import (
 )
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
 
 def create_or_update_cluster(config):
@@ -188,7 +187,7 @@ def get_or_create_head_node(config):
         # Hash the head node config to see if it needs to be updated
         launch_hash = hash_launch_conf(config["head_node"], config["auth"])
 
-        # If there's no existing head node or the existing head node's config 
+        # If there's no existing head node or the existing head node's config
         # is out of date
         if (
             head_node is None
@@ -247,7 +246,6 @@ def get_or_create_head_node(config):
         config["file_mounts"].update(
             {remote_key_path: config["auth"]["ssh_private_key"]}
         )
-
 
         # Run setup commands
         init_commands = config["head_setup_commands"]
@@ -387,6 +385,7 @@ def cluster(config_path, create):
         create_or_update_cluster(config)
     else:
         teardown_cluster(config_path)
+
 
 def resource_group(config_path, create):
     config = yaml.safe_load(open(config_path).read())

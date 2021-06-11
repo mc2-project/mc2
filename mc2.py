@@ -1,4 +1,5 @@
 import argparse
+import logging
 import os
 import pathlib
 import shutil
@@ -10,6 +11,13 @@ import mc2client.xgb as xgb
 
 from envyaml import EnvYAML
 
+# Configure logging
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    level=logging.INFO,
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+logging.Formatter.converter = time.gmtime
 
 parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers(help="Command to run.", dest="command")
@@ -20,9 +28,7 @@ parser_init = subparsers.add_parser(
 )
 
 # -------------Launch------------------
-parser_launch = subparsers.add_parser(
-    "launch", help="Launch Azure resources"
-)
+parser_launch = subparsers.add_parser("launch", help="Launch Azure resources")
 
 # -------------Start-------------------
 parser_start = subparsers.add_parser(
@@ -30,9 +36,7 @@ parser_start = subparsers.add_parser(
 )
 
 # -------------Upload----------------
-parser_upload = subparsers.add_parser(
-    "upload", help="Encrypt and upload data."
-)
+parser_upload = subparsers.add_parser("upload", help="Encrypt and upload data.")
 
 # -------------Run--------------------
 parser_run = subparsers.add_parser(
@@ -45,19 +49,17 @@ parser_download = subparsers.add_parser(
 )
 
 # -------------Stop-------------------
-parser_stop = subparsers.add_parser(
-    "stop", help="Stop previously started service"
-)
+parser_stop = subparsers.add_parser("stop", help="Stop previously started service")
 
 # -------------Teardown---------------
-parser_teardown = subparsers.add_parser(
-    "teardown", help="Teardown Azure resources"
-)
+parser_teardown = subparsers.add_parser("teardown", help="Teardown Azure resources")
 
 if __name__ == "__main__":
     oc_config = os.environ.get("MC2_CONFIG")
     if not oc_config:
-        raise Exception("Please set the environment variable `MC2_CONFIG` to the path of your config file")
+        raise Exception(
+            "Please set the environment variable `MC2_CONFIG` to the path of your config file"
+        )
 
     mc2.set_config(oc_config)
     args = parser.parse_args()
@@ -75,8 +77,10 @@ if __name__ == "__main__":
 
         # If the nodes have been manually specified, don't do anything
         if config_launch.get("head") or config_launch.get("workers"):
-            print("Node addresses have been manually specified in the config "\
-                  "... doing nothing")
+            logging.warning(
+                "Node addresses have been manually specified in the config "
+                "... doing nothing"
+            )
             quit()
 
         # Create resource group
@@ -123,8 +127,6 @@ if __name__ == "__main__":
 
         encrypted_data = [d + ".enc" for d in data]
 
-        print("Encrypting and uploading data...")
-
         dst_dir = config_upload.get("dst", "")
         for i in range(len(data)):
             # Encrypt data
@@ -132,7 +134,9 @@ if __name__ == "__main__":
                 mc2.encrypt_data(data[i], encrypted_data[i], None, "xgb")
             elif enc_format == "sql":
                 if schemas is None:
-                    raise Exception("Please specify a schema when uploading data for Opaque SQL")
+                    raise Exception(
+                        "Please specify a schema when uploading data for Opaque SQL"
+                    )
                 # Remove temporary files from a previous run
                 if os.path.exists(encrypted_data[i]):
                     if os.path.isdir(encrypted_data[i]):
@@ -150,7 +154,6 @@ if __name__ == "__main__":
             if dst_dir:
                 remote_path = os.path.join(dst_dir, filename)
             mc2.upload_file(encrypted_data[i], remote_path, use_azure)
-            print("Uploaded data to {}".format(remote_path))
 
             # Remove temporary directory
             if os.path.isdir(encrypted_data[i]):
@@ -163,7 +166,7 @@ if __name__ == "__main__":
         script = config_run["script"]
 
         if config_run["compute"] == "xgb":
-            print("run() unimplemented for secure-xgboost")
+            logging.error("run() unimplemented for secure-xgboost")
             quit()
         elif config_run["compute"] == "sql":
             mc2.configure_job(config)
@@ -183,8 +186,6 @@ if __name__ == "__main__":
         remote_results = config_download.get("src", [])
         local_results_dir = config_download["dst"]
 
-        print("Downloading and decrypting data")
-
         # Create the local results directory if it doesn't exist
         if not os.path.exists(local_results_dir):
             pathlib.Path(local_results_dir).mkdir(parents=True, exist_ok=True)
@@ -195,15 +196,12 @@ if __name__ == "__main__":
 
             # Fetch file
             mc2.download_file(remote_result, local_result, use_azure)
-            print("Downloaded result to ", local_result)
 
             # Decrypt data
             if enc_format == "xgb":
                 mc2.decrypt_data(local_result, local_result + ".dec", "xgb")
-                print("Decrypted result saved to ", local_result + ".dec")
             elif enc_format == "sql":
                 mc2.decrypt_data(local_result, local_result + ".dec", "sql")
-                print("Decrypted result saved to ", local_result + ".dec")
             else:
                 raise Exception("Specified format {} not supported".format(enc_format))
 
@@ -213,7 +211,7 @@ if __name__ == "__main__":
                 os.remove(local_result)
 
     elif args.command == "stop":
-        print("Currently unsupported")
+        logging.error("`opaque stop` is currently unsupported")
         pass
 
     elif args.command == "teardown":
@@ -221,8 +219,10 @@ if __name__ == "__main__":
 
         # If the nodes have been manually specified, don't do anything
         if config["launch"].get("head") or config["launch"].get("workers"):
-            print("Node addresses have been manually specified in the config "\
-                  "... doing nothing")
+            logging.warning(
+                "Node addresses have been manually specified in the config "
+                "... doing nothing"
+            )
             quit()
 
         delete_container = config_teardown.get("container")
@@ -240,3 +240,8 @@ if __name__ == "__main__":
         delete_resource_group = config_teardown.get("resource_group")
         if delete_resource_group:
             mc2.delete_resource_group()
+
+    else:
+        logging.error(
+            "Unsupported command specified. Please type `opaque -h` for a list of supported commands."
+        )

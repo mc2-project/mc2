@@ -1,22 +1,24 @@
 #include "crypto.h"
-#include "flatbuffers/Rows_generated.h"
 #include "flatbuffers/EncryptedBlock_generated.h"
+#include "flatbuffers/Rows_generated.h"
 
 // Encrypt a file in Secure XGBoost encryption format
-int sxgb_encrypt_file(char* fname, char* e_fname, char* k_fname); 
+int sxgb_encrypt_file(char *fname, char *e_fname, char *k_fname);
 
 // Decrypt a file encrypted using Secure XGBoost encryption format
-int sxgb_decrypt_file(char* fname, char* d_fname, char* k_fname);
+int sxgb_decrypt_file(char *fname, char *d_fname, char *k_fname);
 
 class OpaqueFileProcessor {
-public:
+  public:
     // Encrypt a file in Opaque encryption format
-    int opaque_encrypt_file(char* fname, char* schema_file, char* e_fname, char* k_fname);
+    int opaque_encrypt_file(char *fname, char *schema_file, char *e_fname,
+                            char *k_fname);
 
     // Decrypt a file encrypted using Opaque encryption format
-    int opaque_decrypt_data(char** e_fnames, size_t num_encrypted_files, char* d_fname, char* k_fname);
+    int opaque_decrypt_data(char **e_fnames, size_t num_encrypted_files,
+                            char *d_fname, char *k_fname);
 
-private:
+  private:
     uint8_t symm_key[CIPHER_KEY_SIZE];
     int num_partitions_outputted = 0;
 
@@ -36,6 +38,7 @@ private:
 
     void finish_block();
     void finish_encrypted_blocks();
-    void write_schema(std::vector<std::string> column_names, std::vector<std::string> column_types, const char* schema_path);
-
+    void write_schema(std::vector<std::string> column_names,
+                      std::vector<std::string> column_types,
+                      const char *schema_path);
 };
