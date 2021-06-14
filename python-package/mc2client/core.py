@@ -591,6 +591,14 @@ def generate_symmetric_key():
     num_bytes : int
         Number of bytes for key
     """
+    
+    """
+    Due the issue #139, 
+    we do note allow the user to specifiy 
+    cipher key size.
+    instead of this, we get the cipher_key_size from c_api.cpp
+    and assign it to num_bytes variable.
+    """
     num_bytes = _LIB.cipher_key_size()
 
     if _CONF.get("general_config") is None:

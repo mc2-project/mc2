@@ -143,4 +143,6 @@ extern "C" void opaque_decrypt_data(char **encrypted_files,
     *result = status;
 }
 
-extern "C" size_t cipher_key_size() {return CIPHER_KEY_SIZE}
+// function created for to not to allow user specifies cipher key
+// due to issue #139
+extern "C" size_t cipher_key_size() { return CIPHER_KEY_SIZE; }
