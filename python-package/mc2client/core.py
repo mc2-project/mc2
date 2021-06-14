@@ -591,6 +591,7 @@ def generate_symmetric_key():
     num_bytes : int
         Number of bytes for key
     """
+    num_bytes = _LIB.cipher_key_size()
 
     if _CONF.get("general_config") is None:
         raise MC2ClientConfigError("Configuration not set")
@@ -604,7 +605,7 @@ def generate_symmetric_key():
         )
         return
 
-    key = AESGCM.generate_key(bit_length= _LIB.cipher_key_size() * 8)
+    key = AESGCM.generate_key(bit_length= num_bytes * 8)
     with open(symmetric_key_path, "wb") as symm_key:
         symm_key.write(key)
 
