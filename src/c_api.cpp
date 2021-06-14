@@ -142,3 +142,5 @@ extern "C" void opaque_decrypt_data(char **encrypted_files,
                                          plaintext_file, key_file);
     *result = status;
 }
+
+extern "C" size_t cipher_key_size() { return CIPHER_KEY_SIZE; }

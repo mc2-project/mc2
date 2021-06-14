@@ -582,7 +582,7 @@ def generate_keypair(expiration=10 * 365 * 24 * 60 * 60):
     logger.info("Generated certificate and outputted to {}".format(cert_path))
 
 
-def generate_symmetric_key(num_bytes=32):
+def generate_symmetric_key():
     """
     Generate a new symmetric key and save it path specified by user in config YAML passed to `set_config()`
 
@@ -591,6 +591,8 @@ def generate_symmetric_key(num_bytes=32):
     num_bytes : int
         Number of bytes for key
     """
+    num_bytes = _LIB.cipher_key_size()
+
     if _CONF.get("general_config") is None:
         raise MC2ClientConfigError("Configuration not set")
 
