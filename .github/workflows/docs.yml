@@ -77,7 +77,7 @@ jobs:
 
       - name: Build docs
         run: |
-          cd main/docs
+          cd main/client-docs
           make html
 
       - name: Clone gh-pages branch
@@ -89,7 +89,7 @@ jobs:
 
       - name: Commit documentation changes
         run: |
-          cp -r main/docs/_build/html/* main/gh-pages/
+          cp -r main/client-docs/_build/html/* main/gh-pages/
           cd main/gh-pages
           touch .nojekyll
           git config --local user.email "action@github.com"
