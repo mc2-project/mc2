@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="575" height="211" src="docs/img/logo.png">
+  <img width="575" height="211" src="client-docs/img/logo.png">
 </p>
 
 
@@ -12,7 +12,7 @@
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
 
-![MC2 Overview](docs/img/mc2_workflow.jpeg)
+![MC2 Overview](client-docs/img/mc2_workflow.jpeg)
 
 Born out of research in the [UC Berkeley RISE Lab](https://rise.cs.berkeley.edu/), MC<sup>2</sup> is a platform for running secure analytics and machine learning on encrypted data.
 With MC<sup>2</sup>, users can outsource their confidential data workloads to the cloud, while ensuring that the data is never exposed unencrypted to the cloud provider. 
