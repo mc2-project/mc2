@@ -193,10 +193,10 @@ jobs:
 
       - name: Build docs
         run: |
-          cd main/docs
+          cd main/client-docs
           make html
 
       - name: Run spellcheck
         run : |
-            cd main/docs
+            cd main/client-docs
             sphinx-build -b spelling . _build
