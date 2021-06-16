@@ -105,7 +105,6 @@ ENV OE_SDK_PATH=/opt/openenclave/
 
 # Build Opaque SQL
 SHELL ["/bin/bash", "-c"]
-RUN cd /mc2/opaque-sql && source /opt/openenclave/share/openenclave/openenclaverc && build/sbt keys
 RUN cd /mc2/opaque-sql && source /opt/openenclave/share/openenclave/openenclaverc && build/sbt package
 
 # Set the working directory to /mc2
