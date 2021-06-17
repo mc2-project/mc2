@@ -97,11 +97,15 @@ RUN echo "source /opt/openenclave/share/openenclave/openenclaverc" >> ~/.bashrc
 # Set environment variables
 ENV OPAQUE_HOME="/mc2/opaque-sql"
 ENV OPAQUE_DATA_DIR=${OPAQUE_HOME}/data/
-ENV SPARK_SCALA_VERSION=2.12
-ENV SYMMETRIC_KEY_PATH=${OPAQUE_HOME}/symmetric_key.key
-ENV PRIVATE_KEY_PATH=${OPAQUE_HOME}/private_key.pem
+ENV PRIVATE_KEY_PATH=${OPAQUE_HOME}/src/test/keys/mc2_test_key.pem
 ENV MODE=SIMULATE
 ENV OE_SDK_PATH=/opt/openenclave/
+
+# Spark settings
+ENV SPARK_SCALA_VERSION=2.12
+ENV SPARK_HOME=/opt/spark
+ENV PATH=$PATH:/opt/spark/bin:/opt/spark/sbin
+
 
 # Build Opaque SQL
 SHELL ["/bin/bash", "-c"]
