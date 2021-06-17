@@ -75,6 +75,12 @@ jobs:
         run: cd sequencefile; python setup.py install
         shell: bash
 
+      - name: Little hack to make this repo's docs build properly
+        run: |
+          cd main/client-docs
+          mkdir -p _build/tmp
+          cp ../mc2.py _build/tmp
+
       - name: Build docs
         run: |
           cd main/client-docs
@@ -103,3 +109,10 @@ jobs:
           branch: gh-pages
           directory: main/gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
+    
+      - name: Update MC2 website
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.MC2_BOT_PAT }}
+          repository: mc2-project/mc2-project.github.io
+          event-type: client-docs-dispatch
