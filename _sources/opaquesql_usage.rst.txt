@@ -8,7 +8,7 @@ Next, to use MC\ :sup:`2` Client for Opaque SQL, you'll need to specifically mod
 
 Start
 -----
-In the ``start`` section, you must specify the command to launch the Opaque SQL service: ``build/sbt run``. The section should look something like this:
+In the ``start`` section, you must specify a command to launch the Opaque SQL service. The section should look something like this:
 
 .. code-block:: yaml
 

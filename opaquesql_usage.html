@@ -156,7 +156,7 @@
 <p>Next, to use MC<sup>2</sup> Client for Opaque SQL, you’ll need to specifically modify several sections of the <a class="reference internal" href="config/config.html"><span class="doc">configuration</span></a>: the <code class="docutils literal notranslate"><span class="pre">start</span></code>, <code class="docutils literal notranslate"><span class="pre">upload</span></code>, <code class="docutils literal notranslate"><span class="pre">run</span></code>, and <code class="docutils literal notranslate"><span class="pre">download</span></code> sections. Once you’ve finished configuration, look at the <a class="reference internal" href="quickstart.html"><span class="doc">Quickstart</span></a> guide on how to securely run a query.</p>
 <section id="start">
 <h2>Start<a class="headerlink" href="#start" title="Permalink to this headline">¶</a></h2>
-<p>In the <code class="docutils literal notranslate"><span class="pre">start</span></code> section, you must specify the command to launch the Opaque SQL service: <code class="docutils literal notranslate"><span class="pre">build/sbt</span> <span class="pre">run</span></code>. The section should look something like this:</p>
+<p>In the <code class="docutils literal notranslate"><span class="pre">start</span></code> section, you must specify a command to launch the Opaque SQL service. The section should look something like this:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">start</span><span class="p">:</span>
    <span class="c1"># Commands to run on head node</span>
    <span class="nt">head</span><span class="p">:</span>
