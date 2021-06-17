@@ -191,6 +191,12 @@ jobs:
         run: cd sequencefile; python setup.py install
         shell: bash
 
+      - name: Little hack to make this repo's docs build properly
+        run: |
+          cd main/client-docs
+          mkdir -p _build/tmp
+          cp ../mc2.py _build/tmp
+
       - name: Build docs
         run: |
           cd main/client-docs

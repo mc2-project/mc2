@@ -109,3 +109,10 @@ jobs:
           branch: gh-pages
           directory: main/gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
+    
+      - name: Update MC2 website
+          uses: peter-evans/repository-dispatch@v1
+          with:
+            token: ${{ secrets.MC2_BOT_PAT }}
+            repository: mc2-project/mc2-project.github.io
+            event-type: client-docs-dispatch
