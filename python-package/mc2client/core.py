@@ -526,6 +526,7 @@ def generate_keypair(expiration=10 * 365 * 24 * 60 * 60):
 
     username = user_config["username"]
     private_key_path = user_config["private_key"]
+    public_key_path = user_config["public_key"]
     cert_path = user_config["certificate"]
 
     root_cert_path = user_config["root_certificate"]
@@ -535,6 +536,14 @@ def generate_keypair(expiration=10 * 365 * 24 * 60 * 60):
         logger.warning(
             "Skipping keypair generation - private key already exists at {}".format(
                 private_key_path
+            )
+        )
+        return
+
+    if os.path.exists(public_key_path):
+        logger.warning(
+            "Skipping keypair generation - public key alreadt exists at {}".format(
+                public_key_path
             )
         )
         return
@@ -555,6 +564,11 @@ def generate_keypair(expiration=10 * 365 * 24 * 60 * 60):
         priv_key_file.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
 
     logger.info("Generated private key and outputted to {}".format(private_key_path))
+
+    with open(public_key_path, "wb") as public_key_file:
+        public_key_file.write(crypto.dump_publickey(crypto.FILETYPE_PEM, key))
+
+    logger.info("Generated public key and outputtet to {}".format(public_key_path))
 
     # Generate the certificate signing request
     ca_cert = crypto.load_certificate(crypto.FILETYPE_PEM, open(root_cert_path).read())
