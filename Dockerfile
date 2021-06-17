@@ -106,7 +106,6 @@ ENV SPARK_SCALA_VERSION=2.12
 ENV SPARK_HOME=/opt/spark
 ENV PATH=$PATH:/opt/spark/bin:/opt/spark/sbin
 
-
 # Build Opaque SQL
 SHELL ["/bin/bash", "-c"]
 RUN cd /mc2/opaque-sql && source /opt/openenclave/share/openenclave/openenclaverc && build/sbt package
