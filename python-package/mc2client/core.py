@@ -1,3 +1,4 @@
+import base64
 import ctypes
 import glob
 import math
@@ -6,6 +7,7 @@ import logging
 import pathlib
 import secrets
 import shutil
+import signal
 import sys
 import subprocess
 
@@ -21,9 +23,10 @@ from hadoop.io import (  # pylint: disable=no-name-in-module
 from envyaml import EnvYAML
 from numproto import ndarray_to_proto, proto_to_ndarray
 from OpenSSL import crypto
-from paramiko import AutoAddPolicy, SSHClient
+from paramiko import AutoAddPolicy, SSHClient, SSHException
 from scp import SCPClient
 
+from .cache import add_cache_entry, get_cache_entry, remove_cache_entry
 from .exceptions import (
     AttestationError,
     CryptoError,
@@ -32,6 +35,7 @@ from .exceptions import (
 )
 from .rpc import attest_pb2, attest_pb2_grpc  # pylint: disable=no-name-in-module
 from .toolchain.node_provider import get_node_provider
+from .toolchain.updater import with_interactive
 from .toolchain.toolchain import (
     cluster,
     container,
@@ -476,12 +480,18 @@ def convert_from_sequencefiles(encrypted_data):
     return output_partition_files
 
 
-def _createSSHClient(server, port=22, user=None, password=None):
+def _createSSHClient(server, port=22, user=None, key_file=None):
     client = SSHClient()
     client.load_system_host_keys()
     client.set_missing_host_key_policy(AutoAddPolicy())
-    client.connect(server, port, user, password)
+    client.connect(server, port, user, key_file)
     return client
+
+
+def _get_azure_ips():
+    _CONF["head"]["ip"] = get_head_ip()
+    for (worker, ip) in zip(_CONF["workers"], get_worker_ips()):
+        worker["ip"] = ip
 
 
 ####################
@@ -503,10 +513,35 @@ def set_config(general_config):
     _CONF["current_user"] = config["user"]["username"]
 
     # Networking configs
-    _CONF["head"] = config["launch"].get("head")
-    _CONF["workers"] = config["launch"].get("workers") or []
+    manual_head_node = config["launch"].get("head")
+    manual_worker_nodes = config["launch"].get("workers") or []
     _CONF["azure_config"] = config["launch"].get("azure_config")
-    _CONF["use_azure"] = not (_CONF["head"] or _CONF["workers"])
+    _CONF["use_azure"] = not (manual_head_node or manual_worker_nodes)
+
+    # SSH information
+    if _CONF["use_azure"]:
+        azure_config = EnvYAML(_CONF["azure_config"], strict=False)
+        remote_username = azure_config["auth"]["ssh_user"]
+        ssh_key = azure_config["auth"]["ssh_private_key"]
+        # Since `set_config` may be called before Azure VMs may have been
+        # launched, we can't initialize the IPs of the nodes. This value will
+        # be set later once we can guarantee the nodes are launched
+        _CONF["head"] = {
+            "username": remote_username,
+            "ssh_key": ssh_key,
+            "identity": "head node",
+        }
+        _CONF["workers"] = [
+            {
+                "username": remote_username,
+                "ssh_key": ssh_key,
+                "identity": "worker node",
+            }
+            for _ in range(azure_config["num_workers"])
+        ]
+    else:
+        _CONF["head"] = manual_head_node
+        _CONF["workers"] = manual_worker_nodes
 
 
 def generate_keypair(expiration=10 * 365 * 24 * 60 * 60):
@@ -612,6 +647,15 @@ def generate_symmetric_key():
     logger.info(
         "Generated symmetric key and outputted to {}".format(symmetric_key_path)
     )
+
+
+def clear_cache():
+    """
+    Clears all data located in the Opaque cache
+    """
+    # Clear attestation data
+    remove_cache_entry("attested_nodes")
+    remove_cache_entry("public_keys")
 
 
 def encrypt_data(plaintext_file, encrypted_file, schema_file=None, enc_format="xgb"):
@@ -808,6 +852,10 @@ def upload_file(input_path, output_path, use_azure=True):
     output_path : str
         Path to output file
     """
+    # Make sure all of the node information is up to date
+    if _CONF["use_azure"]:
+        _get_azure_ips()
+
     if not _CONF["use_azure"] and use_azure:
         raise MC2ClientConfigError(
             "Attempted to use Azure storage with" "node addresses manually configured"
@@ -820,26 +868,7 @@ def upload_file(input_path, output_path, use_azure=True):
         logger.info("Uploading {} to Azure blob storage".format(input_path))
         upload(_CONF["azure_config"], input_path, output_path)
     else:
-        # TODO: the username used for SSH and the username specified in config.yaml should be the same
-        # there should only be one place to input the username across config.yaml and azure.yaml
-        if _CONF["use_azure"]:
-            azure_config = EnvYAML(_CONF["azure_config"], strict=False)
-            remote_username = azure_config["auth"]["ssh_user"]
-            ssh_key = azure_config["auth"]["ssh_private_key"]
-            head = {
-                "ip": get_head_ip(),
-                "username": remote_username,
-                "ssh_key": ssh_key,
-            }
-            workers = [
-                {"ip": ip, "username": remote_username} for ip in get_worker_ips()
-            ]
-        else:
-            head = _CONF["head"]
-            workers = _CONF["workers"]
-
-        nodes = [head] + workers
-
+        nodes = [_CONF["head"]] + _CONF["workers"]
         for node in nodes:
             if node["ip"] == "0.0.0.0" or node["ip"] == "127.0.0.1":
                 # Overwrite the destination path
@@ -861,12 +890,17 @@ def upload_file(input_path, output_path, use_azure=True):
                     shutil.copy2(input_path, output_path)
             else:
                 # Use scp
-                logger.info("Uploading {} to disk of {}".format(input_path, node["ip"]))
+                logger.info(
+                    "Uploading {} to disk of {}".format(
+                        input_path, node.get("identity", node["ip"])
+                    )
+                )
                 ssh = _createSSHClient(
                     node["ip"], 22, node["username"], node["ssh_key"]
                 )
                 scp = SCPClient(ssh.get_transport())
                 scp.put(input_path, output_path, recursive=True)
+                ssh.close()
 
 
 def download_file(input_path, output_path, use_azure=True):
@@ -880,6 +914,10 @@ def download_file(input_path, output_path, use_azure=True):
     output_path : str
         Path to output file
     """
+    # Make sure all of the node information is up to date
+    if _CONF["use_azure"]:
+        _get_azure_ips()
+
     if not _CONF["use_azure"] and use_azure:
         raise MC2ClientConfigError(
             "Attempted to use Azure storage with" "node addresses manually configured"
@@ -892,18 +930,7 @@ def download_file(input_path, output_path, use_azure=True):
         logger.info("Downloading {} from Azure blob storage".format(input_path))
         download(_CONF["azure_config"], input_path, output_path)
     else:  # use scp
-        if _CONF["use_azure"]:
-            azure_config = EnvYAML(_CONF["azure_config"], strict=False)
-            remote_username = azure_config["auth"]["ssh_user"]
-            ssh_key = azure_config["auth"]["ssh_private_key"]
-            head = {
-                "ip": get_head_node_ip(_CONF["azure_config"]),
-                "username": remote_username,
-                "ssh_key": ssh_key,
-            }
-        else:
-            head = _CONF["head"]
-
+        head = _CONF["head"]
         if head["ip"] == "0.0.0.0" or head["ip"] == "127.0.0.1":
             logger.info(
                 "Using local deployment. Copying data from {}".format(input_path)
@@ -913,7 +940,11 @@ def download_file(input_path, output_path, use_azure=True):
             else:
                 shutil.copy2(input_path, output_path)
         else:
-            logger.info("Downloading {} from disk of {}".format(input_path, head["ip"]))
+            logger.info(
+                "Downloading {} from disk of {}".format(
+                    input_path, head.get("identity", head["ip"])
+                )
+            )
             ssh = _createSSHClient(head["ip"], 22, head["username"], head["ssh_key"])
             scp = SCPClient(ssh.get_transport())
             scp.get(input_path, output_path, recursive=True)
@@ -975,7 +1006,7 @@ def get_worker_ips():
 
 def run_remote_cmds(head_cmds, worker_cmds):
     """
-    Remotely run commands on VMs in the Azure cluster
+    Remotely run commands on head and worker nodes
 
     Parameters
     ----------
@@ -984,53 +1015,179 @@ def run_remote_cmds(head_cmds, worker_cmds):
     worker_cmds : list
         List of commands to run on the worker nodes
     """
+    # Make sure all of the node information is up to date
     if _CONF["use_azure"]:
-        # Run the commands on the azure cluster
-        run_remote_cmds_on_cluster(_CONF["azure_config"], head_cmds, worker_cmds)
-    else:
-        # Create a list with the node address + command
-        commands = [(_CONF["head"], head_cmds)] + [
-            (worker, worker_cmds) for worker in _CONF["workers"]
-        ]
+        _get_azure_ips()
 
-        # SSH into each node and run the specified command or run in a
-        # subprocess if the IP is local
-        for (node, cmds) in commands:
-            if (node["ip"] == "0.0.0.0") or (node["ip"] == "127.0.0.1"):
-                # We're using a local deployment
-                for cmd in cmds:
-                    ps = subprocess.Popen(cmd, shell=True)
-                    logger.info(
-                        "Running {} locally created a process with PID {}".format(
-                            cmd, ps.pid
-                        )
-                    )
-            else:
+    commands = [(_CONF["head"], head_cmds)] + [
+        (worker, worker_cmds) for worker in _CONF["workers"]
+    ]
+
+    # Get the list of remote processes from the cache
+    running_processes = get_cache_entry("processes") or dict()
+
+    for (i, (node, cmds)) in enumerate(commands):
+        if (node["ip"] == "0.0.0.0") or (node["ip"] == "127.0.0.1"):
+            # We're using a local deployment.
+            #
+            # Launch the commands in a local shell subprocess. All
+            # output from these commands is ignored.
+            for cmd in cmds:
+                # The `preexec_fn` argument ensures that the spawned
+                # shell is a group leader, and thus sending a signal to
+                # it will also send a signal to any subprocesses that it
+                # spawns
+                ps = subprocess.Popen(
+                    cmd,
+                    shell=True,
+                    preexec_fn=os.setsid,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+                logger.info(f"Running '{cmd}' locally")
+
+                # Append the shell PID to the list associated with the node IP
+                running_processes.setdefault(node["ip"], []).append((cmd, ps.pid))
+        else:
+            # We're using a remote deployment - SSH into the node
+            try:
                 ssh = _createSSHClient(
                     node["ip"], 22, node["username"], node["ssh_key"]
                 )
-                for cmd in cmds:
-                    logger.info("Running {} remotely on {}".format(cmd, node["ip"]))
-                    ssh.exec_command(cmd)
+            except SSHException as e:
+                raise Exception(
+                    "Failed to SSH into {}: {}".format(
+                        node.get("identity", node["ip"]), e
+                    )
+                ) from None
+
+            # Launch the commands in a remote shell subprocess. All
+            # output from these commands is ignored.
+            for cmd in cmds:
+                # TODO: Spawn a background process to log the
+                #       stdout/stderr of the process to a file
+                #
+                # By default, the SSH client uses a non-login,
+                # non-interactive shell and will not source any shell
+                # configuration files. To combat this, we wrap all of our
+                # commands in the `with_interactive` function to force an
+                # interactive shell.
+                #
+                # We obtain the PID of the spawned shell via `echo $$` and
+                # run the specified command in a background subshell so that
+                # `start` doesn't block on the command finishing.  Note that
+                # the SID (session ID) of all process spawned in the subshell
+                # will be equal to the PID we obtained via `echo $$` - we will
+                # use this to later terminate the process.
+                shell_cmd = " ".join(
+                    with_interactive("echo $$; {{ {}; }} &".format(cmd))
+                )
+                (_, stdout, stderr) = ssh.exec_command(shell_cmd, get_pty=True)
+
+                # If the command is valid, then the first line of output
+                # with be the PID. Otherwise an error has occured
+                try:
+                    output = stdout.readline()
+                    pid = int(output.rstrip())
+                except ValueError:
+                    out = output + " ".join(stdout.readlines())
+                    err = " ".join(stderr.readlines())
+                    node_string = node.get("identity", node["ip"])
+                    raise Exception(
+                        f"Running '{cmd}' remotely on {node_string} "
+                        + "failed with errors:\n"
+                        + f"\nSTDOUT:\n{out}"
+                        + f"\nSTDERR:\n{err}"
+                    ) from None
+
+                logger.info(
+                    "Running '{}' remotely on {}".format(
+                        cmd, node.get("identity", node["ip"])
+                    )
+                )
+                # Append the shell PID to the list associated with the node IP
+                running_processes.setdefault(node["ip"], []).append((cmd, pid))
+            ssh.close()
+
+    # Cache the lists of running processes
+    add_cache_entry("processes", running_processes)
+
+
+def stop_remote_cmds():
+    """
+    Stop commands running on head and worker nodes
+    """
+    # Make sure all of the node information is up to date
+    if _CONF["use_azure"]:
+        _get_azure_ips()
+
+    # Get the list of remote processes from the cache
+    running_processes = get_cache_entry("processes") or dict()
+
+    # Send the SIGTERM signal to all processes spawned via run()
+    for (ip, processes) in running_processes.items():
+        # We're using a local deployment
+        if (ip == "0.0.0.0") or (ip == "127.0.0.1"):
+            for (cmd, pid) in processes:
+                try:
+                    # Send the signal to the group associated with the
+                    # spawned shell subprocess
+                    os.killpg(os.getpgid(pid), signal.SIGTERM)
+                    logger.info(f"Stopping '{cmd}' locally")
+                except ProcessLookupError:
+                    logger.warning(f"Command '{cmd}' already stopped")
+        else:
+            # Get the node information corresponding to the cached IP
+            nodes = [_CONF["head"]] + _CONF["workers"]
+            node = [node for node in nodes if node["ip"] == ip]
+
+            # Make sure there's a single YAML entry for the cached IP
+            if not node or len(node) > 1:
+                logging.warning(
+                    "Invalid network configuration for {}.  Skipping...".format(
+                        node.get("identity", node["ip"])
+                    )
+                )
+                pass
+            else:
+                node = node[0]
+
+            # SSH to the node
+            ssh = _createSSHClient(node["ip"], 22, node["username"], node["ssh_key"])
+            for (cmd, pid) in processes:
+                # This command sends the SIGTERM signal to all processes
+                # whose SID matches the provided PID
+                ssh.exec_command(f"ps -o pid -g {pid} | sed '1d' | xargs kill")
+                logger.info(
+                    "Stopping '{}' remotely on {}".format(
+                        cmd, node.get("identity", node["ip"])
+                    )
+                )
+
+            ssh.close()
+
+        # Clear the cache entries
+        remove_cache_entry("processes")
 
 
 def configure_job(config):
     """
     Attest all of the worker enclaves and give them the shared symmetric key.
     """
+    # Make sure all of the node information is up to date
+    if _CONF["use_azure"]:
+        _get_azure_ips()
+
     user_config = config["user"]
     attestation_config = config["run"]["attestation"]
 
     # Get the address of the head node's attestation gRPC listener
-    if _CONF["use_azure"]:
-        head_address = get_head_ip() + ":50051"
-    else:
-        head_address = _CONF["head"]["ip"] + ":50051"
+    head_address = _CONF["head"]["ip"] + ":50051"
 
     # If we are not in simulation mode, get the enclave signing key
     simulation_mode = attestation_config.get("simulation_mode")
-    mrsigner_path = attestation_config["mrsigner"]
     if not simulation_mode:
+        mrsigner_path = attestation_config["mrsigner"]
         if not os.path.exists(mrsigner_path):
             raise FileNotFoundError("Enclave signing key not found at:", mrsigner_path)
         else:
@@ -1081,39 +1238,58 @@ def _attest(head_address, simulation_mode, mrsigner):
     attestation, e.g. whether to verify report, whether to check
     MRSIGNER/MRENCLAVE, can be specified in config YAML.
     """
-    # Query enclave for attestation report
-    with grpc.insecure_channel(head_address) as channel:
-        stub = attest_pb2_grpc.ClientToEnclaveStub(channel)
-        response = stub.GetRemoteEvidence(attest_pb2.AttestationStatus(status=0))
+    node_ips = [node["ip"] for node in _CONF["workers"]]
 
-    # Extract evidence list from response
-    evidence_list = response.evidences
+    # Check if the enclaves have already been attested
+    cached_attested_nodes = get_cache_entry("attested_nodes") or []
+    cached_pks = get_cache_entry("public_keys") or []
 
-    # Extract public keys from the evidence
-    pk_list = []
-    pk_size = _LIB.cipher_pk_size()
-    for msg in evidence_list:
-        # Allocate memory for enclave public key
-        pk_bytes = bytes(pk_size)
-        _LIB.get_public_key(
-            ctypes.cast(msg, ctypes.POINTER(ctypes.c_uint8)),
-            ctypes.cast(pk_bytes, ctypes.POINTER(ctypes.c_uint8)),
-        )
-        pk_list.append(pk_bytes)
+    if set(node_ips) == set(cached_attested_nodes):
+        assert len(cached_attested_nodes) == len(cached_pks), "Invalid cache state"
+        _CONF["enclave_pks"] = [base64.b64decode(pk) for pk in cached_pks]
+    else:
+        # Enclaves have not all been attested, query head node for attestation
+        # report
+        with grpc.insecure_channel(head_address) as channel:
+            stub = attest_pb2_grpc.ClientToEnclaveStub(channel)
+            response = stub.GetRemoteEvidence(attest_pb2.AttestationStatus(status=0))
 
-    # Verify attestation report
-    if not simulation_mode:
+        # Extract evidence list from response
+        evidence_list = response.evidences
+
+        # Extract public keys from the evidence
+        pk_list = []
+        pk_size = _LIB.cipher_pk_size()
         for msg in evidence_list:
-            if _LIB.attest_evidence(
-                ctypes.c_char_p(mrsigner.encode("utf-8")),
-                ctypes.c_size_t(len(mrsigner) + 1),
+            # Allocate memory for enclave public key
+            pk_bytes = bytes(pk_size)
+            _LIB.get_public_key(
                 ctypes.cast(msg, ctypes.POINTER(ctypes.c_uint8)),
-                ctypes.c_size_t(len(msg)),
-            ):
-                raise AttestationError("Remote attestation report verification failed")
+                ctypes.cast(pk_bytes, ctypes.POINTER(ctypes.c_uint8)),
+            )
+            pk_list.append(pk_bytes)
 
-    # Set enclave public keys in the config
-    _CONF["enclave_pks"] = pk_list
+        # Verify attestation report
+        if not simulation_mode:
+            for msg in evidence_list:
+                if _LIB.attest_evidence(
+                    ctypes.c_char_p(mrsigner.encode("utf-8")),
+                    ctypes.c_size_t(len(mrsigner) + 1),
+                    ctypes.cast(msg, ctypes.POINTER(ctypes.c_uint8)),
+                    ctypes.c_size_t(len(msg)),
+                ):
+                    raise AttestationError(
+                        "Remote attestation report verification failed"
+                    )
+
+        # Set enclave public keys in the config
+        _CONF["enclave_pks"] = pk_list
+
+        # Cache the attestation information
+        add_cache_entry("attested_nodes", node_ips)
+        add_cache_entry(
+            "public_keys", [base64.b64encode(pk).decode("ascii") for pk in pk_list]
+        )
 
 
 def _construct_signed_key_fb(sym_key, sig):

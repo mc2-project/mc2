@@ -27,13 +27,13 @@ user:
 launch:
     # The absolute path to your Azure configuraton
     # This needs to be an absolute path
-    azure_config: /dummy/azure.yaml
+    #azure_config: /dummy/azure.yaml
 
     # # Manually specify the IP/uname/ssh_key of the head node or workers.
     # # If these values exist, they will override any values in `azure_config`.
     # # Consequently, the `launch` and `stop` commands will do nothing.
-    # head:
-    #    ip:
+    head:
+       ip: 0.0.0.0
     #    username:
     #    ssh_key:
     # workers:

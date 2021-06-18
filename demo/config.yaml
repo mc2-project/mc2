@@ -54,7 +54,7 @@ launch:
 start:
     # Commands to run on head node
     head:
-        - cd /home/mc2/opaque; build/sbt keys; build/sbt run
+      - cd /home/mc2/opaque-sql; build/sbt run
 
     # Commands to run on worker nodes
     workers:
