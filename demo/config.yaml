@@ -29,9 +29,9 @@ launch:
     # This needs to be an absolute path
     azure_config: ${MC2_CLIENT_HOME}/demo/azure.yaml
 
-	# # Manually specify the IPs of and usernames/SSH private keys used to log
-	# # in to the head and worker nodes. If these values exist, Opaque Client
-	# # will not launch or try to use any Azure resources
+    # # Manually specify the IPs of and usernames/SSH private keys used to log
+    # # in to the head and worker nodes. If these values exist, Opaque Client
+    # # will not launch or try to use any Azure resources
     # head:
     #     ip: 98.171.139.74
     #     username: mc2
