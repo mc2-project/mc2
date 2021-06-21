@@ -1,5 +1,6 @@
 from .core import (
     configure_job,
+    clear_cache,
     create_cluster,
     create_container,
     create_resource_group,
@@ -16,6 +17,7 @@ from .core import (
     get_head_ip,
     get_worker_ips,
     run_remote_cmds,
+    stop_remote_cmds,
     set_config,
     upload_file,
 )
@@ -25,6 +27,7 @@ from .xgb import Booster, DMatrix, rabit
 __all__ = [
     "configure_job",
     "Booster",
+    "clear_cache",
     "create_cluster",
     "create_container",
     "create_resource_group",
@@ -44,6 +47,7 @@ __all__ = [
     "rabit",
     "run",
     "run_remote_cmds",
+    "stop_remote_cmds",
     "set_config",
     "upload_file",
 ]

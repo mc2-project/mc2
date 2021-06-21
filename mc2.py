@@ -55,15 +55,15 @@ parser_stop = subparsers.add_parser("stop", help="Stop previously started servic
 parser_teardown = subparsers.add_parser("teardown", help="Teardown Azure resources")
 
 if __name__ == "__main__":
-    oc_config = os.environ.get("MC2_CONFIG")
-    if not oc_config:
+    mc2_config = os.environ.get("MC2_CONFIG")
+    if not mc2_config:
         raise Exception(
             "Please set the environment variable `MC2_CONFIG` to the path of your config file"
         )
 
-    mc2.set_config(oc_config)
+    mc2.set_config(mc2_config)
     args = parser.parse_args()
-    config = EnvYAML(oc_config)
+    config = EnvYAML(mc2_config)
 
     if args.command == "init":
         # Generate a private key and certificate
@@ -71,6 +71,8 @@ if __name__ == "__main__":
 
         # Generate a CIPHER_KEY_SIZE byte symmetric key
         mc2.generate_symmetric_key()
+
+        logging.info("init finished successfully")
 
     elif args.command == "launch":
         config_launch = config["launch"]
@@ -102,6 +104,8 @@ if __name__ == "__main__":
         if create_cluster:
             mc2.create_cluster()
 
+        logging.info("launch finished successfully")
+
     elif args.command == "start":
         config_start = config["start"]
 
@@ -113,6 +117,8 @@ if __name__ == "__main__":
 
         # Run commands
         mc2.run_remote_cmds(head_cmds, worker_cmds)
+
+        logging.info("start finished successfully")
 
     elif args.command == "upload":
         config_upload = config["upload"]
@@ -161,6 +167,8 @@ if __name__ == "__main__":
             else:
                 os.remove(encrypted_data[i])
 
+        logging.info("upload finished successfully")
+
     elif args.command == "run":
         config_run = config["run"]
         script = config_run["script"]
@@ -173,6 +181,8 @@ if __name__ == "__main__":
             mc2.opaquesql.run(script)
         else:
             raise Exception("Only XGBoost and SQL are currently supported")
+
+        logging.info("run finished successfully")
 
     elif args.command == "download":
         config_download = config["download"]
@@ -210,9 +220,13 @@ if __name__ == "__main__":
             else:
                 os.remove(local_result)
 
+        logging.info("download finished successfully")
+
     elif args.command == "stop":
-        logging.error("`opaque stop` is currently unsupported")
-        pass
+        mc2.stop_remote_cmds()
+        mc2.clear_cache()
+
+        logging.info("stop finished successfully")
 
     elif args.command == "teardown":
         config_teardown = config["teardown"]
@@ -240,6 +254,8 @@ if __name__ == "__main__":
         delete_resource_group = config_teardown.get("resource_group")
         if delete_resource_group:
             mc2.delete_resource_group()
+
+        logging.info("teardown finished successfully")
 
     else:
         logging.error(
