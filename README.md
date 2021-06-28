@@ -14,7 +14,7 @@
 
 ![MC2 Overview](client-docs/img/mc2_workflow.jpeg)
 
-Born out of research in the [UC Berkeley RISE Lab](https://rise.cs.berkeley.edu/), MC<sup>2</sup> is a platform for running secure analytics and machine learning on encrypted data.
+Born out of research in the [UC Berkeley RISE Lab](https://rise.cs.berkeley.edu/), [MC<sup>2</sup>](https://mc2-project.github.io/) is a platform for running secure analytics and machine learning on encrypted data.
 With MC<sup>2</sup>, users can outsource their confidential data workloads to the cloud, while ensuring that the data is never exposed unencrypted to the cloud provider. 
 MC<sup>2</sup> also enables secure collaboration -- multiple data owners can use the platform to jointly analyze their collective data, without revealing their individual data to each other.
 
@@ -27,7 +27,7 @@ The MC<sup>2</sup> project also includes exploratory research prototypes that de
 * [Cerebro](https://github.com/mc2-project/cerebro): A general purpose Python DSL for learning with secure multiparty computation.
 * [Delphi](https://github.com/mc2-project/delphi): Secure inference for deep neural networks.
 
-For more information on MC<sup>2</sup>, visit our website at https://mc2-project.github.io/.
+For more information on MC<sup>2</sup>, visit our [website](https://mc2-project.github.io/).
 
 This repository contains the source code for the **MC<sup>2</sup> client**, which enables users to easily interface with MC<sup>2</sup> services deployed remotely in the cloud. **Currently, the client supports remote deployments of Opaque SQL only.** Support for Secure XGBoost is coming soon.
 To run an end-to-end MC<sup>2</sup> workflow:
