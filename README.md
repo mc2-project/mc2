@@ -27,7 +27,9 @@ The MC<sup>2</sup> project also includes exploratory research prototypes that de
 * [Cerebro](https://github.com/mc2-project/cerebro): A general purpose Python DSL for learning with secure multiparty computation.
 * [Delphi](https://github.com/mc2-project/delphi): Secure inference for deep neural networks.
 
-This repository contains the source code for the **MC<sup>2</sup> client**, which enables users to easily interface with MC<sup>2</sup> services deployed remotely in the cloud. Currently, the client supports remote deployments of Opaque SQL only. Support for Secure XGBoost is coming soon.
+For more information on MC<sup>2</sup>, visit our website at https://mc2-project.github.io/.
+
+This repository contains the source code for the **MC<sup>2</sup> client**, which enables users to easily interface with MC<sup>2</sup> services deployed remotely in the cloud. **Currently, the client supports remote deployments of Opaque SQL only.** Support for Secure XGBoost is coming soon.
 To run an end-to-end MC<sup>2</sup> workflow:
 1. Launch Opaque SQL in the cloud (instructions to do so can be found in the respective repositories) 
 2. Use the MC<sup>2</sup> client to encrypt data locally, transfer it to the cloud VMs, run scripts specifying the desired computation, and retrieve and view encrypted results.
@@ -55,12 +57,23 @@ docker build -t mc2_img .
 docker run -it -v </absolute/path/to/mc2/playground>:/mc2/client/playground mc2_img /bin/bash
 ```
 
-Alternatively, if you'd like to install MC<sup>2</sup> Client directly on your host, follow [these instructions](https://mc2-project.github.io/mc2/install.html).
+Alternatively, if you'd like to install MC<sup>2</sup> Client directly on your host, follow [these instructions](https://mc2-project.github.io/client-docs/install.html).
 
 ## Quickstart
 This quickstart will give you a flavor of using MC<sup>2</sup> with Opaque SQL, and can be entirely done locally with Docker if desired. You will use MC<sup>2</sup> Client to encrypt some data, transfer the encrypted data to a remote machine, run an Opaque SQL job on the encrypted data on the remote machine, and retrieve and decrypt the job's encrypted results. To run everything securely, you can choose to spin up Opaque SQL on Azure VMs with SGX-support. Alternatively, to get a flavor of MC<sup>2</sup> without having to use Azure, you can use the deployment of Opaque SQL in the Docker container.
 
 MC<sup>2</sup> Client provides a command line interface that enables you to remotely interact with MC<sup>2</sup> compute services. The CLI relies on a configuration file that you should modify before each step in this quickstart to tell MC<sup>2</sup> Client what exactly you want to do. An example of the configuration file is [here](demo/config.yaml).
+
+The dataset we'll be using in this quickstart is a medical dataset containing patient records. Here's a couple of sample records for reference.
+
+    ```sh
+    Age,BMI,Glucose,Insulin,HOMA,Leptin,Adiponectin,Resistin,MCP.1,Classification
+    48,23.5,70,2.707,0.467408667,8.8071,9.7024,7.99585,417.114,1
+    83,20.69049454,92,3.115,0.706897333,8.8438,5.429285,4.06405,468.786,1
+    82,23.12467037,91,4.498,1.009651067,17.9393,22.43204,9.27715,554.697,1
+    ```
+
+If you get stuck at any point while running the quickstart, feel free to ping us on [Slack](https://join.slack.com/t/mc2-project/shared_invite/zt-rt3kxyy8-GS4KA0A351Ysv~GKwy8NEQ).
 
 ### Docker Quickstart
 If you'd like to try everything out locally, you can do so within the Docker container you built in the [installation](#installation) section.
@@ -73,40 +86,41 @@ If you'd like to try everything out locally, you can do so within the Docker con
     export MC2_CONFIG=</path/to/playground/config.yaml>
     ```
 
-1. Optionally, generate a keypair and a symmetric key that MC<sup>2</sup> Client will use to encrypt your data. Specify your username and output paths in the `user` section of the configuration file. Then, generate the keys.
+1. Generate a keypair and a symmetric key that MC<sup>2</sup> Client will use to encrypt your data. Specify your username and output paths in the `user` section of the configuration file. Then, generate the keys.
 
     ```sh
     mc2 init
     ```
 
-1. Start the Opaque SQL compute service.
+1. Start [Opaque SQL](https://mc2-project.github.io/opaque-sql-docs/src/index.html), a MC<sup>2</sup> service for secure SQL analytics.
     
     ```sh
     mc2 start
     ```
 
-1. Prepare your data for computation by encrypting and uploading it. Note that "uploading" here means copying because we have a local deployment.
+1. Prepare your data for computation by encrypting and uploading it. This step uses the keys you generated in step 2 to encrypt your data. Note that "uploading" here means copying because we have a local deployment.
+
 
     ```sh
     mc2 upload
     ```
 
-1. Run the provided Opaque SQL quickstart script, to be executed by MC<sup>2</sup>. The script can be found [here](quickstart/opaque_sql_demo.scala). 
+1. Run the provided Opaque SQL quickstart script, to be executed by MC<sup>2</sup>. The script can be found [here](quickstart/opaque_sql_demo.scala), and performs a filter operation over our data -- the results will contain records of all patients who are younger than 30 years old. Results are encrypted by MC<sup></2> before being saved, and can only be decrypted with the key you used to encrypt your data in the previous step.
 
     ```sh
     mc2 run
     ```
 
-1. Once computation has finished, you can retrieve your encrypted results and decrypt them. Specify the results' path and their encryption format in the `download` section of configuration. The decrypted results will be in the same directory.
+1. Once computation has finished, you can retrieve your encrypted results and decrypt them. Results are saved in the `results/` directory. You can view the results by looking at `results/opaque_sql_result.dec`
 
     ```sh
     mc2 download
     ```
 
 ### Azure Quickstart
-You can also choose to run this quickstart with enclave-enabled VMs on the cloud with Azure Confidential Computing. This guide will take you through launching such VMs and using them with MC<sup>2</sup>.
+You can also choose to run this quickstart with enclave-enabled VMs on the cloud with Azure Confidential Computing. Unlike the Docker quickstart, in this quickstart you'll first launch enclave-enabled VMs on Azure using MC<sup>2</sup> before uploading data and runing computation. 
 
-1. In the container, copy the contents of the `quickstart` directory to your mounted "playground" directory to ensure that your changes inside the container get reflected on your host. Otherwise, no need to do anything. Then, set the `MC2_CONFIG` environment variable to the path of your configuration file.
+1. Start off in the container you built in the [installation](#installation) section. In the container, copy the contents of the `quickstart` directory to your mounted "playground" directory to ensure that your changes inside the container get reflected on your host. Otherwise, no need to do anything. Then, set the `MC2_CONFIG` environment variable to the path of your configuration file.
 
     ```sh
     # From the /mc2/client directory
@@ -114,13 +128,13 @@ You can also choose to run this quickstart with enclave-enabled VMs on the cloud
     export MC2_CONFIG=</path/to/playground/config.yaml>
     ```
 
-1. Optionally, generate a keypair and a symmetric key that MC<sup>2</sup> Client will use to encrypt your data. Specify your username and output paths in the `user` section of the configuration file. Then, generate the keys.
+1. Generate a keypair and a symmetric key that MC<sup>2</sup> Client will use to encrypt your data. Specify your username and output paths in the `user` section of the configuration file. Then, generate the keys.
 
     ```sh
     mc2 init
     ```
 
-1. Next, launch the machines and resources you'll be using for computation. MC<sup>2</sup> Client provides an interface to launch resources on Azure (and sets up the machines with necessary dependencies). Take a look at the `launch` section of the configuration file -- you'll need to specify the path to your [Azure configuration file](quickstart/azure.yaml), which is a YAML file that details the names and types of various resources you will launch. 
+1. Next, launch the machines and resources you'll be using for computation. This step does not exist in the Docker quickstart. MC<sup>2</sup> Client provides an interface to launch resources on Azure (and sets up the machines with necessary dependencies). Take a look at the `launch` section of the configuration file -- you'll need to specify the path to your [Azure configuration file](quickstart/azure.yaml), which is a YAML file that details the names and types of various resources you will launch. 
 
     Next, log in to Azure through the command line and set your subscription ID. [Here](https://docs.microsoft.com/en-us/azure/media-services/latest/setup-azure-subscription-how-to?tabs=portal) are instructions on how to find your subscription ID.
 
@@ -134,25 +148,25 @@ You can also choose to run this quickstart with enclave-enabled VMs on the cloud
     mc2 launch
     ```
 
-1. Start the Opaque SQL compute service. 
+1. Start [Opaque SQL](https://mc2-project.github.io/opaque-sql-docs/src/index.html), a MC<sup>2</sup> service for secure SQL analytics.
     
     ```sh
     mc2 start
     ```
 
-1. Prepare your data for computation by encrypting and uploading it.
+1. Prepare your data for computation by encrypting and uploading it. This step uses the keys you generated in step 2 to encrypt your data. Note that "uploading" here means copying because we have a local deployment.
 
     ```sh
     mc2 upload
     ```
 
-1. Run the provided Opaque SQL demo script, to be executed by MC<sup>2</sup>. The script can be found [here](quickstart/opaque_sql_demo.scala). All paths in the script are remote paths, since the script will be executing on the remote Opaque SQL service. Then, go to the `run` section of the configuration and specify the path to your script, as well as parameters for remote attestation. Run the following command to remotely start computation.  
+1. Run the provided Opaque SQL quickstart script, to be executed by MC<sup>2</sup>. The script can be found [here](quickstart/opaque_sql_demo.scala), and performs a filter operation over our data -- the results will contain records of all patients who are younger than 30 years old. Results are encrypted by MC<sup></2> before being saved, and can only be decrypted with the key you used to encrypt your data in the previous step.
 
     ```sh
     mc2 run
     ```
 
-1. Once computation has finished, you can retrieve your encrypted results and decrypt them.
+1. Once computation has finished, you can retrieve your encrypted results and decrypt them. Results are saved in the `results/` directory. You can view the results by looking at `results/opaque_sql_result.dec`
 
     ```sh
     mc2 download
@@ -165,12 +179,10 @@ You can also choose to run this quickstart with enclave-enabled VMs on the cloud
     ```
 
 ## Documentation
-For more thorough documentation on installation and usage, please visit:
+For more thorough documentation MC<sup>2</sup> Client and Opaque SQL, please visit:
 
-* [MC<sup>2</sup> Client](https://mc2-project.github.io/mc2/)
-* [Opaque SQL](https://mc2-project.github.io/opaque-sql/)
-* [Secure XGBoost](https://mc2-project.github.io/secure-xgboost/)
-
+* [MC<sup>2</sup> Client](https://mc2-project.github.io/client-docs/index.html)
+* [Opaque SQL](https://mc2-project.github.io/opaque-sql-docs/src/index.html)
 
 ## Contact
 Join our [Slack](https://join.slack.com/t/mc2-project/shared_invite/zt-rt3kxyy8-GS4KA0A351Ysv~GKwy8NEQ), open a [GitHub issue](https://github.com/mc2-project/mc2/issues), or send a message to mc2-dev@googlegroups.com.
