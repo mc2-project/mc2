@@ -76,7 +76,7 @@ RUN cd /mc2/ && git clone https://github.com/mc2-project/opaque-sql.git
 RUN sudo apt -y install build-essential openjdk-8-jdk python libssl-dev
 
 # Install Spark 3.1.1
-RUN wget https://downloads.apache.org/spark/spark-3.1.1/spark-3.1.1-bin-hadoop2.7.tgz && \
+RUN wget https://archive.apache.org/dist/spark/spark-3.1.1/spark-3.1.1-bin-hadoop2.7.tgz && \
     tar xvf spark-3.1.1* && \
     sudo mkdir -p /opt/spark && \
     sudo mv spark-3.1.1*/* /opt/spark && \
