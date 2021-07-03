@@ -66,12 +66,12 @@ MC<sup>2</sup> Client provides a command line interface that enables you to remo
 
 The dataset we'll be using in this quickstart is a medical dataset containing patient records. Here's a couple of sample records for reference.
 
-    ```sh
-    Age,BMI,Glucose,Insulin,HOMA,Leptin,Adiponectin,Resistin,MCP.1,Classification
-    48,23.5,70,2.707,0.467408667,8.8071,9.7024,7.99585,417.114,1
-    83,20.69049454,92,3.115,0.706897333,8.8438,5.429285,4.06405,468.786,1
-    82,23.12467037,91,4.498,1.009651067,17.9393,22.43204,9.27715,554.697,1
-    ```
+  ```sh
+  Age,BMI,Glucose,Insulin,HOMA,Leptin,Adiponectin,Resistin,MCP.1,Classification
+  48,23.5,70,2.707,0.467408667,8.8071,9.7024,7.99585,417.114,1
+  83,20.69049454,92,3.115,0.706897333,8.8438,5.429285,4.06405,468.786,1
+  82,23.12467037,91,4.498,1.009651067,17.9393,22.43204,9.27715,554.697,1
+  ```
 
 If you get stuck at any point while running the quickstart, feel free to ping us on [Slack](https://join.slack.com/t/mc2-project/shared_invite/zt-rt3kxyy8-GS4KA0A351Ysv~GKwy8NEQ).
 
@@ -105,7 +105,7 @@ If you'd like to try everything out locally, you can do so within the Docker con
     mc2 upload
     ```
 
-1. Run the provided Opaque SQL quickstart script, to be executed by MC<sup>2</sup>. The script can be found [here](quickstart/opaque_sql_demo.scala), and performs a filter operation over our data -- the results will contain records of all patients who are younger than 30 years old. Results are encrypted by MC<sup></2> before being saved, and can only be decrypted with the key you used to encrypt your data in the previous step.
+1. Run the provided Opaque SQL quickstart script, to be executed by MC<sup>2</sup>. The script can be found [here](quickstart/opaque_sql_demo.scala), and performs a filter operation over our data -- the results will contain records of all patients who are younger than 30 years old. Results are encrypted by MC<sup>2</sup> before being saved, and can only be decrypted with the key you used to encrypt your data in the previous step.
 
     ```sh
     mc2 run
@@ -160,7 +160,7 @@ You can also choose to run this quickstart with enclave-enabled VMs on the cloud
     mc2 upload
     ```
 
-1. Run the provided Opaque SQL quickstart script, to be executed by MC<sup>2</sup>. The script can be found [here](quickstart/opaque_sql_demo.scala), and performs a filter operation over our data -- the results will contain records of all patients who are younger than 30 years old. Results are encrypted by MC<sup></2> before being saved, and can only be decrypted with the key you used to encrypt your data in the previous step.
+1. Run the provided Opaque SQL quickstart script, to be executed by MC<sup>2</sup>. The script can be found [here](quickstart/opaque_sql_demo.scala), and performs a filter operation over our data -- the results will contain records of all patients who are younger than 30 years old. Results are encrypted by MC<sup>2</sup> before being saved, and can only be decrypted with the key you used to encrypt your data in the previous step.
 
     ```sh
     mc2 run
