@@ -36,8 +36,8 @@ launch:
        ip: 0.0.0.0
     #    username:
     #    ssh_key:
-    # workers:
-    #  - ip:
+    workers:
+     - ip: 0.0.0.0
     #    username:
     #    ssh_key:
 
@@ -90,7 +90,7 @@ upload:
 # Computation configuration
 run:
     # Script to run
-    script: opaque_sql_demo.scala
+    script: ${MC2_CLIENT_HOME}/quickstart/opaque_sql_demo.scala
 
     # Compute service you're using
     # Choices are `xgb` or `sql`
