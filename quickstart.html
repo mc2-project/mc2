@@ -157,15 +157,15 @@
 <h2>Docker Quickstart<a class="headerlink" href="#docker-quickstart" title="Permalink to this headline">¶</a></h2>
 <p>If you’d like to try everything out locally, you can do so within the Docker container you built in the <a class="reference internal" href="install.html"><span class="doc">installation</span></a> section.</p>
 <ol class="arabic simple">
-<li><p>Copy the contents of the <code class="docutils literal notranslate"><span class="pre">quickstart</span></code> directory to your mounted “playground” directory to ensure that your changes inside the container get reflected on your host. Then, set the <code class="docutils literal notranslate"><span class="pre">MC2_CONFIG</span></code> environment variable to the path of your configuration file.</p></li>
+<li><p>In the container, copy the contents of the <code class="docutils literal notranslate"><span class="pre">quickstart</span></code> directory to your mounted <code class="docutils literal notranslate"><span class="pre">playground</span></code> directory to ensure that your changes inside the container get reflected on your host. Then, specify the path to your configuration file.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># From the /mc2/client directory</span>
 cp -r quickstart/* playground
-<span class="nb">export</span> <span class="nv">MC2_CONFIG</span><span class="o">=</span>&lt;/path/to/playground/config.yaml&gt;
+mc2 configure <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/playground/config.yaml
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li><p>Optionally, generate a keypair and a symmetric key that MC<sup>2</sup> Client will use to encrypt your data. Specify your username and output paths in the <code class="docutils literal notranslate"><span class="pre">user</span></code> section of the configuration file. Then, generate the keys.</p></li>
+<li><p>Generate a keypair and a symmetric key that MC<sup>2</sup> Client will use to encrypt your data. Specify your username and output paths in the <code class="docutils literal notranslate"><span class="pre">user</span></code> section of the configuration file. Then, generate the keys.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mc2 init
 </pre></div>
@@ -183,7 +183,7 @@ cp -r quickstart/* playground
 </pre></div>
 </div>
 <ol class="arabic simple" start="5">
-<li><p>Run the provided Opaque SQL quickstart script, to be executed by MC<sup>2</sup>. The script can be found [here](quickstart/opaque_sql_demo.scala).</p></li>
+<li><p>Run the provided Opaque SQL quickstart script, to be executed by MC<sup>2</sup>. The script can be found <a class="reference external" href="https://github.com/mc2-project/mc2/quickstart/opaque_sql_demo.scala">here</a>.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mc2 run
 </pre></div>
@@ -199,15 +199,15 @@ cp -r quickstart/* playground
 <h2>Azure Quickstart<a class="headerlink" href="#azure-quickstart" title="Permalink to this headline">¶</a></h2>
 <p>You can also choose to run this quickstart with enclave-enabled VMs on the cloud with Azure Confidential Computing. This guide will take you through launching such VMs and using them with MC<sup>2</sup>.</p>
 <ol class="arabic simple">
-<li><p>In the container, copy the contents of the <code class="docutils literal notranslate"><span class="pre">quickstart</span></code> directory to your mounted “playground” directory to ensure that your changes inside the container get reflected on your host. Otherwise, no need to do anything. Then, set the <code class="docutils literal notranslate"><span class="pre">MC2_CONFIG</span></code> environment variable to the path of your configuration file.</p></li>
+<li><p>In the container, copy the contents of the <code class="docutils literal notranslate"><span class="pre">quickstart</span></code> directory to your mounted <code class="docutils literal notranslate"><span class="pre">playground</span></code> directory to ensure that your changes inside the container get reflected on your host. Then, set the path to your configuration file.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># From the /mc2/client directory</span>
 cp -r quickstart/* playground
-<span class="nb">export</span> <span class="nv">MC2_CONFIG</span><span class="o">=</span>&lt;/path/to/playground/config.yaml&gt;
+mc2 configure <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/playground/config.yaml
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li><p>Optionally, generate a keypair and a symmetric key that MC<sup>2</sup> Client will use to encrypt your data. Specify your username and output paths in the <code class="docutils literal notranslate"><span class="pre">user</span></code> section of the configuration file. Then, generate the keys.</p></li>
+<li><p>Generate a keypair and a symmetric key that MC<sup>2</sup> Client will use to encrypt your data. Specify your username and output paths in the <code class="docutils literal notranslate"><span class="pre">user</span></code> section of the configuration file. Then, generate the keys.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mc2 init
 </pre></div>
@@ -237,7 +237,7 @@ az account <span class="nb">set</span> -s &lt;YOUR_SUBSCRIPTION_ID&gt;
 </pre></div>
 </div>
 <ol class="arabic simple" start="6">
-<li><p>Run the provided Opaque SQL demo script, to be executed by MC<sup>2</sup>. The script can be found [here](quickstart/opaque_sql_demo.scala). All paths in the script are remote paths, since the script will be executing on the remote Opaque SQL service. Then, go to the <code class="docutils literal notranslate"><span class="pre">run</span></code> section of the configuration and specify the path to your script, as well as parameters for remote attestation. Run the following command to remotely start computation.</p></li>
+<li><p>Run the provided Opaque SQL demo script, to be executed by MC<sup>2</sup>. The script can be found <a class="reference external" href="https://github.com/opaque-systems/opaque-client/blob/master/quickstart/opaque_sql_demo.scala">here</a> , and performs a filter operation over our data – the results will contain records of all patients who are younger than 30 years old. Results are encrypted by MC<sup>2</sup> before being saved, and can only be decrypted with the key you used to encrypt your data in the previous step.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mc2 run
 </pre></div>
@@ -284,7 +284,7 @@ az account <span class="nb">set</span> -s &lt;YOUR_SUBSCRIPTION_ID&gt;
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2021, MC2 Team
+              Copyright &#169; 2021, MC² Team
             |
             Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
               and

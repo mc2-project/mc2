@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Quickstart" href="quickstart.html" /><link rel="prev" title="MC2 Client" href="index.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Quickstart" href="quickstart.html" /><link rel="prev" title="Welcome to MC2 Client’s documentation!" href="index.html" />
 
     <meta name="generator" content="sphinx-3.0.3, furo 2021.06.18.beta36"/>
         <title>Installation - MC2 Client documentation</title>
@@ -155,14 +155,21 @@
 <section id="building-with-docker-for-a-local-deployment">
 <h2>Building with Docker for a local deployment<a class="headerlink" href="#building-with-docker-for-a-local-deployment" title="Permalink to this headline">¶</a></h2>
 <p>To quickly play with MC<sup>2</sup> Client and Opaque SQL locally, you can use the provided Dockerfile to build a container (takes ~7 min) with all MC<sup>2</sup> Client and Opaque SQL dependencies. To do so, you must have <a class="reference external" href="https://docs.docker.com/get-docker/">Docker</a> installed.</p>
-<p>The container will have the contents of this <code class="docutils literal notranslate"><span class="pre">mc2</span></code> directory at <code class="docutils literal notranslate"><span class="pre">/mc2/client</span></code>. Opaque SQL will be at <code class="docutils literal notranslate"><span class="pre">/mc2/opaque-sql</span></code></p>
-<p>For ease of use, we recommend that you create a directory within your host <code class="docutils literal notranslate"><span class="pre">mc2</span></code> directory that will serve as your playground, and then mount your <code class="docutils literal notranslate"><span class="pre">playground</span></code> directory to the Docker container. Mounting will ensure that changes you make in your <code class="docutils literal notranslate"><span class="pre">playground</span></code> directory outside the container will be reflected inside the container, and vice versa. If you’re bringing your own data, you can either copy your data over to your playground directory, or separately mount your data directory to the container.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clone the `mc2` repo</span>
-<span class="c1"># Build a Docker image called `mc2_img`</span>
-docker build -t mc2_img .
+<p>The container will have the contents of this <code class="docutils literal notranslate"><span class="pre">opaque-client</span></code> directory at <code class="docutils literal notranslate"><span class="pre">/mc2/client</span></code>. Opaque SQL will be at <code class="docutils literal notranslate"><span class="pre">/mc2/opaque-sql</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you have installed Docker on Linux, you will either need to follow the post-installation instructions provided [here](<a class="reference external" href="https://docs.docker.com/engine/install/linux-postinstall/">https://docs.docker.com/engine/install/linux-postinstall/</a>) or run all docker commands as <code class="docutils literal notranslate"><span class="pre">sudo</span></code>.</p>
+</div>
+<p>For ease of use, we recommend that you create a directory within your host <code class="docutils literal notranslate"><span class="pre">opaque-client</span></code> directory that will serve as your playground, and then mount your <code class="docutils literal notranslate"><span class="pre">playground</span></code> directory to the Docker container. Mounting will ensure that changes you make in your <code class="docutils literal notranslate"><span class="pre">playground</span></code> directory outside the container will be reflected inside the container, and vice versa. If you’re bringing your own data, you can either copy your data over to your playground directory, or separately mount your data directory to the container.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> <span class="c1"># From the `mc2-project/mc2`, create a `playground/` directory</span>
+ mkdir playground
 
-<span class="c1"># Run the container, mounting your playground to the container, and open a shell into the container</span>
-docker run -it -v &lt;/absolute/path/to/mc2/playground&gt;:/mc2/client/playground mc2_img /bin/bash
+ <span class="c1"># Clone the `mc2` repo</span>
+ <span class="c1"># Build a Docker image called `mc2_img`</span>
+ docker build -t mc2_img .
+
+ <span class="c1"># Run the container, mounting your playground to the container, and open a shell into the container</span>
+ docker run -it -v <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/playground:/mc2/client/playground mc2_img /bin/bash
 </pre></div>
 </div>
 </section>
@@ -194,9 +201,9 @@ curl -sL https://aka.ms/InstallAzureCLIDeb <span class="p">|</span> sudo bash
 sudo apt-get install -y libmbedtls-dev python3-pip
 pip3 install --upgrade pip
 
-<span class="c1"># MC2 Client Python package dependencies</span>
-git clone https://github.com/mc2-project/mc2.git
-<span class="nb">cd</span> mc2
+<span class="c1"># |platform| Client Python package dependencies</span>
+git clone https://github.com/<span class="p">|</span>github-org<span class="p">|</span>/<span class="p">|</span>github-repo<span class="p">|</span>.git
+<span class="nb">cd</span> <span class="p">|</span>github-repo<span class="p">|</span>
 pip3 install -r requirements.txt
 <span class="nb">cd</span> ..
 
@@ -208,30 +215,19 @@ sudo python3 setup.py install
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li><p>Clone the MC<sup>2</sup> Client GitHub repo and build the C++ source.</p></li>
+<li><p>Clone the MC<sup>2</sup> Client GitHub repo and install the Python package.</p></li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> mc2/src
-mkdir build
-<span class="nb">cd</span> build
-cmake ..
-make -j4
-<span class="nb">cd</span> ../..
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> <span class="nb">cd</span> mc2/python-package
+ sudo python3 setup.py install
 </pre></div>
 </div>
-<ol class="arabic simple" start="3">
-<li><p>Once you’ve built the binary, install the Python package.</p></li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> python-package
-sudo python3 setup.py install
-</pre></div>
-</div>
-<p>You’re done! Try importing the <code class="docutils literal notranslate"><span class="pre">mc2client</span></code> Python package to check that your installation was successful.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3
-Python 3.8.7 (default, Dec 30 2020, 10:13:08)
-[Clang 12.0.0 (clang-1200.0.32.28)] on darwin
-Type "help", "copyright", "credits" or "license" for more information.
+<p>You’re done! Try importing the <code class="code docutils literal notranslate"><span class="pre">mc2client</span></code> Python package to check that your installation was successful.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> $ python3
+ Python 3.8.7 (default, Dec 30 2020, 10:13:08)
+ [Clang 12.0.0 (clang-1200.0.32.28)] on darwin
+ Type "help", "copyright", "credits" or "license" for more information.
 
-&gt;&gt;&gt; import mc2client as mc2
+ &gt;&gt;&gt; import mc2client as mc2
 </pre></div>
 </div>
 </section>
@@ -272,7 +268,7 @@ az account <span class="nb">set</span> -s &lt;YOUR_SUBSCRIPTION_ID&gt;
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2021, MC2 Team
+              Copyright &#169; 2021, MC² Team
             |
             Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
               and

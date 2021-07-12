@@ -151,21 +151,17 @@
         </label>
         <section id="cli-usage">
 <h1>CLI Usage<a class="headerlink" href="#cli-usage" title="Permalink to this headline">¶</a></h1>
-<p>Below, you’ll find guides on how to use the MC<sup>2</sup> Client command line interface. The CLI is dependent on the <code class="docutils literal notranslate"><span class="pre">mc2client</span></code> Python package, so ensure that you’ve first installed the Python package by trying to import <code class="docutils literal notranslate"><span class="pre">mc2client</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mc2client</span> <span class="k">as</span> <span class="nn">mc2</span>
+<p>Below, you’ll find guides on how to use the MC<sup>2</sup> Client command line interface. The CLI is dependent on the <code class="code docutils literal notranslate"><span class="pre">mc2client</span></code> Python package, so ensure that you’ve first installed the Python package by trying to import <code class="code docutils literal notranslate"><span class="pre">python-package</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="kn">import</span> <span class="nn">mc2client</span> <span class="k">as</span> <span class="nn">mc2</span>
 </pre></div>
 </div>
 <p>The CLI relies heavily on a configuration file in which you can specify the parameters for each command as explained in the next section.</p>
-<section id="configuring-mc2-client">
-<h2>Configuring MC<sup>2</sup> Client<a class="headerlink" href="#configuring-mc2-client" title="Permalink to this headline">¶</a></h2>
+<section id="configuring-platform-client">
+<h2>Configuring MC<sup>2</sup> Client<a class="headerlink" href="#configuring-platform-client" title="Permalink to this headline">¶</a></h2>
 <p>Before running anything, you’ll need to create a configuration YAML file specifying certain parameters. More on configuration is <a class="reference internal" href="../config/config.html"><span class="doc">here</span></a>.</p>
-<p>Once you’ve populated a YAML file with your desired parameters, set the <code class="docutils literal notranslate"><span class="pre">MC2_CONFIG</span></code> environment variable to the path to your configuration file.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># An example config is at `demo/config.yaml`</span>
-<span class="nb">export</span> <span class="nv">MC2_CONFIG</span><span class="o">=</span>/path/to/config/yaml
-</pre></div>
-</div>
-<p>Note that below, the <code class="docutils literal notranslate"><span class="pre">mc2</span></code> command is an alias for <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">mc2.py</span></code>. You may want to add the following line to your bashrc.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">alias</span> <span class="nv">mc2</span><span class="o">=</span><span class="s2">"python3 /path/to/mc2/mc2.py"</span>
+<p>Once you’ve populated a YAML file with your desired parameters, configure MC<sup>2</sup> Client with the path to your configuration file.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> <span class="c1"># An example config is at `demo/config.yaml`</span>
+ mc2 configure /path/to/config/yaml
 </pre></div>
 </div>
 </section>
@@ -173,13 +169,13 @@
 <h2>Generating Keys<a class="headerlink" href="#generating-keys" title="Permalink to this headline">¶</a></h2>
 <p>If you don’t already have a keypair and/or a symmetric key, you’ll want to generate them so that you can interact with MC<sup>2</sup> cloud compute services in a cryptographically secure manner. MC<sup>2</sup> uses your certificate and private key to authenticate you to MC<sup>2</sup> compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn’t see it in plaintext..</p>
 <p>You can generate a certificate and corresponding private key, and a symmetric key, through the CLI. You should have specified paths for your certificate, private key, and symmetric key during configuration. If something already exists at either the certificate or private key path, MC<sup>2</sup> Client will skip generating the certificate and private key. If something already exists at the symmetric key path, MC<sup>2</sup> Client will skip generating the symmetric key.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate a certificate, corresponding private key, and symmetric key</span>
-<span class="c1"># If something exists at any paths specified in the config,</span>
-<span class="c1"># MC2 Client will skip generation.</span>
-$ mc2 init
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> <span class="c1"># Generate a certificate, corresponding private key, and symmetric key</span>
+ <span class="c1"># If something exists at any paths specified in the config,</span>
+ <span class="c1"># MC2 Client will skip generation.</span>
+ $ mc2 init
 </pre></div>
 </div>
-<p><em>Note that, by default, Opaque Client uses a pre-generated RSA public key for enclave verification. This key should be not be used in a production environment.</em></p>
+<p><em>Note that, by default, |platform| Client uses a pre-generated RSA public key for enclave verification. This key should be not be used in a production environment.</em></p>
 </section>
 <section id="launching-cloud-resources">
 <h2>Launching Cloud Resources<a class="headerlink" href="#launching-cloud-resources" title="Permalink to this headline">¶</a></h2>
@@ -307,7 +303,7 @@ $ mc2 init
 </div>
 <section id="note-on-sql-format">
 <span id="sqlformat"></span><h3>Note on <code class="docutils literal notranslate"><span class="pre">sql</span></code> Format<a class="headerlink" href="#note-on-sql-format" title="Permalink to this headline">¶</a></h3>
-<p>If you plan on using the Opaque SQL compute service, you’ll want to encrypt your data in <code class="docutils literal notranslate"><span class="pre">sql</span></code> format. For this format, you’ll first need to create a file specifying the schema of the data.</p>
+<p>If you plan on using the MC<sup>2</sup> compute service, you’ll want to encrypt your data in <code class="docutils literal notranslate"><span class="pre">sql</span></code> format. For this format, you’ll first need to create a file specifying the schema of the data.</p>
 <p>The schema must be written in the following format:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>col_1_name:col_1_type,col_2_name:col_2_type,col_3_name:col_3_type
 </pre></div>
@@ -316,7 +312,7 @@ $ mc2 init
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>age:integer,rank:float,animal:string
 </pre></div>
 </div>
-<p>Currently, Opaque SQL supports the following types:</p>
+<p>Currently, MC<sup>2</sup> supports the following types:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">integer</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">long</span></code></p></li>
@@ -352,7 +348,7 @@ $ mc2 init
 
       <span class="c1"># Path to MRSIGNER value to check</span>
       <span class="c1"># MRSIGNER is the key used to sign the built enclave</span>
-   <span class="-Error">  </span><span class="nt">mrsigner</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${OPAQUE_CLIENT_HOME}/python-package/tests/keys/mc2_test_key.pub</span>
+   <span class="-Error">  </span><span class="nt">mrsigner</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/python-package/tests/keys/mc2_test_key.pub</span>
 
    <span class="c1"># The client consortium. Each username is mapped to a public key and</span>
    <span class="c1"># release policy</span>
@@ -450,7 +446,7 @@ $ mc2 init
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2021, MC2 Team
+              Copyright &#169; 2021, MC² Team
             |
             Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
               and
@@ -478,7 +474,7 @@ $ mc2 init
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">CLI Usage</a><ul>
-<li><a class="reference internal" href="#configuring-mc2-client">Configuring MC<sup>2</sup> Client</a></li>
+<li><a class="reference internal" href="#configuring-platform-client">Configuring MC<sup>2</sup> Client</a></li>
 <li><a class="reference internal" href="#generating-keys">Generating Keys</a></li>
 <li><a class="reference internal" href="#launching-cloud-resources">Launching Cloud Resources</a></li>
 <li><a class="reference internal" href="#starting-compute-services-remotely">Starting Compute Services Remotely</a></li>

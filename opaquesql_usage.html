@@ -156,7 +156,7 @@
 <p>Next, to use MC<sup>2</sup> Client for Opaque SQL, you’ll need to specifically modify several sections of the <a class="reference internal" href="config/config.html"><span class="doc">configuration</span></a>: the <code class="docutils literal notranslate"><span class="pre">start</span></code>, <code class="docutils literal notranslate"><span class="pre">upload</span></code>, <code class="docutils literal notranslate"><span class="pre">run</span></code>, and <code class="docutils literal notranslate"><span class="pre">download</span></code> sections. Once you’ve finished configuration, look at the <a class="reference internal" href="quickstart.html"><span class="doc">Quickstart</span></a> guide on how to securely run a query.</p>
 <section id="start">
 <h2>Start<a class="headerlink" href="#start" title="Permalink to this headline">¶</a></h2>
-<p>In the <code class="docutils literal notranslate"><span class="pre">start</span></code> section, you must specify a command to launch the Opaque SQL service. The section should look something like this:</p>
+<p>In the <code class="docutils literal notranslate"><span class="pre">start</span></code> section, you must specify the command to launch the Opaque SQL service: <code class="docutils literal notranslate"><span class="pre">build/sbt</span> <span class="pre">run</span></code>. The section should look something like this:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">start</span><span class="p">:</span>
    <span class="c1"># Commands to run on head node</span>
    <span class="nt">head</span><span class="p">:</span>
@@ -165,7 +165,7 @@
 
    <span class="c1"># Or to run a standalone Spark cluster</span>
    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; build/sbt assembly</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; spark-submit --class edu.berkeley.cs.rise.opaque.rpc.Listener &lt;Spark configuration parameters&gt; --deploy-mode client ${OPAQUE_HOME}/target/scala-2.12/opaque-assembly-0.1.jar</span>
+   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; spark-submit --class edu.berkeley.cs.rise.opaque.rpc.Listener &lt;Spark configuration parameters&gt; --deploy-mode client ${|platform_uppercase|_HOME}/target/scala-2.12/opaque-assembly-0.1.jar</span>
 
    <span class="c1"># Commands to run on worker nodes</span>
    <span class="nt">workers</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
@@ -269,16 +269,16 @@
 
    <span class="c1"># Path to your symmetric key - will be used for encryption/decryption</span>
    <span class="c1"># If you don't have a symmetric key, specify a path here</span>
-   <span class="c1"># and run `mc2 init` to generate a key</span>
+   <span class="c1"># and run `MC2 init` to generate a key</span>
    <span class="c1">#</span>
-   <span class="c1"># `mc2 init` will not overwrite anything at this path</span>
+   <span class="c1"># `MC2 init` will not overwrite anything at this path</span>
    <span class="nt">symmetric_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/keys/user1_sym.key</span>
 
    <span class="c1"># Path to your private key and certificate</span>
    <span class="c1"># If you don't have a private key / certificate, specify paths here</span>
-   <span class="c1"># and run `mc2 init` to generate a keypair</span>
+   <span class="c1"># and run `MC2 init` to generate a keypair</span>
    <span class="c1">#</span>
-   <span class="c1"># `mc2 init` will not overwrite anything at this path</span>
+   <span class="c1"># `MC2 init` will not overwrite anything at this path</span>
    <span class="nt">private_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/keys/user1.pem</span>
    <span class="nt">certificate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/keys/user1.crt</span>
 
@@ -313,7 +313,7 @@
    <span class="c1"># For this quickstart there is only one node - no worker nodes</span>
    <span class="nt">workers</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
 
-<span class="c1"># Configuration for `mc2 upload`</span>
+<span class="c1"># Configuration for `MC2 upload`</span>
 <span class="nt">upload</span><span class="p">:</span>
    <span class="c1"># Whether to upload data to Azure blob storage or disk</span>
    <span class="c1"># Allowed values are `blob` or `disk`</span>
@@ -440,7 +440,7 @@
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2021, MC2 Team
+              Copyright &#169; 2021, MC² Team
             |
             Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
               and

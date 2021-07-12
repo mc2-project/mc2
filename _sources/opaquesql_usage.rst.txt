@@ -1,14 +1,14 @@
 Usage with Opaque SQL
 =====================
-MC\ :sup:`2` offers `Opaque SQL <https://mc2-project.github.io/opaque-sql/>`_, a secure analytics engine built on top of Apache Spark SQL, as a compute service that users can run. Opaque SQL provides a SQL and Scala interface for users to express their desired SQL-like computation. MC\ :sup:`2` Client integrates directly with Opaque SQL, and enables users to start the Opaque SQL service as well as encrypt and decrypt data in a format readable by Opaque SQL.
+|platform| offers `Opaque SQL <https://mc2-project.github.io/opaque-sql/>`_, a secure analytics engine built on top of Apache Spark SQL, as a compute service that users can run. Opaque SQL provides a SQL and Scala interface for users to express their desired SQL-like computation. |platform| Client integrates directly with Opaque SQL, and enables users to start the Opaque SQL service as well as encrypt and decrypt data in a format readable by Opaque SQL.
 
 First, install Opaque SQL by following `this guide <https://mc2-project.github.io/opaque-sql/install/install.html>`_. 
 
-Next, to use MC\ :sup:`2` Client for Opaque SQL, you'll need to specifically modify several sections of the :doc:`configuration <config/config>`: the ``start``, ``upload``, ``run``, and ``download`` sections. Once you've finished configuration, look at the :doc:`quickstart` guide on how to securely run a query.
+Next, to use |platform| Client for Opaque SQL, you'll need to specifically modify several sections of the :doc:`configuration <config/config>`: the ``start``, ``upload``, ``run``, and ``download`` sections. Once you've finished configuration, look at the :doc:`quickstart` guide on how to securely run a query.
 
 Start
 -----
-In the ``start`` section, you must specify a command to launch the Opaque SQL service. The section should look something like this:
+In the ``start`` section, you must specify the command to launch the Opaque SQL service: ``build/sbt run``. The section should look something like this:
 
 .. code-block:: yaml
 
@@ -20,18 +20,19 @@ In the ``start`` section, you must specify a command to launch the Opaque SQL se
 
       # Or to run a standalone Spark cluster
       - cd /path/to/opaque-sql; build/sbt assembly
-      - cd /path/to/opaque-sql; spark-submit --class edu.berkeley.cs.rise.opaque.rpc.Listener <Spark configuration parameters> --deploy-mode client ${OPAQUE_HOME}/target/scala-2.12/opaque-assembly-0.1.jar
+      - cd /path/to/opaque-sql; spark-submit --class edu.berkeley.cs.rise.opaque.rpc.Listener <Spark configuration parameters> --deploy-mode client ${|platform_uppercase|_HOME}/target/scala-2.12/opaque-assembly-0.1.jar
 
       # Commands to run on worker nodes
       workers: []
 
 Upload
 ------
-In the ``upload`` section, you should tell MC\ :sup:`2` Client that you want to encrypt data in ``sql`` format, the format readable by Opaque SQL. Along with the data, you should specify the path to the data schema. More on the schema format can be found :ref:`here <sqlformat>`.
+In the ``upload`` section, you should tell |platform| Client that you want to encrypt data in ``sql`` format, the format readable by Opaque SQL. Along with the data, you should specify the path to the data schema. More on the schema format can be found :ref:`here <sqlformat>`.
 
 The section should look something like this:
 
 .. code-block:: yaml
+   :substitutions:
 
    upload:
       # Whether to upload data to Azure blob storage or disk
@@ -47,21 +48,22 @@ The section should look something like this:
 
       # Files to encrypt and upload
       src:
-        - ${MC2_CLIENT_HOME}/quickstart/data/opaquesql.csv
+        - ${|platform_uppercase|_CLIENT_HOME}/quickstart/data/opaquesql.csv
 
       # If you want to run Opaque SQL, you must also specify a schema,
       # one for each file you want to encrypt and upload
       schemas:
-        - ${MC2_CLIENT_HOME}/quickstart/data/opaquesql_schema.json
+        - ${|platform_uppercase|_CLIENT_HOME}/quickstart/data/opaquesql_schema.json
 
       # Directory to upload data to
       dst: /mc2/data
 
 Run
 ---
-In the ``run`` section, you should tell MC\ :sup:`2` Client that you're running Opaque SQL, and specify an Opaque SQL script written in Scala. This section should look something like this:
+In the ``run`` section, you should tell |platform| Client that you're running Opaque SQL, and specify an Opaque SQL script written in Scala. This section should look something like this:
 
 .. code-block:: yaml
+   :substitutions:
 
    run:
       # Script to run
@@ -84,7 +86,7 @@ In the ``run`` section, you should tell MC\ :sup:`2` Client that you're running 
 
          # Path to MRSIGNER value to check
          # MRSIGNER is the key used to sign the built enclave
-         mrsigner: ${MC2_CLIENT_HOME}/python-package/tests/keys/mc2_test_key.pub
+         mrsigner: ${|platform_uppercase|_CLIENT_HOME}/python-package/tests/keys/mc2_test_key.pub
 
       # The client consortium. Each username is mapped to a public key and
       # release policy
@@ -96,7 +98,7 @@ In the ``run`` section, you should tell MC\ :sup:`2` Client that you're running 
 
 Download
 --------
-In the download section, you should tell MC\ :sup:`2` Client that the results you are retrieving are encrypted by Opaque SQL. This section should look something like this:
+In the download section, you should tell |platform| Client that the results you are retrieving are encrypted by Opaque SQL. This section should look something like this:
 
 .. code-block:: yaml
 
@@ -123,6 +125,7 @@ Example
 All together, the configuration file should look something like the following when running Opaque SQL.
 
 .. code-block:: yaml
+   :substitutions:
 
    # User configuration
    user:
@@ -131,29 +134,29 @@ All together, the configuration file should look something like the following wh
 
       # Path to your symmetric key - will be used for encryption/decryption
       # If you don't have a symmetric key, specify a path here 
-      # and run `mc2 init` to generate a key
+      # and run `|platform| init` to generate a key
       #
-      # `mc2 init` will not overwrite anything at this path
-      symmetric_key: ${MC2_CLIENT_HOME}/quickstart/keys/user1_sym.key
+      # `|platform| init` will not overwrite anything at this path
+      symmetric_key: ${|platform_uppercase|_CLIENT_HOME}/quickstart/keys/user1_sym.key
 
       # Path to your private key and certificate
       # If you don't have a private key / certificate, specify paths here
-      # and run `mc2 init` to generate a keypair
+      # and run `|platform| init` to generate a keypair
       #
-      # `mc2 init` will not overwrite anything at this path
-      private_key: ${MC2_CLIENT_HOME}/quickstart/keys/user1.pem
-      certificate: ${MC2_CLIENT_HOME}/quickstart/keys/user1.crt
+      # `|platform| init` will not overwrite anything at this path
+      private_key: ${|platform_uppercase|_CLIENT_HOME}/quickstart/keys/user1.pem
+      certificate: ${|platform_uppercase|_CLIENT_HOME}/quickstart/keys/user1.crt
 
       # Path to CA certificate and private key
       # Needed if you want to generate a certificate signed by CA
-      root_certificate: ${MC2_CLIENT_HOME}/quickstart/keys/root.crt
-      root_private_key: ${MC2_CLIENT_HOME}/quickstart/keys/root.pem
+      root_certificate: ${|platform_uppercase|_CLIENT_HOME}/quickstart/keys/root.crt
+      root_private_key: ${|platform_uppercase|_CLIENT_HOME}/quickstart/keys/root.pem
 
    # Configuration for launching cloud resources
    launch:
       # The absolute path to your Azure configuraton
       # This needs to be an absolute path
-      azure_config: ${MC2_CLIENT_HOME}/quickstart/azure.yaml
+      azure_config: ${|platform_uppercase|_CLIENT_HOME}/quickstart/azure.yaml
 
       # Whether to launch a cluster of VMs
       cluster: true
@@ -175,7 +178,7 @@ All together, the configuration file should look something like the following wh
       # For this quickstart there is only one node - no worker nodes
       workers: []
 
-   # Configuration for `mc2 upload`
+   # Configuration for `|platform| upload`
    upload:
       # Whether to upload data to Azure blob storage or disk
       # Allowed values are `blob` or `disk`
@@ -190,12 +193,12 @@ All together, the configuration file should look something like the following wh
 
       # Files to encrypt and upload
       src:
-      - ${MC2_CLIENT_HOME}/quickstart/data/opaquesql.csv
+      - ${|platform_uppercase|_CLIENT_HOME}/quickstart/data/opaquesql.csv
 
       # If you want to run Opaque SQL, you must also specify a schema,
       # one for each file you want to encrypt and upload
       schemas:
-      - ${MC2_CLIENT_HOME}/quickstart/data/opaquesql_schema.json
+      - ${|platform_uppercase|_CLIENT_HOME}/quickstart/data/opaquesql_schema.json
 
       # Directory to upload data to
       dst: /mc2/data
@@ -225,7 +228,7 @@ All together, the configuration file should look something like the following wh
          # MRSIGNER is the key used to sign the built enclave
          # This key should be used for testing purposes only,
          # and is not secure for production purpose.
-         mrsigner: ${MC2_CLIENT_HOME}/python-package/tests/keys/mc2_test_key.pub
+         mrsigner: ${|platform_uppercase|_CLIENT_HOME}/python-package/tests/keys/mc2_test_key.pub
 
       # The client consortium. Each username is mapped to a public key and
       # release policy
