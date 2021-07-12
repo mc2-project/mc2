@@ -1,49 +1,46 @@
 CLI Usage
 =========
 
-Below, you'll find guides on how to use the MC\ :sup:`2` Client command line interface. The CLI is dependent on the ``mc2client`` Python package, so ensure that you've first installed the Python package by trying to import ``mc2client``.
+Below, you'll find guides on how to use the |platform| Client command line interface. The CLI is dependent on the :substitution-code:`|python-package|` Python package, so ensure that you've first installed the Python package by trying to import :substitution-code:`python-package`.
 
 .. code-block:: python
+   :substitutions:
 
-    import mc2client as mc2
+    import |python-package| as |python-package-short|
 
 The CLI relies heavily on a configuration file in which you can specify the parameters for each command as explained in the next section.
 
-Configuring MC\ :sup:`2` Client
+Configuring |platform| Client
 -------------------------
 Before running anything, you'll need to create a configuration YAML file specifying certain parameters. More on configuration is :doc:`here <../config/config>`.
 
-Once you've populated a YAML file with your desired parameters, set the ``MC2_CONFIG`` environment variable to the path to your configuration file.
+Once you've populated a YAML file with your desired parameters, configure |platform| Client with the path to your configuration file.
 
 .. code-block:: bash
+   :substitutions:
 
     # An example config is at `demo/config.yaml`
-    export MC2_CONFIG=/path/to/config/yaml
-
-Note that below, the ``mc2`` command is an alias for ``python3 mc2.py``. You may want to add the following line to your bashrc.
-
-.. code-block:: bash
-
-    alias mc2="python3 /path/to/mc2/mc2.py"
+    |cmd| configure /path/to/config/yaml
 
 Generating Keys
 ---------------
-If you don't already have a keypair and/or a symmetric key, you'll want to generate them so that you can interact with MC\ :sup:`2` cloud compute services in a cryptographically secure manner. MC\ :sup:`2` uses your certificate and private key to authenticate you to MC\ :sup:`2` compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn't see it in plaintext..
+If you don't already have a keypair and/or a symmetric key, you'll want to generate them so that you can interact with |platform| cloud compute services in a cryptographically secure manner. |platform| uses your certificate and private key to authenticate you to |platform| compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn't see it in plaintext..
 
-You can generate a certificate and corresponding private key, and a symmetric key, through the CLI. You should have specified paths for your certificate, private key, and symmetric key during configuration. If something already exists at either the certificate or private key path, MC\ :sup:`2` Client will skip generating the certificate and private key. If something already exists at the symmetric key path, MC\ :sup:`2` Client will skip generating the symmetric key.
+You can generate a certificate and corresponding private key, and a symmetric key, through the CLI. You should have specified paths for your certificate, private key, and symmetric key during configuration. If something already exists at either the certificate or private key path, |platform| Client will skip generating the certificate and private key. If something already exists at the symmetric key path, |platform| Client will skip generating the symmetric key.
 
 .. code-block:: bash
+   :substitutions:
 
     # Generate a certificate, corresponding private key, and symmetric key
     # If something exists at any paths specified in the config,
-    # MC2 Client will skip generation.
-    $ mc2 init
+    # |platform| Client will skip generation.
+    $ |cmd| init
 
-*Note that, by default, Opaque Client uses a pre-generated RSA public key for enclave verification. This key should be not be used in a production environment.* 
+*Note that, by default, |platform| Client uses a pre-generated RSA public key for enclave verification. This key should be not be used in a production environment.* 
 
 Launching Cloud Resources
 -------------------------
-You can use MC\ :sup:`2` Client to launch resources in Azure. In particular, you can create a cluster of VMs, Azure blob storage, and a storage container. This section in the configuration looks as follows.
+You can use |platform| Client to launch resources in Azure. In particular, you can create a cluster of VMs, Azure blob storage, and a storage container. This section in the configuration looks as follows.
 
 .. code-block:: yaml
 
@@ -66,6 +63,7 @@ You will also need to specify details for the Azure resources you want to launch
 In particular, note the following important sections in the Azure configuration that you will likely want to modify.
 
 .. code-block:: yaml
+   :substitutions:
 
    # An unique identifier for the head node and workers of this cluster.
    cluster_name: default
@@ -82,10 +80,10 @@ In particular, note the following important sections in the Azure configuration 
       location: eastus
 
       # Name of resource group that will contain your launched resources
-      resource_group: mc2-client-dev
+      resource_group: |cmd|-client-dev
 
       # Name of Azure blob storage you want to create
-      storage_name: mc2storage
+      storage_name: |cmd|storage
 
       # Name of storage container you want to create
       container_name: blob-container-1
@@ -107,8 +105,9 @@ In particular, note the following important sections in the Azure configuration 
 To launch the resources, run the following command:
 
 .. code-block:: bash
+   :substitutions:
    
-   mc2 launch
+   |cmd| launch
 
 .. note::
 	If nodes have been manually configured (via the ``head`` or ``workers`` fields in the ``launch`` section), this command will not do anything.
@@ -116,7 +115,7 @@ To launch the resources, run the following command:
 
 Starting Compute Services Remotely
 ----------------------------------
-To run computation, you'll need to remotely start the compute services. You can specify commands to start the compute services using MC\ :sup:`2` Client through configuration. MC\ :sup:`2` Client will remotely run these commands on each VM in the Azure cluster.
+To run computation, you'll need to remotely start the compute services. You can specify commands to start the compute services using |platform| Client through configuration. |platform| Client will remotely run these commands on each VM in the Azure cluster.
 
 .. code-block:: yaml
 
@@ -133,8 +132,9 @@ To run computation, you'll need to remotely start the compute services. You can 
 To start the services, run the following command:
 
 .. code-block:: bash
+   :substitutions:
 
-   mc2 start
+   |cmd| start
 
 .. note::
 	If nodes have been manually configured (via the ``head`` or ``workers`` fields in the ``launch`` section) and are locally hosted (i.e. ``ip`` is ``0.0.0.0`` or ``127.0.0.1``) then the commands will be run in a local subprocess.
@@ -142,7 +142,7 @@ To start the services, run the following command:
 
 Encrypting and Uploading Data
 -----------------------------
-MC\ :sup:`2` Client will use the symmetric key you specified during configuration to encrypt your sensitive data. If you don't yet have a symmetric key, see the above section on :ref:`Generating Keys`.
+|platform| Client will use the symmetric key you specified during configuration to encrypt your sensitive data. If you don't yet have a symmetric key, see the above section on :ref:`Generating Keys`.
 
 .. code-block:: yaml
 
@@ -174,8 +174,9 @@ MC\ :sup:`2` Client will use the symmetric key you specified during configuratio
 To encrypt and upload your data, run the following command:
 
 .. code-block:: bash
+   :substitutions:
 
-   mc2 upload
+   |cmd| upload
 
 .. note::
 	If nodes have been manually configured (via the ``head`` or ``workers`` fields in the ``launch`` section) and are locally hosted (i.e. ``ip`` is ``0.0.0.0`` or ``127.0.0.1``) then the file will be copied to ``dst`` on the local machine.
@@ -186,7 +187,7 @@ To encrypt and upload your data, run the following command:
 Note on ``sql`` Format
 ~~~~~~~~~~~~~~~~~~~~~~
 
-If you plan on using the Opaque SQL compute service, you'll want to encrypt your data in ``sql`` format. For this format, you'll first need to create a file specifying the schema of the data.
+If you plan on using the |platform| compute service, you'll want to encrypt your data in ``sql`` format. For this format, you'll first need to create a file specifying the schema of the data.
 
 The schema must be written in the following format:
 
@@ -201,7 +202,7 @@ For example, if your data has 3 columns, named ``age`` of type ``integer``, ``ra
     age:integer,rank:float,animal:string
 
 
-Currently, Opaque SQL supports the following types:
+Currently, |platform| supports the following types:
 
 - ``integer``
 - ``long``
@@ -209,14 +210,15 @@ Currently, Opaque SQL supports the following types:
 - ``double``
 - ``string``
 
-If the data in your column is not of any of these types, MC\ :sup:`2` Client will by default encrypt it as a string type. 
+If the data in your column is not of any of these types, |platform| Client will by default encrypt it as a string type. 
 
 
 Running Computation
 -------------------
-To run computation, you should specify a script to run in the configuration. In addition, when you initiate computation, MC\ :sup:`2` Client will under the hood attest the enclave deployment before actually running the computation. Attestation ensures that all enclaves were built and loaded with the proper code and that they were properly initialized. You will also need to specify some configuration values for attestation.
+To run computation, you should specify a script to run in the configuration. In addition, when you initiate computation, |platform| Client will under the hood attest the enclave deployment before actually running the computation. Attestation ensures that all enclaves were built and loaded with the proper code and that they were properly initialized. You will also need to specify some configuration values for attestation.
 
 .. code-block:: yaml
+   :substitutions:
 
    # Computation configuration
    run:
@@ -240,7 +242,7 @@ To run computation, you should specify a script to run in the configuration. In 
 
          # Path to MRSIGNER value to check
          # MRSIGNER is the key used to sign the built enclave
-        mrsigner: ${OPAQUE_CLIENT_HOME}/python-package/tests/keys/mc2_test_key.pub
+        mrsigner: ${|platform_uppercase|_CLIENT_HOME}/python-package/tests/keys/mc2_test_key.pub
 
       # The client consortium. Each username is mapped to a public key and
       # release policy
@@ -252,12 +254,13 @@ To run computation, you should specify a script to run in the configuration. In 
 Begin computation by running the following command:
 
 .. code-block:: bash 
+   :substitutions:
    
-   mc2 run
+   |cmd| run
 
 Downloading and Decrypting Data
 -------------------------------
-MC\ :sup:`2` Client will use the symmetric key you specified during configuration to decrypt computation results. If you don't yet have a symmetric key, see the above section on :ref:`Generating Keys`. You should download results from where the compute services saved the results.
+|platform| Client will use the symmetric key you specified during configuration to decrypt computation results. If you don't yet have a symmetric key, see the above section on :ref:`Generating Keys`. You should download results from where the compute services saved the results.
 
 .. code-block:: yaml
 
@@ -283,8 +286,9 @@ MC\ :sup:`2` Client will use the symmetric key you specified during configuratio
 To encrypt and upload your data, run the following command:
 
 .. code-block:: bash
+   :substitutions:
 
-   mc2 download
+   |cmd| download
 
 .. note::
 	If nodes have been manually configured (via the ``head`` or ``workers`` fields in the ``launch`` section) and are locally hosted (i.e. ``ip`` is ``0.0.0.0`` or ``127.0.0.1``) then the file will be copied from ``src`` to ``dst`` on the local machine.
@@ -295,9 +299,10 @@ Not implemented
 
 Terminating Azure Resources
 ---------------------------
-You can use MC\ :sup:`2` Client to terminate your launched Azure resources. Specify which resources you want to terminate in the configuration.
+You can use |platform| Client to terminate your launched Azure resources. Specify which resources you want to terminate in the configuration.
 
 .. code-block:: yaml
+   :substitutions:
 
    teardown:
       # Whether to terminate launched VMs
@@ -312,5 +317,6 @@ You can use MC\ :sup:`2` Client to terminate your launched Azure resources. Spec
 To terminate desired resources, run the following command:
 
 .. code-block:: bash
+   :substitutions:
    
-   mc2 teardown
+   |cmd| teardown
