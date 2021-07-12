@@ -57,7 +57,7 @@ jobs:
         run: |
           cd main
           pip install -r requirements.txt 
-          pip install client-docs/requirements.txt
+          pip install -r client-docs/requirements.txt
 
       - name: Install mc2client Python package
         run: |
