@@ -20,7 +20,7 @@ python-package/mc2client/rpc/attest_pb2_grpc.py
 python-package/mc2client/toolchain/flatbuffers/tuix/*
 
 # Auto-generated documentation
-docs/_build/
+client-docs/_build/
 
 # Keys
 *.pem
