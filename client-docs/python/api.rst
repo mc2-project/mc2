@@ -1,10 +1,11 @@
 API Reference
 ==============
-MC\ :sup:`2` Client provides a Python interface through the Python package, ``mc2client``. See the Installation section for installation instructions. To use the Python package, we'll need to import it.
+|platform| Client provides a Python interface through the Python package, :substitution-code:`|python-package|`. See the Installation section for installation instructions. To use the Python package, we'll need to import it.
 
 .. code-block:: python
+   :substitutions:
 
-    import mc2client as mc2
+    import |python-package| as |python-package-short|
 
 Global Configuration
 ~~~~~~~~~~~~~~~~~~~~
