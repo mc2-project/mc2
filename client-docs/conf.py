@@ -22,8 +22,8 @@ sys.path.insert(0, curr_path)
 # -- Project information -----------------------------------------------------
 
 project = "MC<sup>2</sup> Client"
-copyright = "2021, MC2 Team"
-author = "MC2 Team"
+copyright = "2021, MC² Team"
+author = "MC² Team"
 
 # The full version, including alpha/beta/rc tags
 #  release = "0.0.1"
@@ -41,6 +41,8 @@ extensions = [
     "sphinxarg.ext",
     "sphinx_copybutton",
     "sphinxcontrib.spelling",
+    "sphinx-prompt",
+    "sphinx_substitution_extensions",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -81,3 +83,14 @@ spelling_word_list_filename = "spelling_wordlist.txt"
 
 # Emit misspelling as Sphinx warning
 spelling_warning = True
+
+# -------- Substitutions ----------------------------
+rst_prolog = """
+.. |platform| replace:: MC\ :sup:`2`
+.. |platform_uppercase| replace:: MC2
+.. |github-org| replace:: mc2-project
+.. |github-repo| replace:: mc2
+.. |cmd| replace:: mc2
+.. |python-package| replace:: mc2client
+.. |python-package-short| replace:: mc2
+"""
