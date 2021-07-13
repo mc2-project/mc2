@@ -499,7 +499,7 @@ def _get_azure_ips():
 ####################
 
 
-def set_config(general_config):
+def set_config(general_config=None):
     """
     Set the path to the config file. This function must be run before running anything else.
 
@@ -507,7 +507,21 @@ def set_config(general_config):
     ----------
     path : str
         Path to config file
+
+    Returns
+    -------
+    general_config : str
+        The path to the config file. This return value is useful when we're calling `set_config()` without a parameter -- it enables the caller the retrieve the cached config_path
     """
+    # If we're specifically configuring the config path
+    if general_config is not None:
+        add_cache_entry("config", general_config)
+    else:
+        general_config = get_cache_entry("config")
+
+    if general_config is None:
+        raise Exception("Please configure the path to your MC2 config")
+
     _CONF["general_config"] = general_config
     config = EnvYAML(_CONF["general_config"])
     _CONF["current_user"] = config["user"]["username"]
@@ -542,6 +556,8 @@ def set_config(general_config):
     else:
         _CONF["head"] = manual_head_node
         _CONF["workers"] = manual_worker_nodes
+
+    return general_config
 
 
 def generate_keypair(expiration=10 * 365 * 24 * 60 * 60):
@@ -651,7 +667,7 @@ def generate_symmetric_key():
 
 def clear_cache():
     """
-    Clears all data located in the Opaque cache
+    Clears all data located in the MC² cache
     """
     # Clear attestation data
     remove_cache_entry("attested_nodes")

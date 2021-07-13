@@ -78,12 +78,12 @@ If you get stuck at any point while running the quickstart, feel free to ping us
 ### Docker Quickstart
 If you'd like to try everything out locally, you can do so within the Docker container you built in the [installation](#installation) section.
 
-1. Copy the contents of the `quickstart` directory to your mounted "playground" directory to ensure that your changes inside the container get reflected on your host. Then, set the `MC2_CONFIG` environment variable to the path of your configuration file.
+1. In the container, copy the contents of the `quickstart` directory to your mounted `playground` directory to ensure that your changes inside the container get reflected on your host. Then, configure MC<sup>2</sup> Client with your configuration file.
 
     ```sh
     # From the /mc2/client directory
     cp -r quickstart/* playground
-    export MC2_CONFIG=</path/to/playground/config.yaml>
+    mc2 configure $(pwd)/playground/config.yaml
     ```
 
 1. Generate a keypair and a symmetric key that MC<sup>2</sup> Client will use to encrypt your data. Specify your username and output paths in the `user` section of the configuration file. Then, generate the keys.
@@ -120,12 +120,12 @@ If you'd like to try everything out locally, you can do so within the Docker con
 ### Azure Quickstart
 You can also choose to run this quickstart with enclave-enabled VMs on the cloud with Azure Confidential Computing. Unlike the Docker quickstart, in this quickstart you'll first launch enclave-enabled VMs on Azure using MC<sup>2</sup> before uploading data and runing computation. 
 
-1. Start off in the container you built in the [installation](#installation) section. In the container, copy the contents of the `quickstart` directory to your mounted "playground" directory to ensure that your changes inside the container get reflected on your host. Otherwise, no need to do anything. Then, set the `MC2_CONFIG` environment variable to the path of your configuration file.
+1. Start off in the container you built in the [installation](#installation) section. In the container, copy the contents of the `quickstart` directory to your mounted "playground" directory to ensure that your changes inside the container get reflected on your host. Otherwise, no need to do anything. Then, configure MC<sup>2</sup> Client with your configuration file.
 
     ```sh
     # From the /mc2/client directory
     cp -r quickstart/* playground
-    export MC2_CONFIG=</path/to/playground/config.yaml>
+    mc2 configure $(pwd)/playground/config.yaml
     ```
 
 1. Generate a keypair and a symmetric key that MC<sup>2</sup> Client will use to encrypt your data. Specify your username and output paths in the `user` section of the configuration file. Then, generate the keys.
