@@ -159,12 +159,18 @@
 <h2>Global Configuration<a class="headerlink" href="#global-configuration" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="mc2client.set_config">
-<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">set_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">general_config</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.set_config" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mc2client.</code><code class="sig-name descname">set_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">general_config</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mc2client.set_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the path to the config file. This function must be run before running anything else.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>path</strong><span class="classifier">str</span></dt><dd><p>Path to config file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>general_config</strong><span class="classifier">str</span></dt><dd><p>The path to the config file. This return value is useful when we’re calling <cite>set_config()</cite> without a parameter – it enables the caller the retrieve the cached config_path</p>
 </dd>
 </dl>
 </dd>
