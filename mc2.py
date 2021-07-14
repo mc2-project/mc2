@@ -22,6 +22,12 @@ logging.Formatter.converter = time.gmtime
 parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers(help="Command to run.", dest="command")
 
+# -----------Configure-----------------
+parser_configure = subparsers.add_parser(
+    "configure", help="Set the path to your config file"
+)
+parser_configure.add_argument("config_path", type=str, help="Path to MC² config file")
+
 # -------------Init--------------------
 parser_init = subparsers.add_parser(
     "init", help="Optionally generate a symmetric key and keypair"
@@ -54,15 +60,21 @@ parser_stop = subparsers.add_parser("stop", help="Stop previously started servic
 # -------------Teardown---------------
 parser_teardown = subparsers.add_parser("teardown", help="Teardown Azure resources")
 
-if __name__ == "__main__":
-    mc2_config = os.environ.get("MC2_CONFIG")
-    if not mc2_config:
-        raise Exception(
-            "Please set the environment variable `MC2_CONFIG` to the path of your config file"
-        )
-
-    mc2.set_config(mc2_config)
+if __name__ == "__main__":  # noqa: C901
     args = parser.parse_args()
+
+    if args.command == "configure":
+        config_path = os.path.abspath(os.path.expanduser(args.config_path))
+        if not os.path.exists(config_path):
+            raise Exception(
+                "Specified config path {} does not exist".format(config_path)
+            )
+        mc2.set_config(config_path)
+        logging.info("Set configuration path to {}".format(config_path))
+        quit()
+
+    # If we're not configuring the config path, retrieve the config path
+    mc2_config = mc2.set_config()
     config = EnvYAML(mc2_config)
 
     if args.command == "init":
@@ -259,5 +271,5 @@ if __name__ == "__main__":
 
     else:
         logging.error(
-            "Unsupported command specified. Please type `opaque -h` for a list of supported commands."
+            "Unsupported command specified. Please type `mc2 -h` for a list of supported commands."
         )

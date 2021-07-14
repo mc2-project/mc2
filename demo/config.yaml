@@ -32,8 +32,8 @@ launch:
     # # Manually specify the IPs of and usernames/SSH private keys used to log
     # # in to the head and worker nodes. If these values exist, Opaque Client
     # # will not launch or try to use any Azure resources
-    # head:
-    #     ip: 98.171.139.74
+    head:
+        ip: 0.0.0.0
     #     username: mc2
     #     ssh_key: ~/.ssh/id_rsa
     # workers:
