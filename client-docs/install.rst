@@ -5,7 +5,7 @@ You can install |platform| Client from source or choose to build a Docker image 
 
 Building with Docker for a local deployment
 -------------------------------------------
-To quickly play with |platform| Client and Opaque SQL locally, you can use the provided Dockerfile to build a container (takes ~7 min) with all |platform| Client and Opaque SQL dependencies. To do so, you must have `Docker <https://docs.docker.com/get-docker/>`_ installed.
+To quickly play with |platform| Client and Opaque SQL locally, you can use the provided Dockerfile to build a container (takes ~7 min) with all |platform| Client and Opaque SQL dependencies. Alternatively, you can pull a pre-built Docker image instead of building one. To do either, you must have `Docker <https://docs.docker.com/get-docker/>`_ installed.
 
 The container will have the contents of this ``opaque-client`` directory at ``/mc2/client``. Opaque SQL will be at ``/mc2/opaque-sql``
 
@@ -23,8 +23,13 @@ For ease of use, we recommend that you create a directory within your host ``opa
     mkdir playground
 
     # Clone the `|github-repo|` repo
+    git clone https://github.com/|github-org|/|github-repo|
+
     # Build a Docker image called `|cmd|_img`
     docker build -t |cmd|_img .
+
+    # Alternatively, pull a pre-built image (~3 GB)
+    # docker pull |docker-org|/|cmd|_img:v|release_version|
 
     # Run the container, mounting your playground to the container, and open a shell into the container
     docker run -it -v $(pwd)/playground:/mc2/client/playground |cmd|_img /bin/bash

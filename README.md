@@ -42,14 +42,17 @@ To run an end-to-end MC<sup>2</sup> workflow:
 
 
 ## Installation
-To quickly play with MC<sup>2</sup> Client and Opaque SQL, you can use the provided Dockerfile to build a container (takes ~7 min) with all MC<sup>2</sup> Client and Opaque SQL dependencies. To do so, you must have [Docker](https://docs.docker.com/get-docker/) installed.
+To quickly play with MC<sup>2</sup> Client and Opaque SQL, you can use the provided Dockerfile to build a container (takes ~7 min) with all MC<sup>2</sup> Client and Opaque SQL dependencies. Alternatively, you can pull a pre-built Docker image instead of building one. To do either, you must have [Docker](https://docs.docker.com/get-docker/) installed.
 
 The container will have the contents of this `mc2` directory at `/mc2/client`, and Opaque SQL will be at `/mc2/opaque-sql`
 
 For ease of use, we recommend that you create a directory within your host `mc2` directory that will serve as your playground, and then mount your `playground` directory to the Docker container. Mounting will ensure that changes you make in your `playground` directory outside the container will be reflected inside the container, and vice versa. If you're bringing your own data, you can either copy your data over to your playground directory, or separately mount your data directory to the container.
 
+### Installation via building an image
 ```sh
 # Clone the `mc2-project/mc2 repo`
+git clone https://github.com/mc2-project/mc2.git
+
 # Build a Docker image called `mc2_img`
 docker build -t mc2_img .
 
@@ -57,6 +60,21 @@ docker build -t mc2_img .
 docker run -it -v </absolute/path/to/mc2/playground>:/mc2/client/playground mc2_img /bin/bash
 ```
 
+### Installation via pulling an image
+If you prefer to pull the image instead, you can pull a pre-built image (~3 GB) from Docker Hub.
+
+```
+# Clone the `mc2-project/mc2 repo`
+git clone https://github.com/mc2-project/mc2.git
+
+# Pull the mc2_img from Docker Hub
+docker pull mc2project/mc2_img:v0.1.3
+
+# Run the container, mounting your playground to the container, and open a shell into the container
+docker run -it -v </absolute/path/to/mc2/playground>:/mc2/client/playground mc2_img /bin/bash
+```
+
+### Installation via build from source
 Alternatively, if you'd like to install MC<sup>2</sup> Client directly on your host, follow [these instructions](https://mc2-project.github.io/client-docs/install.html).
 
 ## Quickstart
