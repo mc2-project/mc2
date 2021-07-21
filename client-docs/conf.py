@@ -93,4 +93,6 @@ rst_prolog = """
 .. |cmd| replace:: mc2
 .. |python-package| replace:: mc2client
 .. |python-package-short| replace:: mc2
+.. |release_version| replace:: 0.1.3
+.. |docker-org| replace:: mc2project
 """
