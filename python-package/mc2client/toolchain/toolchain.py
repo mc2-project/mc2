@@ -74,7 +74,9 @@ def get_or_create_worker_nodes(config):
         # TODO: right now we always update the nodes even if the hash
         # matches. We could prompt the user for what they want to do here.
         runtime_hash = hash_runtime_conf(config["file_mounts"], config)
-        logger.info("get_or_create_worker_nodes: Updating files on worker nodes...")
+        logger.info(
+            "get_or_create_worker_nodes: Updating files on worker nodes..."
+        )
 
         init_commands = config["worker_setup_commands"]
 
@@ -86,7 +88,9 @@ def get_or_create_worker_nodes(config):
                 out.append("export MC2_HEAD_IP={}; {}".format(head_ip, cmd))
             return out
 
-        mc2_start_commands = _with_head_node_ip(config["worker_start_mc2_commands"])
+        mc2_start_commands = _with_head_node_ip(
+            config["worker_start_mc2_commands"]
+        )
 
         updaters = []
         for node in nodes:
@@ -127,7 +131,9 @@ def _bootstrap_config(config):
 
     importer = NODE_PROVIDERS.get(config["provider"]["type"])
     if not importer:
-        raise NotImplementedError("Unsupported provider {}".format(config["provider"]))
+        raise NotImplementedError(
+            "Unsupported provider {}".format(config["provider"])
+        )
 
     bootstrap_config, _ = importer()
     resolved_config = bootstrap_config(config)
@@ -152,7 +158,9 @@ def teardown_cluster(config_file):
                 {TAG_MC2_NODE_TYPE: NODE_TYPE_WORKER}
             )
 
-            head = provider.non_terminated_nodes({TAG_MC2_NODE_TYPE: NODE_TYPE_HEAD})
+            head = provider.non_terminated_nodes(
+                {TAG_MC2_NODE_TYPE: NODE_TYPE_HEAD}
+            )
 
             return head + workers
 
@@ -162,7 +170,9 @@ def teardown_cluster(config_file):
         with LogTimer("teardown_cluster: done."):
             while A:
                 logger.info(
-                    "teardown_cluster: Shutting down {} nodes...".format(len(A))
+                    "teardown_cluster: Shutting down {} nodes...".format(
+                        len(A)
+                    )
                 )
                 provider.terminate_nodes(A)
                 time.sleep(1)
@@ -191,7 +201,8 @@ def get_or_create_head_node(config):
         # is out of date
         if (
             head_node is None
-            or provider.node_tags(head_node).get(TAG_MC2_LAUNCH_CONFIG) != launch_hash
+            or provider.node_tags(head_node).get(TAG_MC2_LAUNCH_CONFIG)
+            != launch_hash
         ):
             # Shut down the head node if it is out of date
             if head_node is not None:
@@ -237,7 +248,9 @@ def get_or_create_head_node(config):
         remote_config["file_mounts"] = new_mounts
 
         # Now inject the rewritten config and SSH key into the head node
-        remote_config_file = tempfile.NamedTemporaryFile("w", prefix="mc2-bootstrap-")
+        remote_config_file = tempfile.NamedTemporaryFile(
+            "w", prefix="mc2-bootstrap-"
+        )
         remote_config_file.write(json.dumps(remote_config))
         remote_config_file.flush()
         config["file_mounts"].update(
@@ -277,7 +290,9 @@ def get_or_create_head_node(config):
 
         if updater.exitcode != 0:
             logger.error(
-                "get_or_create_head_node: Updating {} failed".format(head_node_ip)
+                "get_or_create_head_node: Updating {} failed".format(
+                    head_node_ip
+                )
             )
             sys.exit(1)
         logger.info(
@@ -321,7 +336,9 @@ def get_worker_node_ips(config_file):
 
     provider = get_node_provider(config["provider"], config["cluster_name"])
     try:
-        nodes = provider.non_terminated_nodes({TAG_MC2_NODE_TYPE: NODE_TYPE_WORKER})
+        nodes = provider.non_terminated_nodes(
+            {TAG_MC2_NODE_TYPE: NODE_TYPE_WORKER}
+        )
 
         if config.get("provider", {}).get("use_internal_ips", False) is True:
             return [provider.internal_ip(node) for node in nodes]
@@ -349,7 +366,9 @@ def _get_head_node(config, create_if_needed=False):
         return _get_head_node(config, create_if_needed=False)
     else:
         raise RuntimeError(
-            "Head node of cluster ({}) not found!".format(config["cluster_name"])
+            "Head node of cluster ({}) not found!".format(
+                config["cluster_name"]
+            )
         )
 
 

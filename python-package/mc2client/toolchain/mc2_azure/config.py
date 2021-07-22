@@ -59,7 +59,9 @@ def create_or_delete_resource_group(config, create):
         )
     else:
         logger.info("Deleting Resource Group: %s", resource_group)
-        delete_async_op = resource_client.resource_groups.delete(resource_group)
+        delete_async_op = resource_client.resource_groups.delete(
+            resource_group
+        )
         delete_async_op.wait()
 
 
@@ -129,7 +131,9 @@ def _configure_key_pair(config):
         except TypeError:
             raise Exception("Invalid config value for {}".format(key_type))
 
-        assert os.path.exists(key_path), "Could not find ssh key: {}".format(key_path)
+        assert os.path.exists(key_path), "Could not find ssh key: {}".format(
+            key_path
+        )
 
         if key_type == "ssh_public_key":
             with open(key_path, "r") as f:

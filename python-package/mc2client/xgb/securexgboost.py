@@ -99,7 +99,9 @@ class DMatrix(object):
         # Sort by username
         usernames, data = (
             list(x)
-            for x in zip(*sorted(zip(usernames, data), key=lambda pair: pair[0]))
+            for x in zip(
+                *sorted(zip(usernames, data), key=lambda pair: pair[0])
+            )
         )
 
         if isinstance(data, list):
@@ -111,7 +113,9 @@ class DMatrix(object):
             if encrypted:
                 args = "XGDMatrixCreateFromEncryptedFile"
                 for username, filename in zip(usernames, data):
-                    args = args + " username {} filename {}".format(username, filename)
+                    args = args + " username {} filename {}".format(
+                        username, filename
+                    )
                 args = args + " silent {}".format(int(silent))
                 sig, sig_len = create_client_signature(args)
 
@@ -141,7 +145,9 @@ class DMatrix(object):
                     out_sig_length = c_bst_ulong(response.sig_len)
 
                 args = "handle {}".format(handle.value.decode("utf-8"))
-                verify_enclave_signature(args, len(args), out_sig, out_sig_length)
+                verify_enclave_signature(
+                    args, len(args), out_sig, out_sig_length
+                )
 
             else:
                 raise NotImplementedError(
@@ -277,7 +283,9 @@ class DMatrix(object):
         feature_names : list or None
         """
         if self._feature_names is None:
-            self._feature_names = ["f{0}".format(i) for i in range(self.num_col())]
+            self._feature_names = [
+                "f{0}".format(i) for i in range(self.num_col())
+            ]
         return self._feature_names
 
     @property
@@ -361,9 +369,12 @@ class DMatrix(object):
 
             valid = ("int", "float", "i", "q")
             if not all(
-                isinstance(f, STRING_TYPES) and f in valid for f in feature_types
+                isinstance(f, STRING_TYPES) and f in valid
+                for f in feature_types
             ):
-                raise ValueError("All feature_names must be {int, float, i, q}")
+                raise ValueError(
+                    "All feature_names must be {int, float, i, q}"
+                )
         self._feature_types = feature_types
 
 
@@ -379,7 +390,9 @@ def verify_enclave_signature(data, size, sig, sig_len, increment_nonce=True):
     pem_key = _CONF["enclave_pk"]
     pem_key_len = _CONF["enclave_pk_size"]
     # Verify signature
-    _check_call(_LIB.verify_signature(pem_key, pem_key_len, arr, size, sig, sig_len))
+    _check_call(
+        _LIB.verify_signature(pem_key, pem_key_len, arr, size, sig, sig_len)
+    )
 
     if increment_nonce:
         _CONF["nonce_ctr"] += 1
@@ -444,7 +457,9 @@ class Booster(object):
         """
         for d in cache:
             if not isinstance(d, DMatrix):
-                raise TypeError("invalid cache item: {}".format(type(d).__name__))
+                raise TypeError(
+                    "invalid cache item: {}".format(type(d).__name__)
+                )
             self._validate_features(d)
 
         args = "XGBoosterCreate"
@@ -584,7 +599,9 @@ class Booster(object):
 
         """
         if not isinstance(dtrain, DMatrix):
-            raise TypeError("invalid training matrix: {}".format(type(dtrain).__name__))
+            raise TypeError(
+                "invalid training matrix: {}".format(type(dtrain).__name__)
+            )
         self._validate_features(dtrain)
 
         if fobj is None:
@@ -622,7 +639,9 @@ class Booster(object):
                 out_sig_length = c_bst_ulong(response.sig_len)
             verify_enclave_signature("", 0, out_sig, out_sig_length)
         else:
-            raise NotImplementedError("Custom objective functions not supported")
+            raise NotImplementedError(
+                "Custom objective functions not supported"
+            )
             # TODO(rishabh): We do not support custom objectives currently
             # pred = self.predict(dtrain)
             # grad, hess = fobj(pred, dtrain)
@@ -722,7 +741,9 @@ class Booster(object):
         if "current_user" in _CONF:
             username = _CONF["current_user"]
         else:
-            raise ValueError("Please set your username with the init_user() function")
+            raise ValueError(
+                "Please set your username with the init_user() function"
+            )
         option_mask = 0x00
         if output_margin:
             option_mask |= 0x01
@@ -808,11 +829,19 @@ class Booster(object):
 
                 if i != len(preds_list) - 1:
                     verify_enclave_signature(
-                        preds, size, out_sig, out_sig_length, increment_nonce=False
+                        preds,
+                        size,
+                        out_sig,
+                        out_sig_length,
+                        increment_nonce=False,
                     )
                 else:
                     verify_enclave_signature(
-                        preds, size, out_sig, out_sig_length, increment_nonce=True
+                        preds,
+                        size,
+                        out_sig,
+                        out_sig_length,
+                        increment_nonce=True,
                     )
 
             if decrypt:
@@ -1000,7 +1029,9 @@ class Booster(object):
         if "current_user" in _CONF:
             username = _CONF["current_user"]
         else:
-            raise ValueError("Please set your username with the init_user() function")
+            raise ValueError(
+                "Please set your username with the init_user() function"
+            )
 
         if isinstance(fname, STRING_TYPES):
             # Normalize file paths (otherwise signatures might differ)
@@ -1082,7 +1113,9 @@ class Booster(object):
         if need_close:
             fout.close()
 
-    def get_dump(self, fmap="", with_stats=False, dump_format="text", decrypt=True):
+    def get_dump(
+        self, fmap="", with_stats=False, dump_format="text", decrypt=True
+    ):
         """
         Returns the (encrypted) model dump as a list of strings.
         The model is encrypted with the user's symmetric key.
@@ -1119,7 +1152,10 @@ class Booster(object):
                 ftype = self.feature_types
 
             args = "XGBoosterDumpModelExWithFeatures booster_handle {} flen {} with_stats {} dump_format {}".format(
-                self.handle.value.decode("utf-8"), flen, int(with_stats), dump_format
+                self.handle.value.decode("utf-8"),
+                flen,
+                int(with_stats),
+                dump_format,
             )
             for i in range(flen):
                 args = args + " fname {} ftype {}".format(fname[i], ftype[i])
@@ -1163,7 +1199,10 @@ class Booster(object):
                 raise ValueError("No such file: {0}".format(fmap))
 
             args = "XGBoosterDumpModelEx booster_handle {} fmap {} with_stats {} dump_format {}".format(
-                self.handle.value.decode("utf-8"), fmap, int(with_stats), dump_format
+                self.handle.value.decode("utf-8"),
+                fmap,
+                int(with_stats),
+                dump_format,
             )
             sig, sig_len = create_client_signature(args)
 
@@ -1304,8 +1343,9 @@ class Booster(object):
         ]
 
         if importance_type not in allowed_importance_types:
-            msg = "importance_type mismatch, got '{}', expected one of " + repr(
-                allowed_importance_types
+            msg = (
+                "importance_type mismatch, got '{}', expected one of "
+                + repr(allowed_importance_types)
             )
             raise ValueError(msg.format(importance_type))
 
@@ -1405,7 +1445,9 @@ class Booster(object):
             "dart",
         }:
             raise ValueError(
-                "This method is not defined for Booster type {}".format(self.booster)
+                "This method is not defined for Booster type {}".format(
+                    self.booster
+                )
             )
 
         tree_ids = []
@@ -1460,7 +1502,10 @@ class Booster(object):
                     gains.append(float(stats[7]))
                     covers.append(float(stats[9]))
 
-        ids = [str(t_id) + "-" + str(n_id) for t_id, n_id in zip(tree_ids, node_ids)]
+        ids = [
+            str(t_id) + "-" + str(n_id)
+            for t_id, n_id in zip(tree_ids, node_ids)
+        ]
         df = DataFrame(
             {
                 "Tree": tree_ids,
@@ -1511,9 +1556,13 @@ class Booster(object):
                         + ", ".join(str(s) for s in my_missing)
                     )
 
-                raise ValueError(msg.format(self.feature_names, data.feature_names))
+                raise ValueError(
+                    msg.format(self.feature_names, data.feature_names)
+                )
 
-    def get_split_value_histogram(self, feature, fmap="", bins=None, as_pandas=True):
+    def get_split_value_histogram(
+        self, feature, fmap="", bins=None, as_pandas=True
+    ):
         """Get split value histogram of a feature
 
         Parameters
