@@ -4,10 +4,10 @@ name: build
 on:
   push:
     branches: 
-      - open-source
+      - master
   pull_request:
     branches:
-      - open-source
+      - master
   
 jobs:
 
