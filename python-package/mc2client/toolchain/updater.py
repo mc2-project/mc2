@@ -92,7 +92,9 @@ class SSHCommandRunner:
         ]
 
         return ["-i", self.ssh_private_key] + [
-            x for y in (["-o", "{}={}".format(k, v)] for k, v in OPTS) for x in y
+            x
+            for y in (["-o", "{}={}".format(k, v)] for k, v in OPTS)
+            for x in y
         ]
 
     def get_node_ip(self):
@@ -102,7 +104,9 @@ class SSHCommandRunner:
             return self.provider.external_ip(self.node_id)
 
     def wait_for_ip(self, deadline):
-        while time.time() < deadline and not self.provider.is_terminated(self.node_id):
+        while time.time() < deadline and not self.provider.is_terminated(
+            self.node_id
+        ):
             logger.info(self.log_prefix + "Waiting for IP...")
             ip = self.get_node_ip()
             if ip is not None:
@@ -163,7 +167,9 @@ class SSHCommandRunner:
             + ["{}@{}".format(self.ssh_user, self.ssh_ip)]
         )
         if cmd:
-            logger.info(self.log_prefix + "Running {}".format(" ".join(final_cmd)))
+            logger.info(
+                self.log_prefix + "Running {}".format(" ".join(final_cmd))
+            )
             final_cmd += with_interactive(cmd)
         else:
             # We do this because `-o ControlMaster` causes the `-N` flag to
@@ -183,10 +189,14 @@ class SSHCommandRunner:
                 time.sleep(10)
                 if num_tries > 3:
                     if exit_on_fail:
-                        quoted_cmd = " ".join(final_cmd[:-1] + [quote(final_cmd[-1])])
+                        quoted_cmd = " ".join(
+                            final_cmd[:-1] + [quote(final_cmd[-1])]
+                        )
                         # raise click.ClickException(
                         #     "Command failed: \n\n  {}\n".format(quoted_cmd)) from None
-                        raise Exception("Command failed: \n\n  {}\n".format(quoted_cmd))
+                        raise Exception(
+                            "Command failed: \n\n  {}\n".format(quoted_cmd)
+                        )
                     else:
                         # raise click.ClickException(
                         #     "SSH command Failed. See above for the output from the"
@@ -267,7 +277,9 @@ class NodeUpdater:
         self.node_id = node_id
         self.provider = provider
         self.file_mounts = {
-            remote: os.path.join(os.path.dirname(__file__), os.path.expanduser(local))
+            remote: os.path.join(
+                os.path.dirname(__file__), os.path.expanduser(local)
+            )
             for remote, local in file_mounts.items()
         }
         self.initialization_commands = initialization_commands
@@ -276,7 +288,9 @@ class NodeUpdater:
         self.runtime_hash = runtime_hash
 
     def run(self):
-        logger.info(self.log_prefix + "Updating to {}".format(self.runtime_hash))
+        logger.info(
+            self.log_prefix + "Updating to {}".format(self.runtime_hash)
+        )
         try:
             with LogTimer(
                 self.log_prefix + "Applied config {}".format(self.runtime_hash)
@@ -290,7 +304,9 @@ class NodeUpdater:
                 self.node_id, {TAG_MC2_NODE_STATUS: STATUS_UPDATE_FAILED}
             )
             logger.error(
-                self.log_prefix + "Error executing: {}".format(error_str) + "\n"
+                self.log_prefix
+                + "Error executing: {}".format(error_str)
+                + "\n"
             )
             # if isinstance(e, click.ClickException):
             #     return
@@ -317,9 +333,12 @@ class NodeUpdater:
                     remote_path += "/"
 
             with LogTimer(
-                self.log_prefix + "Synced {} to {}".format(local_path, remote_path)
+                self.log_prefix
+                + "Synced {} to {}".format(local_path, remote_path)
             ):
-                self.cmd_runner.run("mkdir -p {}".format(os.path.dirname(remote_path)))
+                self.cmd_runner.run(
+                    "mkdir -p {}".format(os.path.dirname(remote_path))
+                )
                 sync_cmd(local_path, remote_path)
 
     def wait_ready(self, deadline):
@@ -330,7 +349,9 @@ class NodeUpdater:
                 self.node_id
             ):
                 try:
-                    logger.debug(self.log_prefix + "Waiting for remote shell...")
+                    logger.debug(
+                        self.log_prefix + "Waiting for remote shell..."
+                    )
 
                     self.cmd_runner.run("uptime", timeout=5)
                     logger.debug("Uptime succeeded.")
@@ -343,7 +364,8 @@ class NodeUpdater:
                     #          e.returncode, " ".join(e.cmd)
                     #      )
                     logger.debug(
-                        self.log_prefix + "Node not up, retrying: {}".format(retry_str)
+                        self.log_prefix
+                        + "Node not up, retrying: {}".format(retry_str)
                     )
                     time.sleep(READY_CHECK_INTERVAL)
                     return
@@ -362,7 +384,9 @@ class NodeUpdater:
         if node_tags.get(TAG_MC2_RUNTIME_CONFIG) == self.runtime_hash:
             logger.info(
                 self.log_prefix
-                + "{} already up-to-date, skip to mc2 start".format(self.node_id)
+                + "{} already up-to-date, skip to mc2 start".format(
+                    self.node_id
+                )
             )
         else:
             self.provider.set_node_tags(
@@ -380,20 +404,28 @@ class NodeUpdater:
                 for cmd in self.initialization_commands:
                     self.cmd_runner.run(cmd)
 
-            with LogTimer(self.log_prefix + "Setup commands", show_status=True):
+            with LogTimer(
+                self.log_prefix + "Setup commands", show_status=True
+            ):
                 for cmd in self.setup_commands:
                     self.cmd_runner.run(cmd)
 
-        with LogTimer(self.log_prefix + "MC2 start commands", show_status=True):
+        with LogTimer(
+            self.log_prefix + "MC2 start commands", show_status=True
+        ):
             for cmd in self.mc2_start_commands:
                 self.cmd_runner.run(cmd)
 
     def rsync_up(self, source, target):
-        logger.info(self.log_prefix + "Syncing {} to {}...".format(source, target))
+        logger.info(
+            self.log_prefix + "Syncing {} to {}...".format(source, target)
+        )
         self.cmd_runner.run_rsync_up(source, target)
 
     def rsync_down(self, source, target):
-        logger.info(self.log_prefix + "Syncing {} from {}...".format(source, target))
+        logger.info(
+            self.log_prefix + "Syncing {} from {}...".format(source, target)
+        )
         self.cmd_runner.run_rsync_down(source, target)
 
 

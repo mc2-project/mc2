@@ -33,7 +33,10 @@ from .exceptions import (
     MC2ClientComputeError,
     MC2ClientConfigError,
 )
-from .rpc import attest_pb2, attest_pb2_grpc  # pylint: disable=no-name-in-module
+from .rpc import (
+    attest_pb2,
+    attest_pb2_grpc,
+)  # pylint: disable=no-name-in-module
 from .toolchain.node_provider import get_node_provider
 from .toolchain.updater import with_interactive
 from .toolchain.toolchain import (
@@ -148,10 +151,14 @@ def c_arr_to_list(cptr, length, dtype=np.uint8):
         np.intc: ctypes.c_int,
     }
     if dtype not in NUMPY_TO_CTYPES_MAPPING:
-        raise RuntimeError("Supported types: {}".format(NUMPY_TO_CTYPES_MAPPING.keys()))
+        raise RuntimeError(
+            "Supported types: {}".format(NUMPY_TO_CTYPES_MAPPING.keys())
+        )
     ctype = NUMPY_TO_CTYPES_MAPPING[dtype]
     if not isinstance(cptr, ctypes.POINTER(ctype)):
-        raise RuntimeError("expected {} pointer, got {}".format(ctype, type(cptr)))
+        raise RuntimeError(
+            "expected {} pointer, got {}".format(ctype, type(cptr))
+        )
     res = np.zeros(length, dtype=dtype)
     if not ctypes.memmove(
         res.ctypes.data,
@@ -269,7 +276,9 @@ def ctypes2numpy(cptr, length, dtype):
         np.uint8: ctypes.c_uint8,
     }
     if dtype not in NUMPY_TO_CTYPES_MAPPING:
-        raise RuntimeError("Supported types: {}".format(NUMPY_TO_CTYPES_MAPPING.keys()))
+        raise RuntimeError(
+            "Supported types: {}".format(NUMPY_TO_CTYPES_MAPPING.keys())
+        )
     ctype = NUMPY_TO_CTYPES_MAPPING[dtype]
     if not isinstance(cptr, ctypes.POINTER(ctype)):
         raise RuntimeError("expected {} pointer".format(ctype))
@@ -605,10 +614,14 @@ def generate_keypair(expiration=10 * 365 * 24 * 60 * 60):
     with open(private_key_path, "wb") as priv_key_file:
         priv_key_file.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
 
-    logger.info("Generated private key and outputted to {}".format(private_key_path))
+    logger.info(
+        "Generated private key and outputted to {}".format(private_key_path)
+    )
 
     # Generate the certificate signing request
-    ca_cert = crypto.load_certificate(crypto.FILETYPE_PEM, open(root_cert_path).read())
+    ca_cert = crypto.load_certificate(
+        crypto.FILETYPE_PEM, open(root_cert_path).read()
+    )
     ca_key = crypto.load_privatekey(
         crypto.FILETYPE_PEM, open(root_private_key_path).read()
     )
@@ -647,7 +660,9 @@ def generate_symmetric_key():
     if _CONF.get("general_config") is None:
         raise MC2ClientConfigError("Configuration not set")
 
-    symmetric_key_path = EnvYAML(_CONF["general_config"])["user"]["symmetric_key"]
+    symmetric_key_path = EnvYAML(_CONF["general_config"])["user"][
+        "symmetric_key"
+    ]
     if os.path.exists(symmetric_key_path):
         logger.warning(
             "Skipping symmetric key generation - key already exists at {}".format(
@@ -661,7 +676,9 @@ def generate_symmetric_key():
         symm_key.write(key)
 
     logger.info(
-        "Generated symmetric key and outputted to {}".format(symmetric_key_path)
+        "Generated symmetric key and outputted to {}".format(
+            symmetric_key_path
+        )
     )
 
 
@@ -674,7 +691,9 @@ def clear_cache():
     remove_cache_entry("public_keys")
 
 
-def encrypt_data(plaintext_file, encrypted_file, schema_file=None, enc_format="xgb"):
+def encrypt_data(
+    plaintext_file, encrypted_file, schema_file=None, enc_format="xgb"
+):
     """
     Encrypt a file in a certain format
 
@@ -701,13 +720,19 @@ def encrypt_data(plaintext_file, encrypted_file, schema_file=None, enc_format="x
 
     cleaned_format = "".join(enc_format.split()).lower()
 
-    symmetric_key_path = EnvYAML(_CONF["general_config"])["user"]["symmetric_key"]
+    symmetric_key_path = EnvYAML(_CONF["general_config"])["user"][
+        "symmetric_key"
+    ]
 
     if not os.path.exists(plaintext_file):
-        raise CryptoError("File to encrypt not found at {}".format(plaintext_file))
+        raise CryptoError(
+            "File to encrypt not found at {}".format(plaintext_file)
+        )
 
     if not os.path.exists(symmetric_key_path):
-        raise CryptoError("Symmetric key not found at {}".format(symmetric_key_path))
+        raise CryptoError(
+            "Symmetric key not found at {}".format(symmetric_key_path)
+        )
 
     result = ctypes.c_int()
     if cleaned_format == "xgb":
@@ -769,7 +794,9 @@ def decrypt_data(encrypted_file, plaintext_file, enc_format):
 
     cleaned_format = "".join(enc_format.split()).lower()
 
-    symmetric_key_path = EnvYAML(_CONF["general_config"])["user"]["symmetric_key"]
+    symmetric_key_path = EnvYAML(_CONF["general_config"])["user"][
+        "symmetric_key"
+    ]
 
     if not os.path.exists(symmetric_key_path):
         raise FileNotFoundError(
@@ -874,7 +901,8 @@ def upload_file(input_path, output_path, use_azure=True):
 
     if not _CONF["use_azure"] and use_azure:
         raise MC2ClientConfigError(
-            "Attempted to use Azure storage with" "node addresses manually configured"
+            "Attempted to use Azure storage with"
+            "node addresses manually configured"
         )
 
     if _CONF["use_azure"] and _CONF.get("azure_config") is None:
@@ -936,20 +964,25 @@ def download_file(input_path, output_path, use_azure=True):
 
     if not _CONF["use_azure"] and use_azure:
         raise MC2ClientConfigError(
-            "Attempted to use Azure storage with" "node addresses manually configured"
+            "Attempted to use Azure storage with"
+            "node addresses manually configured"
         )
 
     if _CONF["use_azure"] and _CONF.get("azure_config") is None:
         raise MC2ClientConfigError("Azure configuration not set")
 
     if use_azure:
-        logger.info("Downloading {} from Azure blob storage".format(input_path))
+        logger.info(
+            "Downloading {} from Azure blob storage".format(input_path)
+        )
         download(_CONF["azure_config"], input_path, output_path)
     else:  # use scp
         head = _CONF["head"]
         if head["ip"] == "0.0.0.0" or head["ip"] == "127.0.0.1":
             logger.info(
-                "Using local deployment. Copying data from {}".format(input_path)
+                "Using local deployment. Copying data from {}".format(
+                    input_path
+                )
             )
             if os.path.isdir(input_path):
                 shutil.copytree(input_path, output_path)
@@ -961,7 +994,9 @@ def download_file(input_path, output_path, use_azure=True):
                     input_path, head.get("identity", head["ip"])
                 )
             )
-            ssh = _createSSHClient(head["ip"], 22, head["username"], head["ssh_key"])
+            ssh = _createSSHClient(
+                head["ip"], 22, head["username"], head["ssh_key"]
+            )
             scp = SCPClient(ssh.get_transport())
             scp.get(input_path, output_path, recursive=True)
 
@@ -1063,7 +1098,9 @@ def run_remote_cmds(head_cmds, worker_cmds):
                 logger.info(f"Running '{cmd}' locally")
 
                 # Append the shell PID to the list associated with the node IP
-                running_processes.setdefault(node["ip"], []).append((cmd, ps.pid))
+                running_processes.setdefault(node["ip"], []).append(
+                    (cmd, ps.pid)
+                )
         else:
             # We're using a remote deployment - SSH into the node
             try:
@@ -1169,7 +1206,9 @@ def stop_remote_cmds():
                 node = node[0]
 
             # SSH to the node
-            ssh = _createSSHClient(node["ip"], 22, node["username"], node["ssh_key"])
+            ssh = _createSSHClient(
+                node["ip"], 22, node["username"], node["ssh_key"]
+            )
             for (cmd, pid) in processes:
                 # This command sends the SIGTERM signal to all processes
                 # whose SID matches the provided PID
@@ -1205,7 +1244,9 @@ def configure_job(config):
     if not simulation_mode:
         mrsigner_path = attestation_config["mrsigner"]
         if not os.path.exists(mrsigner_path):
-            raise FileNotFoundError("Enclave signing key not found at:", mrsigner_path)
+            raise FileNotFoundError(
+                "Enclave signing key not found at:", mrsigner_path
+            )
         else:
             enclave_signer_pem = open(mrsigner_path).read()
     else:
@@ -1217,14 +1258,18 @@ def configure_job(config):
     # Get the user's symmetric key
     symm_key_path = user_config["symmetric_key"]
     if not os.path.exists(symm_key_path):
-        raise FileNotFoundError("Symmetric key not found at {}".format(symm_key_path))
+        raise FileNotFoundError(
+            "Symmetric key not found at {}".format(symm_key_path)
+        )
     else:
         user_symm_key = open(symm_key_path, "rb").read()
 
     # Get the user's private keyfile path
     priv_key_path = user_config["private_key"]
     if not os.path.exists(priv_key_path):
-        raise FileNotFoundError("Private key not found at {}".format(priv_key_path))
+        raise FileNotFoundError(
+            "Private key not found at {}".format(priv_key_path)
+        )
 
     # Sign the client's symmetric key
     sig = sign_data(priv_key_path, user_symm_key)
@@ -1261,14 +1306,18 @@ def _attest(head_address, simulation_mode, mrsigner):
     cached_pks = get_cache_entry("public_keys") or []
 
     if set(node_ips) == set(cached_attested_nodes):
-        assert len(cached_attested_nodes) == len(cached_pks), "Invalid cache state"
+        assert len(cached_attested_nodes) == len(
+            cached_pks
+        ), "Invalid cache state"
         _CONF["enclave_pks"] = [base64.b64decode(pk) for pk in cached_pks]
     else:
         # Enclaves have not all been attested, query head node for attestation
         # report
         with grpc.insecure_channel(head_address) as channel:
             stub = attest_pb2_grpc.ClientToEnclaveStub(channel)
-            response = stub.GetRemoteEvidence(attest_pb2.AttestationStatus(status=0))
+            response = stub.GetRemoteEvidence(
+                attest_pb2.AttestationStatus(status=0)
+            )
 
         # Extract evidence list from response
         evidence_list = response.evidences
@@ -1304,7 +1353,8 @@ def _attest(head_address, simulation_mode, mrsigner):
         # Cache the attestation information
         add_cache_entry("attested_nodes", node_ips)
         add_cache_entry(
-            "public_keys", [base64.b64encode(pk).decode("ascii") for pk in pk_list]
+            "public_keys",
+            [base64.b64encode(pk).decode("ascii") for pk in pk_list],
         )
 
 

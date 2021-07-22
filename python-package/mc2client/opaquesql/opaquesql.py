@@ -29,9 +29,13 @@ def run(script):
     try:
         with grpc.insecure_channel(head_address) as channel:
             stub = opaquesql_pb2_grpc.ListenerStub(channel)
-            response = stub.ReceiveQuery(opaquesql_pb2.QueryRequest(request=code))
+            response = stub.ReceiveQuery(
+                opaquesql_pb2.QueryRequest(request=code)
+            )
     except grpc.RpcError as rpc_error:
-        logger.error("When submitting a query to Opaque SQL, " + rpc_error.details())
+        logger.error(
+            "When submitting a query to Opaque SQL, " + rpc_error.details()
+        )
         sys.exit(1)
 
     if response.status.status != 0:

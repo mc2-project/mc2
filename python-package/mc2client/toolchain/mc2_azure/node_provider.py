@@ -165,10 +165,16 @@ class AzureNodeProvider(NodeProvider):
             ["node-1", "node-2"]
         """
         nodes = self._get_filtered_nodes(tag_filters=tag_filters)
-        return [k for k, v in nodes.items() if not v["status"].startswith("deallocat")]
+        return [
+            k
+            for k, v in nodes.items()
+            if not v["status"].startswith("deallocat")
+        ]
 
     def get_head_node(self):
-        return self.non_terminated_nodes({TAG_MC2_NODE_TYPE: NODE_TYPE_HEAD})[0]
+        return self.non_terminated_nodes({TAG_MC2_NODE_TYPE: NODE_TYPE_HEAD})[
+            0
+        ]
 
     def get_worker_nodes(self):
         return self.non_terminated_nodes({TAG_MC2_NODE_TYPE: NODE_TYPE_WORKER})
@@ -238,7 +244,8 @@ class AzureNodeProvider(NodeProvider):
                 "mode": DeploymentMode.incremental,
                 "template": template,
                 "parameters": {
-                    key: {"value": value} for key, value in template_params.items()
+                    key: {"value": value}
+                    for key, value in template_params.items()
                 },
             }
         }
@@ -316,7 +323,9 @@ class AzureNodeProvider(NodeProvider):
                     break
                 except Exception as e:
                     if num_tries > 3:
-                        logger.warning("Failed to delete public ip: {}".format(e))
+                        logger.warning(
+                            "Failed to delete public ip: {}".format(e)
+                        )
                     else:
                         time.sleep(10)
                         num_tries += 1
