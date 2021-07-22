@@ -2,14 +2,18 @@ import mc2client.xgb as xgb
 
 # Load training data
 # TODO: fill in the path to your training data
-dtrain = xgb.DMatrix({"user1": "/root/data/securexgb_train.csv.enc?format=csv&label_column=9"})
+dtrain = xgb.DMatrix(
+    {"user1": "/root/data/securexgb_train.csv.enc?format=csv&label_column=9"}
+)
 
 # Get number of columns in training data
 training_num_cols = dtrain.num_col()
 
 # Load test data
 # TODO: fill in the path to your test data
-dtest = xgb.DMatrix({"user1": "/root/data/securexgb_test.csv.enc?format=csv&label_column=9"})
+dtest = xgb.DMatrix(
+    {"user1": "/root/data/securexgb_test.csv.enc?format=csv&label_column=9"}
+)
 
 # Get number of columns in test data
 test_num_col = dtest.num_col()
@@ -39,7 +43,12 @@ bst.save_model("/root/results/xgb.model")
 feature_map = bst.get_fscore()
 
 # Get features
-sorted_features = {feature: importance for feature, importance in sorted(feature_map.items(), key=lambda item: item[1], reverse=True)}
+sorted_features = {
+    feature: importance
+    for feature, importance in sorted(
+        feature_map.items(), key=lambda item: item[1], reverse=True
+    )
+}
 
 # Get encrypted predictions
 predictions = bst.predict(dtest)[0]
