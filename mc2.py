@@ -26,7 +26,9 @@ subparsers = parser.add_subparsers(help="Command to run.", dest="command")
 parser_configure = subparsers.add_parser(
     "configure", help="Set the path to your config file"
 )
-parser_configure.add_argument("config_path", type=str, help="Path to MC² config file")
+parser_configure.add_argument(
+    "config_path", type=str, help="Path to MC² config file"
+)
 
 # -------------Init--------------------
 parser_init = subparsers.add_parser(
@@ -42,7 +44,9 @@ parser_start = subparsers.add_parser(
 )
 
 # -------------Upload----------------
-parser_upload = subparsers.add_parser("upload", help="Encrypt and upload data.")
+parser_upload = subparsers.add_parser(
+    "upload", help="Encrypt and upload data."
+)
 
 # -------------Run--------------------
 parser_run = subparsers.add_parser(
@@ -55,10 +59,14 @@ parser_download = subparsers.add_parser(
 )
 
 # -------------Stop-------------------
-parser_stop = subparsers.add_parser("stop", help="Stop previously started service")
+parser_stop = subparsers.add_parser(
+    "stop", help="Stop previously started service"
+)
 
 # -------------Teardown---------------
-parser_teardown = subparsers.add_parser("teardown", help="Teardown Azure resources")
+parser_teardown = subparsers.add_parser(
+    "teardown", help="Teardown Azure resources"
+)
 
 if __name__ == "__main__":  # noqa: C901
     args = parser.parse_args()
@@ -164,7 +172,9 @@ if __name__ == "__main__":  # noqa: C901
 
                 mc2.encrypt_data(data[i], encrypted_data[i], schemas[i], "sql")
             else:
-                raise Exception("Specified format {} not supported".format(enc_format))
+                raise Exception(
+                    "Specified format {} not supported".format(enc_format)
+                )
 
             # Transfer data
             filename = os.path.basename(encrypted_data[i])
@@ -225,7 +235,9 @@ if __name__ == "__main__":  # noqa: C901
             elif enc_format == "sql":
                 mc2.decrypt_data(local_result, local_result + ".dec", "sql")
             else:
-                raise Exception("Specified format {} not supported".format(enc_format))
+                raise Exception(
+                    "Specified format {} not supported".format(enc_format)
+                )
 
             if os.path.isdir(local_result):
                 shutil.rmtree(local_result)

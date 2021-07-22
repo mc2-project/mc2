@@ -74,8 +74,8 @@ def create_storage(config):
     storage_name = config["storage_name"]
 
     storage_client = get_client_from_cli_profile(StorageManagementClient)
-    availability_result = storage_client.storage_accounts.check_name_availability(
-        storage_name
+    availability_result = (
+        storage_client.storage_accounts.check_name_availability(storage_name)
     )
 
     if not availability_result.name_available:
@@ -90,7 +90,11 @@ def create_storage(config):
     poller = storage_client.storage_accounts.create(
         rg_name,
         storage_name,
-        {"location": location, "kind": "StorageV2", "sku": {"name": "Standard_ZRS"}},
+        {
+            "location": location,
+            "kind": "StorageV2",
+            "sku": {"name": "Standard_ZRS"},
+        },
     )
 
     # Long-running operations return a poller object; calling poller.result()
@@ -147,7 +151,9 @@ def get_blob_service_client(config):
             storage_name, keys.keys[0].value
         )
     )
-    blob_service_client = BlobServiceClient.from_connection_string(conn_str=conn_string)
+    blob_service_client = BlobServiceClient.from_connection_string(
+        conn_str=conn_string
+    )
     return blob_service_client
 
 

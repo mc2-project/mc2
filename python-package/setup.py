@@ -36,14 +36,19 @@ if not os.path.exists(build_path):
 
 # Call CMake and then Make (number of threads is equal to the number of
 # physical CPU cores)
-subprocess.check_call(["cmake", os.path.join(build_path, "../")], cwd=build_path)
-subprocess.check_call(["make", "-j", str(multiprocessing.cpu_count())], cwd=build_path)
+subprocess.check_call(
+    ["cmake", os.path.join(build_path, "../")], cwd=build_path
+)
+subprocess.check_call(
+    ["make", "-j", str(multiprocessing.cpu_count())], cwd=build_path
+)
 
 # ---- Generate flatbuffers files ----
 
 config_fb_path = os.path.join(setup_path, "mc2client/toolchain/flatbuffers")
 flatc_path = os.path.join(
-    setup_path, "../src/build/_deps/mc2_serialization-build/flatbuffers/bin/flatc"
+    setup_path,
+    "../src/build/_deps/mc2_serialization-build/flatbuffers/bin/flatc",
 )
 schemas_path = os.path.join(
     setup_path, "../src/build/_deps/mc2_serialization-src/src/flatbuffers/"
@@ -55,12 +60,16 @@ schemas = [
 ]
 for schema in schemas:
     schema_path = schemas_path + schema
-    subprocess.Popen([flatc_path, "--python", "-o", config_fb_path, schema_path])
+    subprocess.Popen(
+        [flatc_path, "--python", "-o", config_fb_path, schema_path]
+    )
 subprocess.Popen(["chmod", "a+rx", config_fb_path + "/tuix"])
 
 # ---- Install Opaque Client----
 
-lib_path = [os.path.relpath(os.path.join(setup_path, "../src/build/libmc2client.so"))]
+lib_path = [
+    os.path.relpath(os.path.join(setup_path, "../src/build/libmc2client.so"))
+]
 
 setup(
     name="mc2client",
@@ -92,7 +101,10 @@ print("Configuring shell for MC2 Client...\n")
 
 home_path = os.path.abspath(os.path.join(setup_path, "../"))
 # Terminal shell initialization scripts to support
-shell_paths = [os.path.expanduser("~/.profile"), os.path.expanduser("~/.bashrc")]
+shell_paths = [
+    os.path.expanduser("~/.profile"),
+    os.path.expanduser("~/.bashrc"),
+]
 
 
 def set_path(path):

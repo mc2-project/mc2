@@ -4,10 +4,10 @@ name: build
 on:
   push:
     branches: 
-      - master
+      - open-source
   pull_request:
     branches:
-      - master
+      - open-source
   
 jobs:
 
@@ -93,29 +93,31 @@ jobs:
         run: cd main/python-package/tests; pytest
         shell: bash
 
-
-  # # Set the job key. The key is displayed as the job name
-  # # when a job name is not provided
-  # super-lint:
-  #   # Name the Job
-  #   name: Lint code base
-  #   # Set the type of machine to run on
-  #   runs-on: ubuntu-18.04
-  # 
-  #   steps:
-  #     # Checks out a copy of your repository on the ubuntu-18.04 machine
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-  # 
-  #     # Runs the Super-Linter action
-  #     - name: Run Super-Linter
-  #       uses: github/super-linter@v3
-  #       env:
-  #         DEFAULT_BRANCH: master
-  #         VALIDATE_JSCPD: false
-  #         VALIDATE_BASH: false
-  #         VALIDATE_PROTOBUF: false
+  lint:
+    # Name the Job
+    name: Lint code base
+    # Set the type of machine to run on
+    runs-on: ubuntu-18.04
   
+    steps:
+      # Checks out a copy of your repository on the ubuntu-18.04 machine
+      - name: Checkout code
+        uses: actions/checkout@v2
+  
+      # Runs the Super-Linter action
+      - name: Run Super-Linter
+        uses: github/super-linter@v4.5.1
+        env:
+          DEFAULT_BRANCH: master
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FILTER_REGEX_EXCLUDE: .*src/include/(csv.hpp|json.hpp|base64.h)
+
+          LINTER_RULES_PATH: /
+          VALIDATE_CLANG_FORMAT: true
+          VALIDATE_PYTHON_BLACK: true
+          PYTHON_BLACK_CONFIG_FILE: pyproject.toml
+          VALIDATE_PYTHON_FLAKE8: true
+          PYTHON_FLAKE8_CONFIG_FILE: .flake8
 
   # Build documentation
   docs:

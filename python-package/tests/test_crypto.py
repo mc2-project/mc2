@@ -25,8 +25,12 @@ def config(tmp_path):
     config["user"]["symmetric_key"] = test_symm_key
 
     # Point to root certificate
-    config["user"]["root_private_key"] = os.path.join(tests_dir, "keys/root.pem")
-    config["user"]["root_certificate"] = os.path.join(tests_dir, "keys/root.crt")
+    config["user"]["root_private_key"] = os.path.join(
+        tests_dir, "keys/root.pem"
+    )
+    config["user"]["root_certificate"] = os.path.join(
+        tests_dir, "keys/root.crt"
+    )
 
     test_config_path = os.path.join(tmp_path, "config.yaml")
 

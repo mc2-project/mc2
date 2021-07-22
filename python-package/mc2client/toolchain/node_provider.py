@@ -18,7 +18,9 @@ def import_azure():
 def load_azure_example_config():
     from . import mc2_azure
 
-    return os.path.join(os.path.dirname(mc2_azure.__file__), "example-full.yaml")
+    return os.path.join(
+        os.path.dirname(mc2_azure.__file__), "example-full.yaml"
+    )
 
 
 NODE_PROVIDERS = {
@@ -38,7 +40,9 @@ def load_class(path):
     """
     class_data = path.split(".")
     if len(class_data) < 2:
-        raise ValueError("You need to pass a valid path like mymodule.provider_class")
+        raise ValueError(
+            "You need to pass a valid path like mymodule.provider_class"
+        )
     module_path = ".".join(class_data[:-1])
     class_str = class_data[-1]
     module = importlib.import_module(module_path)

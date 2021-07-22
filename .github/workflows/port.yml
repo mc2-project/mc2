@@ -1,0 +1,61 @@
+name: Port changes to open source
+
+# Run this workflow every time a new commit pushed to your repository
+on:
+  push:
+    branches: 
+      - open-source
+
+jobs:
+
+  port:
+    name: Create new branch with changes in mc2-project/mc2
+    # Define the OS to run on
+    runs-on: ubuntu-18.04
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps: 
+      - name: Checkout closed source code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+          ref: open-source
+          path: closed-source
+
+      - name: Checkout open source code
+        uses: actions/checkout@v2
+        with:
+          repository: mc2-project/mc2
+          submodules: true
+          path: open-source
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Set new branch name
+        run: |
+            cd closed-source
+            git_hash=$(git rev-parse --short "$GITHUB_SHA")
+            echo BRANCH=update-$git_hash >> $GITHUB_ENV
+
+      - name: Create new branch on open source
+        run: |
+            cd open-source
+            git checkout -b ${{ env.BRANCH }}
+
+      - name: Port over new changes and commit
+        run: |
+            cp -r closed-source/* open-source
+            cp -r closed-source/.github/* open-source/.github/
+            cd open-source
+            git config --local user.email "ci-bot+1@opaque.co"
+            git config --local user.name "MC2 Bot"
+            git add .
+            git commit -m "Changes in ${GITHUB_SHA} triggered this build" -a || true
+
+      - name: Push changes to open source branch
+        uses: ad-m/github-push-action@master
+        with:
+          branch: ${{ env.BRANCH }}
+          directory: open-source
+          github_token: ${{ secrets.MC2_BOT_PAT }}
+          repository: mc2-project/mc2
