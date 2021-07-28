@@ -43,6 +43,7 @@ To install |platform| Client, you'll need to be running Ubuntu 18.04. Ubuntu 16.
 1. Install dependencies.
 
 .. code-block:: bash
+    :substitutions:
 
     # CMake
     wget https://github.com/Kitware/CMake/releases/download/v3.15.6/cmake-3.15.6-Linux-x86_64.sh
