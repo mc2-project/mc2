@@ -71,11 +71,16 @@ lib_path = [
     os.path.relpath(os.path.join(setup_path, "../src/build/libmc2client.so"))
 ]
 
+# Get Python package dependencies
+# https://stackoverflow.com/a/14399775
+with open("../requirements.txt") as f:
+    required = f.read().splitlines()
+
 setup(
     name="mc2client",
     version="0.0.1",
     description="MC2 Client Python Package",
-    #  install_requires=["numpy"],
+    install_requires=required,
     zip_safe=False,
     packages=find_packages(),
     package_data={
