@@ -773,7 +773,7 @@ def encrypt_data(
 
 def decrypt_data(encrypted_file, plaintext_file, enc_format):
     """
-    Encrypt a file in a certain format
+    Decrypt a file in a certain format
 
     Parameters
     ----------
