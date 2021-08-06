@@ -57,7 +57,7 @@ To install |platform| Client, you'll need to be running Ubuntu 18.04. Ubuntu 16.
     echo "deb [arch=amd64] https://packages.microsoft.com/ubuntu/18.04/prod bionic main" | sudo tee /etc/apt/sources.list.d/msprod.list && \
     wget -qO - https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add - && \
     sudo apt update
-    sudo apt -y install clang-8 libssl-dev gdb libsgx-enclave-common libsgx-quote-ex libprotobuf10 libsgx-dcap-ql libsgx-dcap-ql-dev az-dcap-client open-enclave=0.12.0
+    sudo apt -y install clang-8 libssl-dev gdb libsgx-enclave-common libsgx-quote-ex libprotobuf10 libsgx-dcap-ql libsgx-dcap-ql-dev az-dcap-client open-enclave=0.17.1
 
     # Azure CLI
     curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
