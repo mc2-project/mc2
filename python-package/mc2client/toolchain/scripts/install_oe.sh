@@ -27,7 +27,7 @@ elif [[ $(lsb_release -rs) == "18.04" ]]; then
     sudo ./sgx_linux_x64_driver_1.36.2.bin
 
 	# Install the Intel and Open Enclave packages and dependencies
-	sudo apt -y install clang-7 libssl-dev gdb libsgx-enclave-common libsgx-enclave-common-dev libprotobuf10 libsgx-dcap-ql libsgx-dcap-ql-dev az-dcap-client open-enclave=0.12.0
+    sudo apt -y install clang-8 libssl-dev gdb libsgx-enclave-common libsgx-quote-ex libprotobuf10 libsgx-dcap-ql libsgx-dcap-ql-dev az-dcap-client open-enclave=0.17.1
 
 	# Configure OE environment variables
 	echo "source /opt/openenclave/share/openenclave/openenclaverc" >> ~/.bashrc
@@ -54,8 +54,7 @@ elif [[ $(lsb_release -rs) == "16.04" ]]; then
     sudo ./sgx_linux_x64_driver_1.36.2.bin
 
 	# Install the Intel and Open Enclave packages and dependencies
-    # TODO: upgrade to OE 0.12 when Opaque supports it
-	sudo apt -y install clang-7 libssl-dev gdb libsgx-enclave-common libsgx-enclave-common-dev libprotobuf9v5 libsgx-dcap-ql libsgx-dcap-ql-dev az-dcap-client open-enclave=0.12.0
+    sudo apt -y install clang-8 libssl-dev gdb libsgx-enclave-common libsgx-quote-ex libprotobuf10 libsgx-dcap-ql libsgx-dcap-ql-dev az-dcap-client open-enclave=0.17.1
 
 	# Configure OE environment variables
 	echo "source /opt/openenclave/share/openenclave/openenclaverc" >> ~/.bashrc
