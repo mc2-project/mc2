@@ -16,6 +16,7 @@ user:
     #
     # `mc2 init` will not overwrite anything at this path
     private_key: keys/user1.pem
+    public_key: keys/user1.pub
     certificate: keys/user1.crt
 
     # Path to CA certificate and private key
