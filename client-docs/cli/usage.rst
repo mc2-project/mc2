@@ -24,14 +24,14 @@ Once you've populated a YAML file with your desired parameters, configure |platf
 
 Generating Keys
 ---------------
-If you don't already have a keypair and/or a symmetric key, you'll want to generate them so that you can interact with |platform| cloud compute services in a cryptographically secure manner. |platform| uses your certificate and private key to authenticate you to |platform| compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn't see it in plaintext..
+If you don't already have a keypair and/or a symmetric key, you'll want to generate them so that you can interact with |platform| cloud compute services in a cryptographically secure manner. |platform| uses your keypair to authenticate you to |platform| compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn't see it in plaintext..
 
-You can generate a certificate and corresponding private key, and a symmetric key, through the CLI. You should have specified paths for your certificate, private key, and symmetric key during configuration. If something already exists at either the certificate or private key path, |platform| Client will skip generating the certificate and private key. If something already exists at the symmetric key path, |platform| Client will skip generating the symmetric key.
+You can generate a keypair, corresponding certificate, and a symmetric key through the CLI. You should have specified paths for your private key, public key, certificate, and symmetric key during configuration. If something already exists at either the private key, public key, or certificate path, |platform| Client will skip generating the keypair and corresponding certificate. If something already exists at the symmetric key path, |platform| Client will skip generating the symmetric key.
 
 .. code-block:: bash
    :substitutions:
 
-    # Generate a certificate, corresponding private key, and symmetric key
+    # Generate a keypair, corresponding certificate, and symmetric key
     # If something exists at any paths specified in the config,
     # |platform| Client will skip generation.
     $ |cmd| init

@@ -12,9 +12,11 @@ We'll need to perform some configuration for the user in the ``user`` section of
 
 - ``symmetric_key`` : path to your symmetric key. If you don't yet have a symmetric key, you can ask MC\ :sup:`2` Client to generate a key for you (see :ref:`Generating Keys`). MC\ :sup:`2` Client will look to this path for your key when encrypting and decrypting your data.
 
-- ``private_key`` : path to your private key. If you don't yet have a private key, you can ask MC\ :sup:`2` Client to generate a private key/certificate for you (see :ref:`Generating Keys`). MC\ :sup:`2` Client will use your private key to sign messages sent to the cloud.
+- ``private_key`` : path to your private key. If you don't yet have a private key, you can ask MC\ :sup:`2` Client to generate a keypair/certificate for you (see :ref:`Generating Keys`). MC\ :sup:`2` Client will use your private key to sign messages sent to the cloud.
 
-- ``certificate`` : path to your certificate. if you don't yet have a certificate, you can ask MC\ :sup:`2` Client to generate a certificate/private key for you (see :ref:`Generating Keys`). MC\ :sup:`2` Client will use your certificate to authenticate you to the cloud.
+- ``public_key`` : path to your public key. If you don't yet have a public key, you can ask MC\ :sup:`2` Client to generate a keypair/certificate for you (see :ref:`Generating Keys`). MC\ :sup:`2` Client will use your public key to authenticate you to the cloud.
+
+- ``certificate`` : path to your certificate. If you don't yet have a certificate, you can ask MC\ :sup:`2` Client to generate a keypair/certificate for you (see :ref:`Generating Keys`). MC\ :sup:`2` Client will use your certificate to authenticate you to the cloud.
 
 - ``root_private_key`` : path to the Certificate Authority's private key. MC\ :sup:`2` Client uses the CA's private key to generate a certificate for you. The MC\ :sup:`2` compute service should also be aware of the CA private key.
 
