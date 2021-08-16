@@ -167,9 +167,9 @@
 </section>
 <section id="generating-keys">
 <h2>Generating Keys<a class="headerlink" href="#generating-keys" title="Permalink to this headline">¶</a></h2>
-<p>If you don’t already have a keypair and/or a symmetric key, you’ll want to generate them so that you can interact with MC<sup>2</sup> cloud compute services in a cryptographically secure manner. MC<sup>2</sup> uses your certificate and private key to authenticate you to MC<sup>2</sup> compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn’t see it in plaintext..</p>
-<p>You can generate a certificate and corresponding private key, and a symmetric key, through the CLI. You should have specified paths for your certificate, private key, and symmetric key during configuration. If something already exists at either the certificate or private key path, MC<sup>2</sup> Client will skip generating the certificate and private key. If something already exists at the symmetric key path, MC<sup>2</sup> Client will skip generating the symmetric key.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> <span class="c1"># Generate a certificate, corresponding private key, and symmetric key</span>
+<p>If you don’t already have a keypair and/or a symmetric key, you’ll want to generate them so that you can interact with MC<sup>2</sup> cloud compute services in a cryptographically secure manner. MC<sup>2</sup> uses your keypair to authenticate you to MC<sup>2</sup> compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn’t see it in plaintext..</p>
+<p>You can generate a keypair, corresponding certificate, and a symmetric key through the CLI. You should have specified paths for your private key, public key, certificate, and symmetric key during configuration. If something already exists at either the private key, public key, or certificate path, MC<sup>2</sup> Client will skip generating the keypair and corresponding certificate. If something already exists at the symmetric key path, MC<sup>2</sup> Client will skip generating the symmetric key.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> <span class="c1"># Generate a keypair, corresponding certificate, and symmetric key</span>
  <span class="c1"># If something exists at any paths specified in the config,</span>
  <span class="c1"># MC2 Client will skip generation.</span>
  $ mc2 init

@@ -139,12 +139,13 @@ All together, the configuration file should look something like the following wh
       # `|platform| init` will not overwrite anything at this path
       symmetric_key: ${|platform_uppercase|_CLIENT_HOME}/quickstart/keys/user1_sym.key
 
-      # Path to your private key and certificate
-      # If you don't have a private key / certificate, specify paths here
+      # Path to your keypair and certificate
+      # If you don't have a keypair / certificate, specify paths here
       # and run `|platform| init` to generate a keypair
       #
       # `|platform| init` will not overwrite anything at this path
       private_key: ${|platform_uppercase|_CLIENT_HOME}/quickstart/keys/user1.pem
+      public_key: ${|platform_uppercase|_CLIENT_HOME}/quickstart/keys/user1.pub
       certificate: ${|platform_uppercase|_CLIENT_HOME}/quickstart/keys/user1.crt
 
       # Path to CA certificate and private key

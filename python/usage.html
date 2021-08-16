@@ -171,9 +171,9 @@
 </section>
 <section id="key-generation">
 <h2>Key Generation<a class="headerlink" href="#key-generation" title="Permalink to this headline">¶</a></h2>
-<p>If you don’t already have a keypair and/or a symmetric key, you’ll want to generate them so that you can interact with MC<sup>2</sup> cloud compute services in a cryptographically secure manner. MC<sup>2</sup> uses your certificate and private key to authenticate you to MC<sup>2</sup> compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn’t see it in plaintext..</p>
-<p>MC<sup>2</sup> Client provides a function to generate a certificate and corresponding private key, and a function to generate a symmetric key. You should have specified paths for your certificate, private key, and symmetric key during configuration. These functions will output the certificate, private key, and symmetric key to these paths.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="c1"># Generate a certificate and corresponding private key</span>
+<p>If you don’t already have a keypair and/or a symmetric key, you’ll want to generate them so that you can interact with MC<sup>2</sup> cloud compute services in a cryptographically secure manner. MC<sup>2</sup> uses your keypair and certificate to authenticate you to MC<sup>2</sup> compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn’t see it in plaintext..</p>
+<p>MC<sup>2</sup> Client provides a function to generate a keypair and corresponding certificate as well as a function to generate a symmetric key. You should have specified paths for your private key, public key, certificate, and symmetric key during configuration. These functions will output the private key, public key, certificate, and symmetric key to these paths.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="c1"># Generate a keypair and corresponding certificate</span>
  <span class="n">mc2</span><span class="o">.</span><span class="n">generate_keypair</span><span class="p">()</span>
 
  <span class="c1"># Generate a symmetric key</span>
