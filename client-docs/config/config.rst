@@ -2,7 +2,7 @@ Global Configuration
 ====================
 .. _conf:
 
-Before using MC\ :sup:`2` Client, you'll need to perform some configuration by specifying parameters in a YAML file. An example YAML file can be found `here <https://github.com/mc2-project/mc2/blob/master/demo/config.yaml>`_, and has also been copied at the bottom of this page. We describe the various parameters below.
+Before using |platform| Client, you'll need to perform some configuration by specifying parameters in a YAML file. An example YAML file can be found `here <https://github.com/mc2-project/mc2/blob/master/demo/config.yaml>`_, and has also been copied at the bottom of this page. We describe the various parameters below.
 
 User Configuration
 ------------------
@@ -10,15 +10,17 @@ We'll need to perform some configuration for the user in the ``user`` section of
 
 - ``username`` : your username. This username will be used for certificate generation and authentication purposes.
 
-- ``symmetric_key`` : path to your symmetric key. If you don't yet have a symmetric key, you can ask MC\ :sup:`2` Client to generate a key for you (see :ref:`Generating Keys`). MC\ :sup:`2` Client will look to this path for your key when encrypting and decrypting your data.
+- ``symmetric_key`` : path to your symmetric key. If you don't yet have a symmetric key, you can ask |platform| Client to generate a key for you (see :ref:`Generating Keys`). |platform| Client will look to this path for your key when encrypting and decrypting your data.
 
-- ``private_key`` : path to your private key. If you don't yet have a private key, you can ask MC\ :sup:`2` Client to generate a private key/certificate for you (see :ref:`Generating Keys`). MC\ :sup:`2` Client will use your private key to sign messages sent to the cloud.
+- ``private_key`` : path to your private key. If you don't yet have a private key, you can ask |platform| Client to generate a keypair/certificate for you (see :ref:`Generating Keys`). |platform| Client will use your private key to sign messages sent to the cloud.
 
-- ``certificate`` : path to your certificate. if you don't yet have a certificate, you can ask MC\ :sup:`2` Client to generate a certificate/private key for you (see :ref:`Generating Keys`). MC\ :sup:`2` Client will use your certificate to authenticate you to the cloud.
+- ``public_key`` : path to your public key. If you don't yet have a public key, you can ask |platform| Client to generate a keypair/certificate for you (see :ref:`Generating Keys`). |platform| Client will use your public key to authenticate you to the cloud.
 
-- ``root_private_key`` : path to the Certificate Authority's private key. MC\ :sup:`2` Client uses the CA's private key to generate a certificate for you. The MC\ :sup:`2` compute service should also be aware of the CA private key.
+- ``certificate`` : path to your certificate. If you don't yet have a certificate, you can ask |platform| Client to generate a keypair/certificate for you (see :ref:`Generating Keys`). |platform| Client will use your certificate to authenticate you to the cloud.
 
-- ``root_certificate`` : path to the Certificate Authority's certificate. MC\ :sup:`2` Client uses the CA's certificate to generate a certificate for you. The MC\ :sup:`2` compute service should also be aware of the CA certificate.
+- ``root_private_key`` : path to the Certificate Authority's private key. |platform| Client uses the CA's private key to generate a certificate for you. The |platform| compute service should also be aware of the CA private key.
+
+- ``root_certificate`` : path to the Certificate Authority's certificate. |platform| Client uses the CA's certificate to generate a certificate for you. The |platform| compute service should also be aware of the CA certificate.
 
 Launch
 ------
@@ -55,9 +57,9 @@ Upload
 ------
 In this section, you can specify what data you want to encrypt and upload, how you want to upload the data, and what encryption format you want to use.
 
-- ``storage`` : options are ``blob`` or ``disk``. If ``blob``, MC\ :sup:`2` Client will upload your data to the Azure storage container you create. If ``disk``, MC\ :sup:`2` Client will ``scp`` your data to each launched VM.
+- ``storage`` : options are ``blob`` or ``disk``. If ``blob``, |platform| Client will upload your data to the Azure storage container you create. If ``disk``, |platform| Client will ``scp`` your data to each launched VM.
 
-- ``format`` : options are ``xgb`` and ``sql``. If ``xgb``, MC\ :sup:`2` Client will encrypt your data in a format compatible with Secure XGBoost. If ``sql``, MC\ :sup:`2` Client will encrypt your data in a format compatible with Opaque SQL.
+- ``format`` : options are ``xgb`` and ``sql``. If ``xgb``, |platform| Client will encrypt your data in a format compatible with Secure XGBoost. If ``sql``, |platform| Client will encrypt your data in a format compatible with Opaque SQL.
 
 - ``src`` : a list of files to encrypt and upload
 
@@ -94,9 +96,9 @@ Download
 In this section, you can specify what you want to download and decrypt, how you want to download the data, and what decryption format you want to use.
 
 
-- ``storage`` : options are ``blob`` or ``disk``. If ``blob``, MC\ :sup:`2` Client will upload your data to the Azure storage container you create. If ``disk``, MC\ :sup:`2` Client will ``scp`` your data to each launched VM.
+- ``storage`` : options are ``blob`` or ``disk``. If ``blob``, |platform| Client will upload your data to the Azure storage container you create. If ``disk``, |platform| Client will ``scp`` your data to each launched VM.
 
-- ``format`` : options are ``xgb`` and ``sql``. If ``xgb``, MC\ :sup:`2` Client will decrypt your data in a format compatible with Secure XGBoost. If ``sql``, MC\ :sup:`2` Client will decrypt your data in a format compatible with Opaque SQL.
+- ``format`` : options are ``xgb`` and ``sql``. If ``xgb``, |platform| Client will decrypt your data in a format compatible with Secure XGBoost. If ``sql``, |platform| Client will decrypt your data in a format compatible with Opaque SQL.
 
 - ``src`` : a list of files to download.
 
