@@ -1,10 +1,13 @@
+import logging
 import multiprocessing
 import os
-import shutil
 import subprocess
-import sys
 
 from setuptools import find_packages, setup
+
+# # Configure logging
+logger = logging.getLogger()
+logger.setLevel("DEBUG")
 
 # Get the absolute path of setup.py
 setup_path = os.path.dirname(os.path.abspath(os.path.expanduser(__file__)))
@@ -101,8 +104,8 @@ setup(
 # to the root directory of the mc2 repository for easier paths in
 # the configuration yamls.
 
-print("\n####################\n")
-print("Configuring shell for MC2 Client...\n")
+logger.debug("\n{:#^20}\n".format(''))
+logger.debug("Configuring shell for MC2 Client...\n")
 
 home_path = os.path.abspath(os.path.join(setup_path, "../"))
 # Terminal shell initialization scripts to support
@@ -143,20 +146,20 @@ def set_path(path):
 shell_paths_set = [set_path(path) for path in shell_paths]
 
 if not any(shell_paths_set):
-    print("ERROR: Failed to write to any of the following:\n")
+    logger.debug("ERROR: Failed to write to any of the following:\n")
     for path in shell_paths:
-        print(f"\t{path}")
-    print(
+        logger.debug(f"\t{path}")
+    logger.debug(
         "\nPlease add the following line to your shell initialization\n"
         "file to ensure that MC2 Client is configured automatically:\n\n"
         f"\texport MC2_CLIENT_HOME={home_path}"
     )
 else:
-    print("Successfully modified:\n")
+    logger.debug("Successfully modified:\n")
     for (success, path) in zip(shell_paths_set, shell_paths):
         if success:
-            print(f"\t{path}")
-    print("\nTo run MC2 Client you may need to restart your current shell.")
+            logger.debug(f"\t{path}")
+    logger.debug("\nTo run MC2 Client you may need to restart your current shell.")
 
 env_path = os.path.join(home_path, "mc2_client_env")
 print(f"\nTo configure your current shell, run:\n\n\tsource {env_path}\n")
