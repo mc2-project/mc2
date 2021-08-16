@@ -28,14 +28,14 @@ Once you've populated a YAML file with your desired parameters, set the path to 
 
 Key Generation
 --------------
-If you don't already have a keypair and/or a symmetric key, you'll want to generate them so that you can interact with |platform| cloud compute services in a cryptographically secure manner. |platform| uses your certificate and private key to authenticate you to |platform| compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn't see it in plaintext..
+If you don't already have a keypair and/or a symmetric key, you'll want to generate them so that you can interact with |platform| cloud compute services in a cryptographically secure manner. |platform| uses your keypair and certificate to authenticate you to |platform| compute services, and uses your symmetric key to encrypt your data to ensure that the cloud doesn't see it in plaintext..
 
-|platform| Client provides a function to generate a certificate and corresponding private key, and a function to generate a symmetric key. You should have specified paths for your certificate, private key, and symmetric key during configuration. These functions will output the certificate, private key, and symmetric key to these paths.
+|platform| Client provides a function to generate a keypair and corresponding certificate as well as a function to generate a symmetric key. You should have specified paths for your private key, public key, certificate, and symmetric key during configuration. These functions will output the private key, public key, certificate, and symmetric key to these paths.
 
 .. code-block:: python
    :substitutions:
 
-    # Generate a certificate and corresponding private key
+    # Generate a keypair and corresponding certificate
     |python-package-short|.generate_keypair()
 
     # Generate a symmetric key
