@@ -16,12 +16,14 @@ def config(tmp_path):
 
     test_cert = os.path.join(tmp_path, "test.crt")
     test_priv_key = os.path.join(tmp_path, "test.pem")
+    test_pub_key = os.path.join(tmp_path, "test.pub")
     test_symm_key = os.path.join(tmp_path, "test_sym.key")
 
     # Rewrite config YAML with test paths
     config = EnvYAML(original_config_path)
     config["user"]["certificate"] = test_cert
     config["user"]["private_key"] = test_priv_key
+    config["user"]["public_key"] = test_pub_key
     config["user"]["symmetric_key"] = test_symm_key
 
     # Point to root certificate
@@ -63,10 +65,12 @@ def schema(config):
 def test_key_generation(keys, tmp_path):
     test_cert = os.path.join(tmp_path, "test.crt")
     test_priv_key = os.path.join(tmp_path, "test.pem")
+    test_pub_key = os.path.join(tmp_path, "test.pub")
     test_symm_key = os.path.join(tmp_path, "test_sym.key")
 
     assert os.path.exists(test_cert)
     assert os.path.exists(test_priv_key)
+    assert os.path.exists(test_pub_key)
     assert os.path.exists(test_symm_key)
 
 

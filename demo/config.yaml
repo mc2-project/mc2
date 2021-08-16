@@ -10,12 +10,14 @@ user:
     # `mc2 init` will not overwrite anything at this path
     symmetric_key: ${MC2_CLIENT_HOME}/demo/keys/user1_sym.key
 
-    # Path to your private key and certificate
+
+    # Path to your keypair and certificate.
     # If you don't have a private key / certificate, specify paths here
     # and run `mc2 init` to generate a keypair
     #
     # `mc2 init` will not overwrite anything at this path
     private_key: ${MC2_CLIENT_HOME}/demo/keys/user1.pem
+    public_key: ${MC2_CLIENT_HOME}/demo/keys/user1.pub
     certificate: ${MC2_CLIENT_HOME}/demo/keys/user1.crt
 
     # Path to CA certificate and private key
