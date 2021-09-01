@@ -71,7 +71,7 @@ git clone https://github.com/mc2-project/mc2.git
 docker pull mc2project/mc2_img:v0.1.3
 
 # Run the container, mounting your playground to the container, and open a shell into the container
-docker run -it -v </absolute/path/to/mc2/playground>:/mc2/client/playground mc2_img /bin/bash
+docker run -it -v </absolute/path/to/mc2/playground>:/mc2/client/playground mc2project/mc2_img:v0.1.3 /bin/bash
 ```
 
 ### Installation via build from source
