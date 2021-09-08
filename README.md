@@ -68,10 +68,10 @@ If you prefer to pull the image instead, you can pull a pre-built image (~3 GB) 
 git clone https://github.com/mc2-project/mc2.git
 
 # Pull the mc2_img from Docker Hub
-docker pull mc2project/mc2_img:v0.1.3
+docker pull mc2project/mc2_img:v0.1.2
 
 # Run the container, mounting your playground to the container, and open a shell into the container
-docker run -it -v </absolute/path/to/mc2/playground>:/mc2/client/playground mc2project/mc2_img:v0.1.3 /bin/bash
+docker run -it -v </absolute/path/to/mc2/playground>:/mc2/client/playground mc2project/mc2_img:v0.1.2 /bin/bash
 ```
 
 ### Installation via build from source
