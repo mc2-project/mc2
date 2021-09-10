@@ -26,6 +26,7 @@ MC<sup>2</sup> provides the following (actively maintained) secure computation s
 The MC<sup>2</sup> project also includes exploratory research prototypes that develop new cryptographic techniques for secure computation. Please visit the individual project pages for more information:
 * [Cerebro](https://github.com/mc2-project/cerebro): A general purpose Python DSL for learning with secure multiparty computation.
 * [Delphi](https://github.com/mc2-project/delphi): Secure inference for deep neural networks.
+* [Muse](https://github.com/mc2-project/muse): Secure inference resilient to malicious clients.
 
 For more information on MC<sup>2</sup>, visit our [website](https://mc2-project.github.io/).
 
