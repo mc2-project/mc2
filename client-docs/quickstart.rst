@@ -38,7 +38,7 @@ If you'd like to try everything out locally, you can do so within the Docker con
 
     |cmd| upload
 
-5. Run the provided Opaque SQL quickstart script, to be executed by MC\ :sup:`2`. The script can be found `here <https://github.com/mc2-project/mc2/quickstart/opaque_sql_demo.scala>`_.
+5. Run the provided Opaque SQL quickstart script, to be executed by MC\ :sup:`2`. The script can be found `here <https://github.com/mc2-project/mc2/blob/master/quickstart/opaque_sql_demo.scala>`_.
 
 .. code-block:: bash
     :substitutions:
@@ -102,7 +102,7 @@ Once you've done that, launch the resources.
 
     |cmd| upload
 
-6. Run the provided Opaque SQL demo script, to be executed by MC\ :sup:`2`. The script can be found `here <https://github.com/opaque-systems/opaque-client/blob/master/quickstart/opaque_sql_demo.scala>`_ , and performs a filter operation over our data -- the results will contain records of all patients who are younger than 30 years old. Results are encrypted by MC\ :sup:`2` before being saved, and can only be decrypted with the key you used to encrypt your data in the previous step.
+6. Run the provided Opaque SQL demo script, to be executed by MC\ :sup:`2`. The script can be found `here <https://github.com/mc2-project/mc2/blob/master/quickstart/opaque_sql_demo.scala>`_ , and performs a filter operation over our data -- the results will contain records of all patients who are younger than 30 years old. Results are encrypted by MC\ :sup:`2` before being saved, and can only be decrypted with the key you used to encrypt your data in the previous step.
 
 .. code-block:: bash
     :substitutions:
