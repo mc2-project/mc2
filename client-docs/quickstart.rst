@@ -16,7 +16,7 @@ Change ``run --> script`` to point to the Python file.
     :substitutions:
 
     run:
-        script: ${|platform|_CLIENT_HOME}/demo/single-party/opaquesql/opaque_sql_demo.py
+        script: ${|platform_uppercase|_CLIENT_HOME}/demo/single-party/opaquesql/opaque_sql_demo.py
 
 Change ``start --> head`` to include instructions on starting the PySpark listener. For a local listener, this will be 
 
