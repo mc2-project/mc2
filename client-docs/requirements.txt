@@ -17,7 +17,7 @@ numpydoc
 pandas
 pytest
 pyyaml
-sphinx==3.0.3
+sphinx
 sphinx-argparse
 sphinx-copybutton
 sphinxcontrib-spelling
