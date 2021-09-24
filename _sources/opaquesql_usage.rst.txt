@@ -1,6 +1,6 @@
 Usage with Opaque SQL
 =====================
-|platform| offers `Opaque SQL <https://mc2-project.github.io/opaque-sql/>`_, a secure analytics engine built on top of Apache Spark SQL, as a compute service that users can run. Opaque SQL provides a SQL and Scala interface for users to express their desired SQL-like computation. |platform| Client integrates directly with Opaque SQL, and enables users to start the Opaque SQL service as well as encrypt and decrypt data in a format readable by Opaque SQL.
+|platform| offers `Opaque SQL <https://mc2-project.github.io/opaque-sql/>`_, a secure analytics engine built on top of Apache Spark SQL, as a compute service that users can run. Opaque SQL provides a Scala and Python interface for users to express their desired SQL-like computation. |platform| Client integrates directly with Opaque SQL, and enables users to start the Opaque SQL service as well as encrypt and decrypt data in a format readable by Opaque SQL.
 
 First, install Opaque SQL by following `this guide <https://mc2-project.github.io/opaque-sql/install/install.html>`_. 
 
@@ -8,19 +8,24 @@ Next, to use |platform| Client for Opaque SQL, you'll need to specifically modif
 
 Start
 -----
-In the ``start`` section, you must specify the command to launch the Opaque SQL service: ``build/sbt run``. The section should look something like this:
+In the ``start`` section, you must specify the command to launch the Opaque SQL service on the head node. This is usually one of three things, depending on how you want to start Opaque SQL. The section should look something like this:
 
 .. code-block:: yaml
+   :substitutions:
 
    start:
       # Commands to run on head node
       head:
-      # To run Opaque SQL locally
+      # To run Opaque SQL locally (Scala)
       - cd /path/to/opaque-sql; build/sbt run
 
-      # Or to run a standalone Spark cluster
+      # Or to run a standalone Spark cluster (Scala)
       - cd /path/to/opaque-sql; build/sbt assembly
       - cd /path/to/opaque-sql; spark-submit --class edu.berkeley.cs.rise.opaque.rpc.Listener <Spark configuration parameters> --deploy-mode client ${|platform_uppercase|_HOME}/target/scala-2.12/opaque-assembly-0.1.jar
+
+      # Or to run a standalone PySpark cluster (Python)
+      - cd /path/to/opaque-sql; build/sbt assembly
+      - cd /path/to/opaque-sql; spark-submit <Spark configuration parameters> --deploy-mode client --jars ${|platform_uppercase|_HOME}/target/scala-2.12/opaque-assembly-0.1.jar --py-files ${|platform_uppercase|_HOME}/target/python.zip ${|platform_uppercase|_HOME}/target/python/listener.py
 
       # Commands to run on worker nodes
       workers: []
@@ -171,7 +176,7 @@ All together, the configuration file should look something like the following wh
    # Commands to start compute service
    start:
       # Commands to run on head node
-      # This command is used to start the Opaque SQL service
+      # This command is used to start the Opaque SQL service on the head node locally
       head:
       - cd /mc2/opaque-sql; build/sbt run
 

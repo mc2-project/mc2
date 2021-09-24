@@ -206,21 +206,25 @@
         <article role="main">
           <section id="usage-with-opaque-sql">
 <h1>Usage with Opaque SQL<a class="headerlink" href="#usage-with-opaque-sql" title="Permalink to this headline">¶</a></h1>
-<p>MC<sup>2</sup> offers <a class="reference external" href="https://mc2-project.github.io/opaque-sql/">Opaque SQL</a>, a secure analytics engine built on top of Apache Spark SQL, as a compute service that users can run. Opaque SQL provides a SQL and Scala interface for users to express their desired SQL-like computation. MC<sup>2</sup> Client integrates directly with Opaque SQL, and enables users to start the Opaque SQL service as well as encrypt and decrypt data in a format readable by Opaque SQL.</p>
+<p>MC<sup>2</sup> offers <a class="reference external" href="https://mc2-project.github.io/opaque-sql/">Opaque SQL</a>, a secure analytics engine built on top of Apache Spark SQL, as a compute service that users can run. Opaque SQL provides a Scala and Python interface for users to express their desired SQL-like computation. MC<sup>2</sup> Client integrates directly with Opaque SQL, and enables users to start the Opaque SQL service as well as encrypt and decrypt data in a format readable by Opaque SQL.</p>
 <p>First, install Opaque SQL by following <a class="reference external" href="https://mc2-project.github.io/opaque-sql/install/install.html">this guide</a>.</p>
 <p>Next, to use MC<sup>2</sup> Client for Opaque SQL, you’ll need to specifically modify several sections of the <a class="reference internal" href="config/config.html"><span class="doc">configuration</span></a>: the <code class="docutils literal notranslate"><span class="pre">start</span></code>, <code class="docutils literal notranslate"><span class="pre">upload</span></code>, <code class="docutils literal notranslate"><span class="pre">run</span></code>, and <code class="docutils literal notranslate"><span class="pre">download</span></code> sections. Once you’ve finished configuration, look at the <a class="reference internal" href="quickstart.html"><span class="doc">Quickstart</span></a> guide on how to securely run a query.</p>
 <section id="start">
 <h2>Start<a class="headerlink" href="#start" title="Permalink to this headline">¶</a></h2>
-<p>In the <code class="docutils literal notranslate"><span class="pre">start</span></code> section, you must specify the command to launch the Opaque SQL service: <code class="docutils literal notranslate"><span class="pre">build/sbt</span> <span class="pre">run</span></code>. The section should look something like this:</p>
+<p>In the <code class="docutils literal notranslate"><span class="pre">start</span></code> section, you must specify the command to launch the Opaque SQL service on the head node. This is usually one of three things, depending on how you want to start Opaque SQL. The section should look something like this:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">start</span><span class="p">:</span>
    <span class="c1"># Commands to run on head node</span>
    <span class="nt">head</span><span class="p">:</span>
-   <span class="c1"># To run Opaque SQL locally</span>
+   <span class="c1"># To run Opaque SQL locally (Scala)</span>
    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; build/sbt run</span>
 
-   <span class="c1"># Or to run a standalone Spark cluster</span>
+   <span class="c1"># Or to run a standalone Spark cluster (Scala)</span>
    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; build/sbt assembly</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; spark-submit --class edu.berkeley.cs.rise.opaque.rpc.Listener &lt;Spark configuration parameters&gt; --deploy-mode client ${|platform_uppercase|_HOME}/target/scala-2.12/opaque-assembly-0.1.jar</span>
+   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; spark-submit --class edu.berkeley.cs.rise.opaque.rpc.Listener &lt;Spark configuration parameters&gt; --deploy-mode client ${MC2_HOME}/target/scala-2.12/opaque-assembly-0.1.jar</span>
+
+   <span class="c1"># Or to run a standalone PySpark cluster (Python)</span>
+   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; build/sbt assembly</span>
+   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; spark-submit &lt;Spark configuration parameters&gt; --deploy-mode client --jars ${MC2_HOME}/target/scala-2.12/opaque-assembly-0.1.jar --py-files ${MC2_HOME}/target/python.zip ${MC2_HOME}/target/python/listener.py</span>
 
    <span class="c1"># Commands to run on worker nodes</span>
    <span class="nt">workers</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
@@ -361,7 +365,7 @@
 <span class="c1"># Commands to start compute service</span>
 <span class="nt">start</span><span class="p">:</span>
    <span class="c1"># Commands to run on head node</span>
-   <span class="c1"># This command is used to start the Opaque SQL service</span>
+   <span class="c1"># This command is used to start the Opaque SQL service on the head node locally</span>
    <span class="nt">head</span><span class="p">:</span>
    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /mc2/opaque-sql; build/sbt run</span>
 

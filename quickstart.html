@@ -212,6 +212,21 @@
 <h2>Docker Quickstart<a class="headerlink" href="#docker-quickstart" title="Permalink to this headline">¶</a></h2>
 <p>If you’d like to try everything out locally, you can do so within the Docker container you built in the <a class="reference internal" href="install.html"><span class="doc">installation</span></a> section.</p>
 <ol class="arabic simple">
+<li><p>Decide whether you want to run Spark (Scala) or PySpark (Python). The former is the default, while the latter will require two modifications to <code class="docutils literal notranslate"><span class="pre">/mc2/client/quickstart/config.yaml</span></code>:</p></li>
+</ol>
+<p>Change <code class="docutils literal notranslate"><span class="pre">run</span> <span class="pre">--&gt;</span> <span class="pre">script</span></code> to point to the Python file.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run</span><span class="p">:</span>
+    <span class="nt">script</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/demo/single-party/opaquesql/opaque_sql_demo.py</span>
+</pre></div>
+</div>
+<p>Change <code class="docutils literal notranslate"><span class="pre">start</span> <span class="pre">--&gt;</span> <span class="pre">head</span></code> to include instructions on starting the PySpark listener. For a local listener, this will be</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">start</span><span class="p">:</span>
+    <span class="nt">head</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /home/mc2/opaque-sql; build/sbt assembly</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /home/mc2/opaque-sql; spark-submit --master local[1] --jars ${MC2_HOME}/target/scala-2.12/opaque-assembly-0.1.jar --py-files ${MC2_HOME}/target/python.zip ${MC2_HOME}/target/python/listener.py</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
 <li><p>In the container, copy the contents of the <code class="docutils literal notranslate"><span class="pre">quickstart</span></code> directory to your mounted <code class="docutils literal notranslate"><span class="pre">playground</span></code> directory to ensure that your changes inside the container get reflected on your host. Then, specify the path to your configuration file.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># From the /mc2/client directory</span>
@@ -219,26 +234,26 @@ cp -r quickstart/* playground
 mc2 configure <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/playground/config.yaml
 </pre></div>
 </div>
-<ol class="arabic simple" start="2">
+<ol class="arabic simple" start="3">
 <li><p>Generate a keypair and a symmetric key that MC<sup>2</sup> Client will use to encrypt your data. Specify your username and output paths in the <code class="docutils literal notranslate"><span class="pre">user</span></code> section of the configuration file. Then, generate the keys.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mc2 init
 </pre></div>
 </div>
-<ol class="arabic simple" start="3">
+<ol class="arabic simple" start="4">
 <li><p>Start the Opaque SQL compute service.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mc2 start
 </pre></div>
 </div>
-<ol class="arabic simple" start="4">
+<ol class="arabic simple" start="5">
 <li><p>Prepare your data for computation by encrypting and uploading it. Note that “uploading” here means copying because we have a local deployment.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mc2 upload
 </pre></div>
 </div>
 <ol class="arabic simple" start="5">
-<li><p>Run the provided Opaque SQL quickstart script, to be executed by MC<sup>2</sup>. The script can be found <a class="reference external" href="https://github.com/mc2-project/mc2/blob/master/quickstart/opaque_sql_demo.scala">here</a>.</p></li>
+<li><p>Run the provided Opaque SQL quickstart script, to be executed by MC<sup>2</sup>. The Scala script can be found <a class="reference external" href="https://github.com/opaque-systems/opaque-client/blob/master/quickstart/opaque_sql_demo.scala">here</a>, while Python is found <a class="reference external" href="https://github.com/opaque-systems/opaque-client/blob/master/quickstart/opaque_sql_demo.py">here</a>.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mc2 run
 </pre></div>
@@ -254,6 +269,21 @@ mc2 configure <span class="k">$(</span><span class="nb">pwd</span><span class="k
 <h2>Azure Quickstart<a class="headerlink" href="#azure-quickstart" title="Permalink to this headline">¶</a></h2>
 <p>You can also choose to run this quickstart with enclave-enabled VMs on the cloud with Azure Confidential Computing. This guide will take you through launching such VMs and using them with MC<sup>2</sup>.</p>
 <ol class="arabic simple">
+<li><p>Decide whether you want to run Spark (Scala) or PySpark (Python). The former is the default, while the latter will require two modifications to <code class="docutils literal notranslate"><span class="pre">/mc2/client/quickstart/config.yaml</span></code>:</p></li>
+</ol>
+<p>Change <code class="docutils literal notranslate"><span class="pre">run</span> <span class="pre">--&gt;</span> <span class="pre">script</span></code> to point to the Python file.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run</span><span class="p">:</span>
+    <span class="nt">script</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/opaque_sql_demo.py</span>
+</pre></div>
+</div>
+<p>Change <code class="docutils literal notranslate"><span class="pre">start</span> <span class="pre">--&gt;</span> <span class="pre">head</span></code> to include instructions on starting the PySpark listener. For a local listener, this will be</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">start</span><span class="p">:</span>
+    <span class="nt">head</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /home/mc2/opaque-sql; build/sbt assembly</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /home/mc2/opaque-sql; spark-submit --master local[1] --jars ${MC2_HOME}/target/scala-2.12/opaque-assembly-0.1.jar --py-files ${MC2_HOME}/target/python.zip ${MC2_HOME}/target/python/listener.py</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
 <li><p>In the container, copy the contents of the <code class="docutils literal notranslate"><span class="pre">quickstart</span></code> directory to your mounted <code class="docutils literal notranslate"><span class="pre">playground</span></code> directory to ensure that your changes inside the container get reflected on your host. Then, set the path to your configuration file.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># From the /mc2/client directory</span>
@@ -261,13 +291,13 @@ cp -r quickstart/* playground
 mc2 configure <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/playground/config.yaml
 </pre></div>
 </div>
-<ol class="arabic simple" start="2">
+<ol class="arabic simple" start="3">
 <li><p>Generate a keypair and a symmetric key that MC<sup>2</sup> Client will use to encrypt your data. Specify your username and output paths in the <code class="docutils literal notranslate"><span class="pre">user</span></code> section of the configuration file. Then, generate the keys.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mc2 init
 </pre></div>
 </div>
-<ol class="arabic simple" start="3">
+<ol class="arabic simple" start="4">
 <li><p>Next, launch the machines and resources you’ll be using for computation. MC<sup>2</sup> Client provides an interface to launch resources on Azure (and sets up the machines with necessary dependencies). Take a look at the <code class="docutils literal notranslate"><span class="pre">launch</span></code> section of the configuration file – you’ll need to specify the path to your <a class="reference internal" href="config/azure.html"><span class="doc">Azure configuration file</span></a>, which is a YAML file that details the names and types of various resources you will launch.</p></li>
 </ol>
 <p>Next, log in to Azure through the command line and set your subscription ID. <a class="reference external" href="https://docs.microsoft.com/en-us/azure/media-services/latest/setup-azure-subscription-how-to?tabs=portal">Here</a> are instructions on how to find your subscription ID.</p>
@@ -279,31 +309,31 @@ az account <span class="nb">set</span> -s &lt;YOUR_SUBSCRIPTION_ID&gt;
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mc2 launch
 </pre></div>
 </div>
-<ol class="arabic simple" start="4">
+<ol class="arabic simple" start="5">
 <li><p>Start the Opaque SQL compute service.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mc2 start
 </pre></div>
 </div>
-<ol class="arabic simple" start="5">
+<ol class="arabic simple" start="6">
 <li><p>Prepare your data for computation by encrypting and uploading it.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mc2 upload
 </pre></div>
 </div>
-<ol class="arabic simple" start="6">
-<li><p>Run the provided Opaque SQL demo script, to be executed by MC<sup>2</sup>. The script can be found <a class="reference external" href="https://github.com/mc2-project/mc2/blob/master/quickstart/opaque_sql_demo.scala">here</a> , and performs a filter operation over our data – the results will contain records of all patients who are younger than 30 years old. Results are encrypted by MC<sup>2</sup> before being saved, and can only be decrypted with the key you used to encrypt your data in the previous step.</p></li>
+<ol class="arabic simple" start="7">
+<li><p>Run the provided Opaque SQL demo script, to be executed by MC<sup>2</sup>. The Scala script can be found <a class="reference external" href="https://github.com/opaque-systems/opaque-client/blob/master/quickstart/opaque_sql_demo.scala">here</a>, while Python is found <a class="reference external" href="https://github.com/opaque-systems/opaque-client/blob/master/quickstart/opaque_sql_demo.py">here</a>. Both perform a filter operation over our data – the results will contain records of all patients who are younger than 30 years old. Results are encrypted by MC<sup>2</sup> before being saved, and can only be decrypted with the key you used to encrypt your data in the previous step.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mc2 run
 </pre></div>
 </div>
-<ol class="arabic simple" start="7">
+<ol class="arabic simple" start="8">
 <li><p>Once computation has finished, you can retrieve your encrypted results and decrypt them.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mc2 download
 </pre></div>
 </div>
-<ol class="arabic simple" start="8">
+<ol class="arabic simple" start="9">
 <li><p>Once you’ve finished using your Azure resources, you can use MC<sup>2</sup> Client to terminate them. You can specify which resources to terminate in the <code class="docutils literal notranslate"><span class="pre">teardown</span></code> section of the configuration.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mc2 teardown
