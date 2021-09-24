@@ -8,7 +8,28 @@ Docker Quickstart
 -----------------
 If you'd like to try everything out locally, you can do so within the Docker container you built in the :doc:`installation <install>` section.
 
-1. In the container, copy the contents of the ``quickstart`` directory to your mounted ``playground`` directory to ensure that your changes inside the container get reflected on your host. Then, specify the path to your configuration file.
+1. Decide whether you want to run Spark (Scala) or PySpark (Python). The former is the default, while the latter will require two modifications to ``/mc2/client/quickstart/config.yaml``:
+
+Change ``run --> script`` to point to the Python file.
+    
+.. code-block:: yaml
+    :substitutions:
+
+    run:
+        script: ${|platform_uppercase|_CLIENT_HOME}/demo/single-party/opaquesql/opaque_sql_demo.py
+
+Change ``start --> head`` to include instructions on starting the PySpark listener. For a local listener, this will be 
+
+.. code-block:: yaml
+    :substitutions:
+
+    start:
+        head:
+          - cd /home/mc2/opaque-sql; build/sbt assembly
+          - cd /home/mc2/opaque-sql; spark-submit --master local[1] --jars ${|platform_uppercase|_HOME}/target/scala-2.12/opaque-assembly-0.1.jar --py-files ${|platform_uppercase|_HOME}/target/python.zip ${|platform_uppercase|_HOME}/target/python/listener.py
+
+
+2. In the container, copy the contents of the ``quickstart`` directory to your mounted ``playground`` directory to ensure that your changes inside the container get reflected on your host. Then, specify the path to your configuration file.
 
 .. code-block:: bash
     :substitutions:
@@ -17,28 +38,28 @@ If you'd like to try everything out locally, you can do so within the Docker con
     cp -r quickstart/* playground
     |cmd| configure $(pwd)/playground/config.yaml
 
-2. Generate a keypair and a symmetric key that MC\ :sup:`2` Client will use to encrypt your data. Specify your username and output paths in the ``user`` section of the configuration file. Then, generate the keys.
+3. Generate a keypair and a symmetric key that |platform| Client will use to encrypt your data. Specify your username and output paths in the ``user`` section of the configuration file. Then, generate the keys.
 
 .. code-block:: bash
     :substitutions:
 
     |cmd| init
 
-3. Start the Opaque SQL compute service.
+4. Start the Opaque SQL compute service.
     
 .. code-block:: bash
     :substitutions:
 
     |cmd| start
 
-4. Prepare your data for computation by encrypting and uploading it. Note that "uploading" here means copying because we have a local deployment.
+5. Prepare your data for computation by encrypting and uploading it. Note that "uploading" here means copying because we have a local deployment.
 
 .. code-block:: bash
     :substitutions:
 
     |cmd| upload
 
-5. Run the provided Opaque SQL quickstart script, to be executed by MC\ :sup:`2`. The script can be found `here <https://github.com/mc2-project/mc2/blob/master/quickstart/opaque_sql_demo.scala>`_.
+5. Run the provided Opaque SQL quickstart script, to be executed by |platform|. The Scala script can be found `here <https://github.com/opaque-systems/opaque-client/blob/master/quickstart/opaque_sql_demo.scala>`_, while Python is found `here <https://github.com/opaque-systems/opaque-client/blob/master/quickstart/opaque_sql_demo.py>`_.
 
 .. code-block:: bash
     :substitutions:
@@ -54,9 +75,30 @@ If you'd like to try everything out locally, you can do so within the Docker con
 
 Azure Quickstart
 ----------------
-You can also choose to run this quickstart with enclave-enabled VMs on the cloud with Azure Confidential Computing. This guide will take you through launching such VMs and using them with MC\ :sup:`2`.
+You can also choose to run this quickstart with enclave-enabled VMs on the cloud with Azure Confidential Computing. This guide will take you through launching such VMs and using them with |platform|.
 
-1. In the container, copy the contents of the ``quickstart`` directory to your mounted ``playground`` directory to ensure that your changes inside the container get reflected on your host. Then, set the path to your configuration file.
+1. Decide whether you want to run Spark (Scala) or PySpark (Python). The former is the default, while the latter will require two modifications to ``/mc2/client/quickstart/config.yaml``:
+
+Change ``run --> script`` to point to the Python file.
+    
+.. code-block:: yaml
+    :substitutions:
+
+    run:
+        script: ${|platform_uppercase|_CLIENT_HOME}/quickstart/opaque_sql_demo.py
+
+Change ``start --> head`` to include instructions on starting the PySpark listener. For a local listener, this will be 
+
+.. code-block:: yaml
+    :substitutions:
+
+    start:
+        head:
+          - cd /home/mc2/opaque-sql; build/sbt assembly
+          - cd /home/mc2/opaque-sql; spark-submit --master local[1] --jars ${|platform_uppercase|_HOME}/target/scala-2.12/opaque-assembly-0.1.jar --py-files ${|platform_uppercase|_HOME}/target/python.zip ${|platform_uppercase|_HOME}/target/python/listener.py
+
+
+2. In the container, copy the contents of the ``quickstart`` directory to your mounted ``playground`` directory to ensure that your changes inside the container get reflected on your host. Then, set the path to your configuration file.
 
 .. code-block:: bash
     :substitutions:
@@ -65,14 +107,14 @@ You can also choose to run this quickstart with enclave-enabled VMs on the cloud
     cp -r quickstart/* playground
     |cmd| configure $(pwd)/playground/config.yaml
 
-2. Generate a keypair and a symmetric key that MC\ :sup:`2` Client will use to encrypt your data. Specify your username and output paths in the ``user`` section of the configuration file. Then, generate the keys.
+3. Generate a keypair and a symmetric key that |platform| Client will use to encrypt your data. Specify your username and output paths in the ``user`` section of the configuration file. Then, generate the keys.
 
 .. code-block:: bash
     :substitutions:
 
     |cmd| init
 
-3. Next, launch the machines and resources you'll be using for computation. MC\ :sup:`2` Client provides an interface to launch resources on Azure (and sets up the machines with necessary dependencies). Take a look at the ``launch`` section of the configuration file -- you'll need to specify the path to your :doc:`Azure configuration file <config/azure>`, which is a YAML file that details the names and types of various resources you will launch. 
+4. Next, launch the machines and resources you'll be using for computation. |platform| Client provides an interface to launch resources on Azure (and sets up the machines with necessary dependencies). Take a look at the ``launch`` section of the configuration file -- you'll need to specify the path to your :doc:`Azure configuration file <config/azure>`, which is a YAML file that details the names and types of various resources you will launch. 
 
 Next, log in to Azure through the command line and set your subscription ID. `Here <https://docs.microsoft.com/en-us/azure/media-services/latest/setup-azure-subscription-how-to?tabs=portal>`_ are instructions on how to find your subscription ID.
 
@@ -88,35 +130,35 @@ Once you've done that, launch the resources.
 
     |cmd| launch
 
-4. Start the Opaque SQL compute service. 
+5. Start the Opaque SQL compute service. 
     
 .. code-block:: bash
     :substitutions:
 
     |cmd| start
 
-5. Prepare your data for computation by encrypting and uploading it.
+6. Prepare your data for computation by encrypting and uploading it.
 
 .. code-block:: bash
     :substitutions:
 
     |cmd| upload
 
-6. Run the provided Opaque SQL demo script, to be executed by MC\ :sup:`2`. The script can be found `here <https://github.com/mc2-project/mc2/blob/master/quickstart/opaque_sql_demo.scala>`_ , and performs a filter operation over our data -- the results will contain records of all patients who are younger than 30 years old. Results are encrypted by MC\ :sup:`2` before being saved, and can only be decrypted with the key you used to encrypt your data in the previous step.
+7. Run the provided Opaque SQL demo script, to be executed by |platform|. The Scala script can be found `here <https://github.com/opaque-systems/opaque-client/blob/master/quickstart/opaque_sql_demo.scala>`_, while Python is found `here <https://github.com/opaque-systems/opaque-client/blob/master/quickstart/opaque_sql_demo.py>`_. Both perform a filter operation over our data -- the results will contain records of all patients who are younger than 30 years old. Results are encrypted by |platform| before being saved, and can only be decrypted with the key you used to encrypt your data in the previous step.
 
 .. code-block:: bash
     :substitutions:
 
     |cmd| run
 
-7. Once computation has finished, you can retrieve your encrypted results and decrypt them.
+8. Once computation has finished, you can retrieve your encrypted results and decrypt them.
 
 .. code-block:: bash
     :substitutions:
 
     |cmd| download
 
-8. Once you've finished using your Azure resources, you can use MC\ :sup:`2` Client to terminate them. You can specify which resources to terminate in the ``teardown`` section of the configuration.
+9. Once you've finished using your Azure resources, you can use |platform| Client to terminate them. You can specify which resources to terminate in the ``teardown`` section of the configuration.
     
 .. code-block:: bash
     :substitutions:
