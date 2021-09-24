@@ -3,9 +3,9 @@
 # and start --> head with the commands to start a PySpark cluster
 
 # Load in the encrypted data
-df = spark.read.format("edu.berkeley.cs.rise.opaque.EncryptedSource").load( # noqa: F821
-    "/tmp/opaquesql.csv.enc"
-)
+df = spark.read.format(  # noqa: F821
+    "edu.berkeley.cs.rise.opaque.EncryptedSource"
+).load("/tmp/opaquesql.csv.enc")
 
 # Filter out all patients older than 30
 result = df.filter(df["Age"] < 30)
