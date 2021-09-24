@@ -1,11 +1,10 @@
-setuptools
-azure-mgmt-resource==10.0.0
 azure-mgmt-compute==10.0.0
 azure-mgmt-storage==10.0.0
 azure-mgmt-network==10.0.0
-azure-cli-core
+azure-cli-core==2.23.0
+azure-core==1.13.0
 azure-storage-blob
-azure-identity
+azure-identity==1.5.0
 cryptography==3.3.2
 furo
 grpcio
@@ -17,7 +16,7 @@ numpydoc
 pandas
 pytest
 pyyaml
-sphinx==3.0.3
+sphinx
 sphinx-argparse
 sphinx-copybutton
 sphinxcontrib-spelling
