@@ -3,7 +3,7 @@
 # and start --> head with the commands to start a PySpark cluster
 
 # Load in the encrypted data
-df = spark.read.format("edu.berkeley.cs.rise.opaque.EncryptedSource").load(
+df = spark.read.format("edu.berkeley.cs.rise.opaque.EncryptedSource").load( # noqa: F821
     "/tmp/opaquesql.csv.enc"
 )
 
