@@ -1317,61 +1317,50 @@ def _attest(head_address, simulation_mode, mrsigner):
     """
     node_ips = [node["ip"] for node in _CONF["workers"]]
 
-    # Check if the enclaves have already been attested
-    cached_attested_nodes = get_cache_entry("attested_nodes") or []
-    cached_pks = get_cache_entry("public_keys") or []
-
-    if set(node_ips) == set(cached_attested_nodes):
-        assert len(cached_attested_nodes) == len(
-            cached_pks
-        ), "Invalid cache state"
-        _CONF["enclave_pks"] = [base64.b64decode(pk) for pk in cached_pks]
-    else:
-        # Enclaves have not all been attested, query head node for attestation
-        # report
-        with grpc.insecure_channel(head_address) as channel:
-            stub = attest_pb2_grpc.ClientToEnclaveStub(channel)
-            response = stub.GetRemoteEvidence(
-                attest_pb2.AttestationStatus(status=0)
-            )
-
-        # Extract evidence list from response
-        evidence_list = response.evidences
-
-        # Extract public keys from the evidence
-        pk_list = []
-        pk_size = _LIB.cipher_pk_size()
-        for msg in evidence_list:
-            # Allocate memory for enclave public key
-            pk_bytes = bytes(pk_size)
-            _LIB.get_public_key(
-                ctypes.cast(msg, ctypes.POINTER(ctypes.c_uint8)),
-                ctypes.cast(pk_bytes, ctypes.POINTER(ctypes.c_uint8)),
-            )
-            pk_list.append(pk_bytes)
-
-        # Verify attestation report
-        if not simulation_mode:
-            for msg in evidence_list:
-                if _LIB.attest_evidence(
-                    ctypes.c_char_p(mrsigner.encode("utf-8")),
-                    ctypes.c_size_t(len(mrsigner) + 1),
-                    ctypes.cast(msg, ctypes.POINTER(ctypes.c_uint8)),
-                    ctypes.c_size_t(len(msg)),
-                ):
-                    raise AttestationError(
-                        "Remote attestation report verification failed"
-                    )
-
-        # Set enclave public keys in the config
-        _CONF["enclave_pks"] = pk_list
-
-        # Cache the attestation information
-        add_cache_entry("attested_nodes", node_ips)
-        add_cache_entry(
-            "public_keys",
-            [base64.b64encode(pk).decode("ascii") for pk in pk_list],
+    # Begin to attest compute service enclaves
+    with grpc.insecure_channel(head_address) as channel:
+        stub = attest_pb2_grpc.ClientToEnclaveStub(channel)
+        response = stub.GetRemoteEvidence(
+            attest_pb2.AttestationStatus(status=0)
         )
+
+    # Extract evidence list from response
+    evidence_list = response.evidences
+
+    # Extract public keys from the evidence
+    pk_list = []
+    pk_size = _LIB.cipher_pk_size()
+    for msg in evidence_list:
+        # Allocate memory for enclave public key
+        pk_bytes = bytes(pk_size)
+        _LIB.get_public_key(
+            ctypes.cast(msg, ctypes.POINTER(ctypes.c_uint8)),
+            ctypes.cast(pk_bytes, ctypes.POINTER(ctypes.c_uint8)),
+        )
+        pk_list.append(pk_bytes)
+
+    # Verify attestation report
+    if not simulation_mode:
+        for msg in evidence_list:
+            if _LIB.attest_evidence(
+                ctypes.c_char_p(mrsigner.encode("utf-8")),
+                ctypes.c_size_t(len(mrsigner) + 1),
+                ctypes.cast(msg, ctypes.POINTER(ctypes.c_uint8)),
+                ctypes.c_size_t(len(msg)),
+            ):
+                raise AttestationError(
+                    "Remote attestation report verification failed"
+                )
+
+    # Set enclave public keys in the config
+    _CONF["enclave_pks"] = pk_list
+
+    # Cache the attestation information
+    add_cache_entry("attested_nodes", node_ips)
+    add_cache_entry(
+        "public_keys",
+        [base64.b64encode(pk).decode("ascii") for pk in pk_list],
+    )
 
 
 def _construct_signed_key_fb(sym_key, sig):
