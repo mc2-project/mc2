@@ -9,21 +9,21 @@ num_workers: 0
 provider:
     type: azure
     # https://docs.microsoft.com/en-us/azure/confidential-computing/virtual-machine-solutions
-    location: westus2
-    resource_group: octavian-gen
-    storage_name: octaviangenstorage
-    container_name: mc2-container-1
+    location: eastus
+    resource_group: mc2-client-dev
+    storage_name: mc2storage
+    container_name: blob-container-1
     # set subscription id otherwise the default from az cli will be used
     # subscription_id: 
 
 # How MC2 will authenticate with newly launched nodes.
 auth:
     # TODO: remove this field and make it the same as the username specified in config.yaml
-    ssh_user: ci
+    ssh_user: mc2
     # you must specify paths to matching private and public key pair files
     # use `ssh-keygen -t rsa -b 4096` to generate a new ssh key pair
-    ssh_private_key: /home/os/.ssh/id_rsa
-    ssh_public_key: /home/os/.ssh/id_rsa.pub
+    ssh_private_key: ~/.ssh/id_rsa
+    ssh_public_key: ~/.ssh/id_rsa.pub
 
 # More specific customization to node configurations can be made using the ARM template azure-vm-template.json file
 # See documentation here: https://docs.microsoft.com/en-us/azure/templates/microsoft.compute/2019-03-01/virtualmachines
@@ -63,18 +63,18 @@ worker_nodes:
 
 # Files or directories to copy to the head and worker nodes. The format is a
 # dictionary from REMOTE_PATH: LOCAL_PATH, e.g.
-file_mounts: []
+file_mounts: {
     # This script installs Open Enclave
-    # "~/install_oe.sh" : "scripts/install_oe.sh",
-    # # This script builds Spark 3.1.1 from source
-    # "~/build_spark.sh" : "scripts/build_spark.sh",
-    # # This script downloads a pre-built Spark 3.1.1 binary
-    # "~/install_spark.sh" : "scripts/install_spark.sh",
-    # # This script builds Opaque from source
-    # "~/build_opaque.sh" : "scripts/build_opaque.sh",
-    # # This script installs Secure XGBoost from source
-    # "~/install_secure_xgboost.sh" : "scripts/install_secure_xgboost.sh"
-
+    "~/install_oe.sh" : "scripts/install_oe.sh",
+    # This script builds Spark 3.1.1 from source
+    "~/build_spark.sh" : "scripts/build_spark.sh",
+    # This script downloads a pre-built Spark 3.1.1 binary
+    "~/install_spark.sh" : "scripts/install_spark.sh",
+    # This script builds Opaque from source
+    "~/build_opaque.sh" : "scripts/build_opaque.sh",
+    # This script installs Secure XGBoost from source
+    "~/install_secure_xgboost.sh" : "scripts/install_secure_xgboost.sh"
+}
 
 # List of commands that will be run before `setup_commands`. If docker is
 # enabled, these commands will run outside the container and before docker
@@ -85,19 +85,19 @@ initialization_commands:
 
 # List of shell commands to run to set up nodes.
 # Note: Use empty list if using image
-setup_commands: []
+setup_commands:
     # This script installs Open Enclave on the node
-    # - chmod +x ~/install_oe.sh
-      # - source ~/install_oe.sh
-      # # This script installs Apache Spark on the node
-    # - chmod +x ~/install_spark.sh
-      # - source ~/install_spark.sh
-      # # This script installs Opaque on the node
-    # - chmod +x ~/build_opaque.sh
-      # - source ~/build_opaque.sh
-      # # This script installs Secure XGBoost on the node
-    # - chmod +x ~/install_secure_xgboost.sh
-      # - source ~/install_secure_xgboost.sh
+    - chmod +x ~/install_oe.sh
+    - source ~/install_oe.sh
+    # This script installs Apache Spark on the node
+    - chmod +x ~/install_spark.sh
+    - source ~/install_spark.sh
+    # This script installs Opaque on the node
+    - chmod +x ~/build_opaque.sh
+    - source ~/build_opaque.sh
+    # This script installs Secure XGBoost on the node
+    - chmod +x ~/install_secure_xgboost.sh
+    - source ~/install_secure_xgboost.sh
 
 # Custom commands that will be run on the head node after common setup.
 # Set to empty list if using image
@@ -110,9 +110,9 @@ worker_setup_commands: []
 # Command to start MC2 on the head node.
 # Set to empty list if using image
 head_start_mc2_commands:
-    # - cd $SPARK_HOME; ./sbin/start-master.sh
+    - cd $SPARK_HOME; ./sbin/start-master.sh
 
 # Command to start MC2 on worker nodes.
 # Set to empty list if using image
 worker_start_mc2_commands:
-    # - cd $SPARK_HOME; ./sbin/start-slave.sh $MC2_HEAD_IP:7077
+    - cd $SPARK_HOME; ./sbin/start-slave.sh $MC2_HEAD_IP:7077

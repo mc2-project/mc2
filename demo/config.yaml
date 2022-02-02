@@ -35,28 +35,28 @@ launch:
     # # in to the head and worker nodes. If these values exist, Opaque Client
     # # will not launch or try to use any Azure resources
     head:
-        ip: 20.94.195.33
-        username: ci
-        ssh_key: /home/os/.ssh/id_rsa
+        ip: 0.0.0.0
+    #     username: mc2
+    #     ssh_key: ~/.ssh/id_rsa
     # workers:
     #   - ip: 98.171.139.77
     #     username: mc2
     #     ssh_key: ~/.ssh/id_rsa
 
     # Whether to launch a cluster of VMs
-    cluster: false
+    cluster: true
 
     # Whether to launch Azure blob storage
-    storage: false
+    storage: true
 
     # Whether to launch a storage container
-    container: false
+    container: true
 
 # Commands to start compute service
 start:
     # Commands to run on head node
     head:
-      - cd /home/ci/opensource/opaque-sql; build/sbt run
+      - cd /home/mc2/opaque-sql; build/sbt run
 
     # Commands to run on worker nodes
     workers:
@@ -141,11 +141,11 @@ stop:
 teardown:
 
     # Whether to terminate launched VMs
-    cluster: false
+    cluster: true
 
     # Whether to terminate created Azure blob storage
-    storage: false
+    storage: true
 
     # Whether to terminate created storage container
-    container: false
-    resource_group: false
+    container: true
+    resource_group: true
