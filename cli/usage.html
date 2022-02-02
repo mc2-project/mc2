@@ -5,12 +5,12 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="CLI Reference" href="api.html" /><link rel="prev" title="CLI Interface" href="index.html" />
 
-    <meta name="generator" content="sphinx-4.2.0, furo 2021.09.22"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.01.02"/>
         <title>CLI Usage - MC2 Client documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=150e365fa939648e89c22f6d7d13c72a1657915a" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=16fb25fabf47304eee183a5e9af80b1ba98259b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=fade93df149f7c5fedb3ff897f799dc7d283b420" />
     
     
 
@@ -235,58 +235,58 @@
 <section id="launching-cloud-resources">
 <h2>Launching Cloud Resources<a class="headerlink" href="#launching-cloud-resources" title="Permalink to this headline">¶</a></h2>
 <p>You can use MC<sup>2</sup> Client to launch resources in Azure. In particular, you can create a cluster of VMs, Azure blob storage, and a storage container. This section in the configuration looks as follows.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">launch</span><span class="p">:</span>
-   <span class="c1"># The absolute path to your Azure configuraton</span>
-   <span class="c1"># This needs to be an absolute path</span>
-   <span class="nt">azure_config</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/azure.yaml</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">launch</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># The absolute path to your Azure configuraton</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># This needs to be an absolute path</span><span class="w"></span>
+<span class="w">   </span><span class="nt">azure_config</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/azure.yaml</span><span class="w"></span>
 
-   <span class="c1"># Whether to launch a cluster of VMs</span>
-   <span class="nt">cluster</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nv">true</span><span class="p p-Indicator">,</span> <span class="nv">false</span><span class="p p-Indicator">}</span>
+<span class="w">   </span><span class="c1"># Whether to launch a cluster of VMs</span><span class="w"></span>
+<span class="w">   </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">true</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">}</span><span class="w"></span>
 
-   <span class="c1"># Whether to launch Azure blob storage</span>
-   <span class="nt">storage</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nv">true</span><span class="p p-Indicator">,</span> <span class="nv">false</span><span class="p p-Indicator">}</span>
+<span class="w">   </span><span class="c1"># Whether to launch Azure blob storage</span><span class="w"></span>
+<span class="w">   </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">true</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">}</span><span class="w"></span>
 
-   <span class="c1"># Whether to launch a storage container</span>
-   <span class="nt">container</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nv">true</span><span class="p p-Indicator">,</span> <span class="nv">false</span><span class="p p-Indicator">}</span>
+<span class="w">   </span><span class="c1"># Whether to launch a storage container</span><span class="w"></span>
+<span class="w">   </span><span class="nt">container</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">true</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>You will also need to specify details for the Azure resources you want to launch in a separate configuration file. An example of the file can be found in <code class="docutils literal notranslate"><span class="pre">demo/azure.yaml</span></code>.</p>
 <p>In particular, note the following important sections in the Azure configuration that you will likely want to modify.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># An unique identifier for the head node and workers of this cluster.</span>
-<span class="nt">cluster_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># An unique identifier for the head node and workers of this cluster.</span><span class="w"></span>
+<span class="nt">cluster_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
 
-<span class="c1"># The total number of workers nodes to launch in addition to the head</span>
-<span class="c1"># node. This number should be &gt;= 0.</span>
-<span class="nt">num_workers</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="c1"># The total number of workers nodes to launch in addition to the head</span><span class="w"></span>
+<span class="c1"># node. This number should be &gt;= 0.</span><span class="w"></span>
+<span class="nt">num_workers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
 
-<span class="c1"># Cloud-provider specific configuration.</span>
-<span class="nt">provider</span><span class="p">:</span>
-   <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
+<span class="c1"># Cloud-provider specific configuration.</span><span class="w"></span>
+<span class="nt">provider</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">azure</span><span class="w"></span>
 
-   <span class="c1"># Location of resources</span>
-   <span class="nt">location</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">eastus</span>
+<span class="w">   </span><span class="c1"># Location of resources</span><span class="w"></span>
+<span class="w">   </span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eastus</span><span class="w"></span>
 
-   <span class="c1"># Name of resource group that will contain your launched resources</span>
-   <span class="nt">resource_group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mc2-client-dev</span>
+<span class="w">   </span><span class="c1"># Name of resource group that will contain your launched resources</span><span class="w"></span>
+<span class="w">   </span><span class="nt">resource_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mc2-client-dev</span><span class="w"></span>
 
-   <span class="c1"># Name of Azure blob storage you want to create</span>
-   <span class="nt">storage_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mc2storage</span>
+<span class="w">   </span><span class="c1"># Name of Azure blob storage you want to create</span><span class="w"></span>
+<span class="w">   </span><span class="nt">storage_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mc2storage</span><span class="w"></span>
 
-   <span class="c1"># Name of storage container you want to create</span>
-   <span class="nt">container_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">blob-container-1</span>
+<span class="w">   </span><span class="c1"># Name of storage container you want to create</span><span class="w"></span>
+<span class="w">   </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">blob-container-1</span><span class="w"></span>
 
-   <span class="c1"># If left blank, the default subscription ID from Azure CLI will be used</span>
-   <span class="nt">subscription_id</span><span class="p">:</span>
+<span class="w">   </span><span class="c1"># If left blank, the default subscription ID from Azure CLI will be used</span><span class="w"></span>
+<span class="w">   </span><span class="nt">subscription_id</span><span class="p">:</span><span class="w"></span>
 
-<span class="c1"># How MC2 will authenticate with newly launched nodes.</span>
-<span class="nt">auth</span><span class="p">:</span>
-   <span class="c1"># The username used to SSH into created VMs</span>
-   <span class="nt">ssh_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mc2</span>
+<span class="c1"># How MC2 will authenticate with newly launched nodes.</span><span class="w"></span>
+<span class="nt">auth</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># The username used to SSH into created VMs</span><span class="w"></span>
+<span class="w">   </span><span class="nt">ssh_user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mc2</span><span class="w"></span>
 
-   <span class="c1"># you must specify paths to matching private and public key pair files</span>
-   <span class="c1"># use `ssh-keygen -t rsa -b 4096` to generate a new ssh key pair</span>
-   <span class="nt">ssh_private_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">~/.ssh/id_rsa</span>
-   <span class="nt">ssh_public_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">~/.ssh/id_rsa.pub</span>
+<span class="w">   </span><span class="c1"># you must specify paths to matching private and public key pair files</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># use `ssh-keygen -t rsa -b 4096` to generate a new ssh key pair</span><span class="w"></span>
+<span class="w">   </span><span class="nt">ssh_private_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~/.ssh/id_rsa</span><span class="w"></span>
+<span class="w">   </span><span class="nt">ssh_public_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~/.ssh/id_rsa.pub</span><span class="w"></span>
 </pre></div>
 </div>
 <p>To launch the resources, run the following command:</p>
@@ -301,14 +301,14 @@
 <section id="starting-compute-services-remotely">
 <h2>Starting Compute Services Remotely<a class="headerlink" href="#starting-compute-services-remotely" title="Permalink to this headline">¶</a></h2>
 <p>To run computation, you’ll need to remotely start the compute services. You can specify commands to start the compute services using MC<sup>2</sup> Client through configuration. MC<sup>2</sup> Client will remotely run these commands on each VM in the Azure cluster.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">start</span><span class="p">:</span>
-   <span class="c1"># Commands to run on head node</span>
-   <span class="nt">head</span><span class="p">:</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">echo "Hello from head"</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">start</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Commands to run on head node</span><span class="w"></span>
+<span class="w">   </span><span class="nt">head</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo "Hello from head"</span><span class="w"></span>
 
-   <span class="c1"># Commands to run on worker nodes</span>
-   <span class="nt">workers</span><span class="p">:</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">echo "Hello from worker"</span>
+<span class="w">   </span><span class="c1"># Commands to run on worker nodes</span><span class="w"></span>
+<span class="w">   </span><span class="nt">workers</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo "Hello from worker"</span><span class="w"></span>
 </pre></div>
 </div>
 <p>To start the services, run the following command:</p>
@@ -323,29 +323,29 @@
 <section id="encrypting-and-uploading-data">
 <h2>Encrypting and Uploading Data<a class="headerlink" href="#encrypting-and-uploading-data" title="Permalink to this headline">¶</a></h2>
 <p>MC<sup>2</sup> Client will use the symmetric key you specified during configuration to encrypt your sensitive data. If you don’t yet have a symmetric key, see the above section on <a class="reference internal" href="#generating-keys"><span class="std std-ref">Generating Keys</span></a>.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">upload</span><span class="p">:</span>
-   <span class="c1"># Whether to upload data to Azure blob storage or disk</span>
-   <span class="c1"># Allowed values are `blob` or `disk`</span>
-   <span class="c1"># If `blob`, Azure CLI will be called to upload data</span>
-   <span class="c1"># Else, `scp` will be used</span>
-   <span class="nt">storage</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nv">blob</span><span class="p p-Indicator">,</span> <span class="nv">disk</span><span class="p p-Indicator">}</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">upload</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Whether to upload data to Azure blob storage or disk</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Allowed values are `blob` or `disk`</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># If `blob`, Azure CLI will be called to upload data</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Else, `scp` will be used</span><span class="w"></span>
+<span class="w">   </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">blob</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">disk</span><span class="p p-Indicator">}</span><span class="w"></span>
 
-   <span class="c1"># Encryption format to use</span>
-   <span class="c1"># Options are `sql` if you want to use Opaque SQL</span>
-   <span class="c1"># or `xgb` if you want to use Secure XGBoost</span>
-   <span class="nt">format</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nv">sql</span><span class="p p-Indicator">,</span> <span class="nv">xgb</span><span class="p p-Indicator">}</span>
+<span class="w">   </span><span class="c1"># Encryption format to use</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Options are `sql` if you want to use Opaque SQL</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># or `xgb` if you want to use Secure XGBoost</span><span class="w"></span>
+<span class="w">   </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">sql</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">xgb</span><span class="p p-Indicator">}</span><span class="w"></span>
 
-   <span class="c1"># Files to encrypt and upload</span>
-   <span class="nt">src</span><span class="p">:</span>
-     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/your/data.csv</span>
+<span class="w">   </span><span class="c1"># Files to encrypt and upload</span><span class="w"></span>
+<span class="w">   </span><span class="nt">src</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/your/data.csv</span><span class="w"></span>
 
-   <span class="c1"># If you want to run Opaque SQL, you must also specify a schema,</span>
-   <span class="c1"># one for each file you want to encrypt and upload</span>
-   <span class="nt">schemas</span><span class="p">:</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/opaquesql_schema.json</span>
+<span class="w">   </span><span class="c1"># If you want to run Opaque SQL, you must also specify a schema,</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># one for each file you want to encrypt and upload</span><span class="w"></span>
+<span class="w">   </span><span class="nt">schemas</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/opaquesql_schema.json</span><span class="w"></span>
 
-   <span class="c1"># Directory to upload data to</span>
-   <span class="nt">dst</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dst_dir</span>
+<span class="w">   </span><span class="c1"># Directory to upload data to</span><span class="w"></span>
+<span class="w">   </span><span class="nt">dst</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dst_dir</span><span class="w"></span>
 </pre></div>
 </div>
 <p>To encrypt and upload your data, run the following command:</p>
@@ -381,36 +381,36 @@
 <section id="running-computation">
 <h2>Running Computation<a class="headerlink" href="#running-computation" title="Permalink to this headline">¶</a></h2>
 <p>To run computation, you should specify a script to run in the configuration. In addition, when you initiate computation, MC<sup>2</sup> Client will under the hood attest the enclave deployment before actually running the computation. Attestation ensures that all enclaves were built and loaded with the proper code and that they were properly initialized. You will also need to specify some configuration values for attestation.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Computation configuration</span>
-<span class="nt">run</span><span class="p">:</span>
-   <span class="c1"># Script to run</span>
-   <span class="nt">script</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">opaque_sql_demo.scala</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Computation configuration</span><span class="w"></span>
+<span class="nt">run</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Script to run</span><span class="w"></span>
+<span class="w">   </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opaque_sql_demo.scala</span><span class="w"></span>
 
-   <span class="c1"># Compute service you're using</span>
-   <span class="c1"># Choices are `xgb` or `sql`</span>
-   <span class="nt">compute</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nv">xgb</span><span class="p p-Indicator">,</span> <span class="nv">sql</span><span class="p p-Indicator">}</span>
+<span class="w">   </span><span class="c1"># Compute service you're using</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Choices are `xgb` or `sql`</span><span class="w"></span>
+<span class="w">   </span><span class="nt">compute</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">xgb</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">sql</span><span class="p p-Indicator">}</span><span class="w"></span>
 
-   <span class="c1"># Attestation configuration</span>
-   <span class="nt">attestation</span><span class="p">:</span>
-      <span class="c1"># Whether we are running in simulation mode</span>
-      <span class="c1"># If 0 (False), we are _not_ running in simulation mode,</span>
-      <span class="c1"># and should verify the attestation evidence</span>
-      <span class="nt">simulation_mode</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">}</span>
+<span class="w">   </span><span class="c1"># Attestation configuration</span><span class="w"></span>
+<span class="w">   </span><span class="nt">attestation</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># Whether we are running in simulation mode</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># If 0 (False), we are _not_ running in simulation mode,</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># and should verify the attestation evidence</span><span class="w"></span>
+<span class="w">      </span><span class="nt">simulation_mode</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">}</span><span class="w"></span>
 
-      <span class="c1"># Path to MRENCLAVE value to check</span>
-      <span class="c1"># MRENCLAVE is a hash of the enclave build log</span>
-      <span class="nt">mrenclave</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">NULL</span>
+<span class="w">      </span><span class="c1"># Path to MRENCLAVE value to check</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># MRENCLAVE is a hash of the enclave build log</span><span class="w"></span>
+<span class="w">      </span><span class="nt">mrenclave</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NULL</span><span class="w"></span>
 
-      <span class="c1"># Path to MRSIGNER value to check</span>
-      <span class="c1"># MRSIGNER is the key used to sign the built enclave</span>
-   <span class="-Error">  </span><span class="nt">mrsigner</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/python-package/tests/keys/mc2_test_key.pub</span>
+<span class="w">      </span><span class="c1"># Path to MRSIGNER value to check</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># MRSIGNER is the key used to sign the built enclave</span><span class="w"></span>
+<span class="w">   </span><span class="w w-Error">  </span><span class="nt">mrsigner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/python-package/tests/keys/mc2_test_key.pub</span><span class="w"></span>
 
-   <span class="c1"># The client consortium. Each username is mapped to a public key and</span>
-   <span class="c1"># release policy</span>
-   <span class="nt">consortium</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="nt">username</span><span class="p">:</span>
-        <span class="nt">public_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/user/public/key</span>
-        <span class="nt">release_policy</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nv">true</span><span class="p p-Indicator">,</span><span class="nv">false</span><span class="p p-Indicator">}</span>
+<span class="w">   </span><span class="c1"># The client consortium. Each username is mapped to a public key and</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># release policy</span><span class="w"></span>
+<span class="w">   </span><span class="nt">consortium</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">username</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">public_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/user/public/key</span><span class="w"></span>
+<span class="w">        </span><span class="nt">release_policy</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">true</span><span class="p p-Indicator">,</span><span class="nv">false</span><span class="p p-Indicator">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Begin computation by running the following command:</p>
@@ -421,23 +421,23 @@
 <section id="downloading-and-decrypting-data">
 <h2>Downloading and Decrypting Data<a class="headerlink" href="#downloading-and-decrypting-data" title="Permalink to this headline">¶</a></h2>
 <p>MC<sup>2</sup> Client will use the symmetric key you specified during configuration to decrypt computation results. If you don’t yet have a symmetric key, see the above section on <a class="reference internal" href="#generating-keys"><span class="std std-ref">Generating Keys</span></a>. You should download results from where the compute services saved the results.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configuration for downloading results</span>
-<span class="nt">download</span><span class="p">:</span>
-    <span class="c1"># Whether to upload data to Azure blob storage or disk</span>
-    <span class="c1"># Allowed values are `blob` or `disk`</span>
-    <span class="c1"># If `blob`, Azure CLI will be called to upload data</span>
-    <span class="c1"># Else, `scp` will be used</span>
-    <span class="nt">storage</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nv">blob</span><span class="p p-Indicator">,</span> <span class="nv">disk</span><span class="p p-Indicator">}</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configuration for downloading results</span><span class="w"></span>
+<span class="nt">download</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># Whether to upload data to Azure blob storage or disk</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># Allowed values are `blob` or `disk`</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># If `blob`, Azure CLI will be called to upload data</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># Else, `scp` will be used</span><span class="w"></span>
+<span class="w">    </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">blob</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">disk</span><span class="p p-Indicator">}</span><span class="w"></span>
 
-    <span class="c1"># Format this data is encrypted with</span>
-    <span class="nt">format</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nv">xgb</span><span class="p p-Indicator">,</span> <span class="nv">sql</span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="c1"># Format this data is encrypted with</span><span class="w"></span>
+<span class="w">    </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">xgb</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">sql</span><span class="p p-Indicator">}</span><span class="w"></span>
 
-    <span class="c1"># Directory/file to download</span>
-    <span class="nt">src</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">securexgb_train.csv.enc</span>
+<span class="w">    </span><span class="c1"># Directory/file to download</span><span class="w"></span>
+<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">securexgb_train.csv.enc</span><span class="w"></span>
 
-    <span class="c1"># Local directory to download data to</span>
-    <span class="nt">dst</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">results/</span>
+<span class="w">    </span><span class="c1"># Local directory to download data to</span><span class="w"></span>
+<span class="w">    </span><span class="nt">dst</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">results/</span><span class="w"></span>
 </pre></div>
 </div>
 <p>To encrypt and upload your data, run the following command:</p>
@@ -456,15 +456,15 @@
 <section id="terminating-azure-resources">
 <h2>Terminating Azure Resources<a class="headerlink" href="#terminating-azure-resources" title="Permalink to this headline">¶</a></h2>
 <p>You can use MC<sup>2</sup> Client to terminate your launched Azure resources. Specify which resources you want to terminate in the configuration.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">teardown</span><span class="p">:</span>
-   <span class="c1"># Whether to terminate launched VMs</span>
-   <span class="nt">cluster</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nv">true</span><span class="p p-Indicator">,</span> <span class="nv">false</span><span class="p p-Indicator">}</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">teardown</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Whether to terminate launched VMs</span><span class="w"></span>
+<span class="w">   </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">true</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">}</span><span class="w"></span>
 
-   <span class="c1"># Whether to terminate created Azure blob storage</span>
-   <span class="nt">storage</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nv">true</span><span class="p p-Indicator">,</span> <span class="nv">false</span><span class="p p-Indicator">}</span>
+<span class="w">   </span><span class="c1"># Whether to terminate created Azure blob storage</span><span class="w"></span>
+<span class="w">   </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">true</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">}</span><span class="w"></span>
 
-   <span class="c1"># Whether to terminate created storage container</span>
-   <span class="nt">container</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nv">true</span><span class="p p-Indicator">,</span> <span class="nv">false</span><span class="p p-Indicator">}</span>
+<span class="w">   </span><span class="c1"># Whether to terminate created storage container</span><span class="w"></span>
+<span class="w">   </span><span class="nt">container</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">true</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>To terminate desired resources, run the following command:</p>
@@ -503,11 +503,9 @@
 
         <div class="related-information">
               Copyright &#169; 2021, MC² Team |
-            Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
-              and
-              <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-              <a href="https://github.com/pradyunsg/furo">Furo theme</a>. |
-            <a class="muted-link" href="../_sources/cli/usage.rst.txt"
+          Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+          <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+            | <a class="muted-link" href="../_sources/cli/usage.rst.txt"
                rel="nofollow">
               Show Source
             </a>
@@ -555,7 +553,7 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/scripts/main.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     </body>

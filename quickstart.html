@@ -5,12 +5,12 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Usage with Opaque SQL" href="opaquesql_usage.html" /><link rel="prev" title="Installation" href="install.html" />
 
-    <meta name="generator" content="sphinx-4.2.0, furo 2021.09.22"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.01.02"/>
         <title>Quickstart - MC2 Client documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=150e365fa939648e89c22f6d7d13c72a1657915a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=16fb25fabf47304eee183a5e9af80b1ba98259b1" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=fade93df149f7c5fedb3ff897f799dc7d283b420" />
     
     
 
@@ -215,15 +215,15 @@
 <li><p>Decide whether you want to run Spark (Scala) or PySpark (Python). The former is the default, while the latter will require two modifications to <code class="docutils literal notranslate"><span class="pre">/mc2/client/quickstart/config.yaml</span></code>:</p></li>
 </ol>
 <p>Change <code class="docutils literal notranslate"><span class="pre">run</span> <span class="pre">--&gt;</span> <span class="pre">script</span></code> to point to the Python file.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run</span><span class="p">:</span>
-    <span class="nt">script</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/demo/single-party/opaquesql/opaque_sql_demo.py</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/demo/single-party/opaquesql/opaque_sql_demo.py</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Change <code class="docutils literal notranslate"><span class="pre">start</span> <span class="pre">--&gt;</span> <span class="pre">head</span></code> to include instructions on starting the PySpark listener. For a local listener, this will be</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">start</span><span class="p">:</span>
-    <span class="nt">head</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /home/mc2/opaque-sql; build/sbt assembly</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /home/mc2/opaque-sql; spark-submit --master local[1] --jars ${MC2_HOME}/target/scala-2.12/opaque-assembly-0.1.jar --py-files ${MC2_HOME}/target/python.zip ${MC2_HOME}/target/python/listener.py</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">start</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">head</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cd /home/mc2/opaque-sql; build/sbt assembly</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cd /home/mc2/opaque-sql; spark-submit --master local[1] --jars ${MC2_HOME}/target/scala-2.12/opaque-assembly-0.1.jar --py-files ${MC2_HOME}/target/python.zip ${MC2_HOME}/target/python/listener.py</span><span class="w"></span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
@@ -272,15 +272,15 @@ mc2 configure <span class="k">$(</span><span class="nb">pwd</span><span class="k
 <li><p>Decide whether you want to run Spark (Scala) or PySpark (Python). The former is the default, while the latter will require two modifications to <code class="docutils literal notranslate"><span class="pre">/mc2/client/quickstart/config.yaml</span></code>:</p></li>
 </ol>
 <p>Change <code class="docutils literal notranslate"><span class="pre">run</span> <span class="pre">--&gt;</span> <span class="pre">script</span></code> to point to the Python file.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run</span><span class="p">:</span>
-    <span class="nt">script</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/opaque_sql_demo.py</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/opaque_sql_demo.py</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Change <code class="docutils literal notranslate"><span class="pre">start</span> <span class="pre">--&gt;</span> <span class="pre">head</span></code> to include instructions on starting the PySpark listener. For a local listener, this will be</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">start</span><span class="p">:</span>
-    <span class="nt">head</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /home/mc2/opaque-sql; build/sbt assembly</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /home/mc2/opaque-sql; spark-submit --master local[1] --jars ${MC2_HOME}/target/scala-2.12/opaque-assembly-0.1.jar --py-files ${MC2_HOME}/target/python.zip ${MC2_HOME}/target/python/listener.py</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">start</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">head</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cd /home/mc2/opaque-sql; build/sbt assembly</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cd /home/mc2/opaque-sql; spark-submit --master local[1] --jars ${MC2_HOME}/target/scala-2.12/opaque-assembly-0.1.jar --py-files ${MC2_HOME}/target/python.zip ${MC2_HOME}/target/python/listener.py</span><span class="w"></span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
@@ -371,11 +371,9 @@ az account <span class="nb">set</span> -s &lt;YOUR_SUBSCRIPTION_ID&gt;
 
         <div class="related-information">
               Copyright &#169; 2021, MC² Team |
-            Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
-              and
-              <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-              <a href="https://github.com/pradyunsg/furo">Furo theme</a>. |
-            <a class="muted-link" href="_sources/quickstart.rst.txt"
+          Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+          <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+            | <a class="muted-link" href="_sources/quickstart.rst.txt"
                rel="nofollow">
               Show Source
             </a>
@@ -413,7 +411,7 @@ az account <span class="nb">set</span> -s &lt;YOUR_SUBSCRIPTION_ID&gt;
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/scripts/main.js"></script>
+    <script src="_static/scripts/furo.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
     </body>

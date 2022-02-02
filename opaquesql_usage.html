@@ -5,12 +5,12 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Configuration" href="config/index.html" /><link rel="prev" title="Quickstart" href="quickstart.html" />
 
-    <meta name="generator" content="sphinx-4.2.0, furo 2021.09.22"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.01.02"/>
         <title>Usage with Opaque SQL - MC2 Client documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=150e365fa939648e89c22f6d7d13c72a1657915a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=16fb25fabf47304eee183a5e9af80b1ba98259b1" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=fade93df149f7c5fedb3ff897f799dc7d283b420" />
     
     
 
@@ -212,22 +212,22 @@
 <section id="start">
 <h2>Start<a class="headerlink" href="#start" title="Permalink to this headline">¶</a></h2>
 <p>In the <code class="docutils literal notranslate"><span class="pre">start</span></code> section, you must specify the command to launch the Opaque SQL service on the head node. This is usually one of three things, depending on how you want to start Opaque SQL. The section should look something like this:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">start</span><span class="p">:</span>
-   <span class="c1"># Commands to run on head node</span>
-   <span class="nt">head</span><span class="p">:</span>
-   <span class="c1"># To run Opaque SQL locally (Scala)</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; build/sbt run</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">start</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Commands to run on head node</span><span class="w"></span>
+<span class="w">   </span><span class="nt">head</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># To run Opaque SQL locally (Scala)</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; build/sbt run</span><span class="w"></span>
 
-   <span class="c1"># Or to run a standalone Spark cluster (Scala)</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; build/sbt assembly</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; spark-submit --class edu.berkeley.cs.rise.opaque.rpc.Listener &lt;Spark configuration parameters&gt; --deploy-mode client ${MC2_HOME}/target/scala-2.12/opaque-assembly-0.1.jar</span>
+<span class="w">   </span><span class="c1"># Or to run a standalone Spark cluster (Scala)</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; build/sbt assembly</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; spark-submit --class edu.berkeley.cs.rise.opaque.rpc.Listener &lt;Spark configuration parameters&gt; --deploy-mode client ${MC2_HOME}/target/scala-2.12/opaque-assembly-0.1.jar</span><span class="w"></span>
 
-   <span class="c1"># Or to run a standalone PySpark cluster (Python)</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; build/sbt assembly</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; spark-submit &lt;Spark configuration parameters&gt; --deploy-mode client --jars ${MC2_HOME}/target/scala-2.12/opaque-assembly-0.1.jar --py-files ${MC2_HOME}/target/python.zip ${MC2_HOME}/target/python/listener.py</span>
+<span class="w">   </span><span class="c1"># Or to run a standalone PySpark cluster (Python)</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; build/sbt assembly</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cd /path/to/opaque-sql; spark-submit &lt;Spark configuration parameters&gt; --deploy-mode client --jars ${MC2_HOME}/target/scala-2.12/opaque-assembly-0.1.jar --py-files ${MC2_HOME}/target/python.zip ${MC2_HOME}/target/python/listener.py</span><span class="w"></span>
 
-   <span class="c1"># Commands to run on worker nodes</span>
-   <span class="nt">workers</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+<span class="w">   </span><span class="c1"># Commands to run on worker nodes</span><span class="w"></span>
+<span class="w">   </span><span class="nt">workers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -235,239 +235,239 @@
 <h2>Upload<a class="headerlink" href="#upload" title="Permalink to this headline">¶</a></h2>
 <p>In the <code class="docutils literal notranslate"><span class="pre">upload</span></code> section, you should tell MC<sup>2</sup> Client that you want to encrypt data in <code class="docutils literal notranslate"><span class="pre">sql</span></code> format, the format readable by Opaque SQL. Along with the data, you should specify the path to the data schema. More on the schema format can be found <a class="reference internal" href="cli/usage.html#sqlformat"><span class="std std-ref">here</span></a>.</p>
 <p>The section should look something like this:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">upload</span><span class="p">:</span>
-   <span class="c1"># Whether to upload data to Azure blob storage or disk</span>
-   <span class="c1"># Allowed values are `blob` or `disk`</span>
-   <span class="c1"># If `blob`, Azure CLI will be called to upload data</span>
-   <span class="c1"># Else, `scp` will be used</span>
-   <span class="nt">storage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">disk</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">upload</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Whether to upload data to Azure blob storage or disk</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Allowed values are `blob` or `disk`</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># If `blob`, Azure CLI will be called to upload data</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Else, `scp` will be used</span><span class="w"></span>
+<span class="w">   </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">disk</span><span class="w"></span>
 
-   <span class="c1"># Encryption format to use</span>
-   <span class="c1"># Options are `sql` if you want to use Opaque SQL</span>
-   <span class="c1"># or `xgb` if you want to use Secure XGBoost</span>
-   <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sql</span>
+<span class="w">   </span><span class="c1"># Encryption format to use</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Options are `sql` if you want to use Opaque SQL</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># or `xgb` if you want to use Secure XGBoost</span><span class="w"></span>
+<span class="w">   </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sql</span><span class="w"></span>
 
-   <span class="c1"># Files to encrypt and upload</span>
-   <span class="nt">src</span><span class="p">:</span>
-     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/data/opaquesql.csv</span>
+<span class="w">   </span><span class="c1"># Files to encrypt and upload</span><span class="w"></span>
+<span class="w">   </span><span class="nt">src</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/data/opaquesql.csv</span><span class="w"></span>
 
-   <span class="c1"># If you want to run Opaque SQL, you must also specify a schema,</span>
-   <span class="c1"># one for each file you want to encrypt and upload</span>
-   <span class="nt">schemas</span><span class="p">:</span>
-     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/data/opaquesql_schema.json</span>
+<span class="w">   </span><span class="c1"># If you want to run Opaque SQL, you must also specify a schema,</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># one for each file you want to encrypt and upload</span><span class="w"></span>
+<span class="w">   </span><span class="nt">schemas</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/data/opaquesql_schema.json</span><span class="w"></span>
 
-   <span class="c1"># Directory to upload data to</span>
-   <span class="nt">dst</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/mc2/data</span>
+<span class="w">   </span><span class="c1"># Directory to upload data to</span><span class="w"></span>
+<span class="w">   </span><span class="nt">dst</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/mc2/data</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
 <section id="run">
 <h2>Run<a class="headerlink" href="#run" title="Permalink to this headline">¶</a></h2>
 <p>In the <code class="docutils literal notranslate"><span class="pre">run</span></code> section, you should tell MC<sup>2</sup> Client that you’re running Opaque SQL, and specify an Opaque SQL script written in Scala. This section should look something like this:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run</span><span class="p">:</span>
-   <span class="c1"># Script to run</span>
-   <span class="nt">script</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">opaque_sql_demo.scala</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Script to run</span><span class="w"></span>
+<span class="w">   </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opaque_sql_demo.scala</span><span class="w"></span>
 
-   <span class="c1"># Compute service you're using</span>
-   <span class="c1"># Choices are `xgb` or `sql`</span>
-   <span class="nt">compute</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sql</span>
+<span class="w">   </span><span class="c1"># Compute service you're using</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Choices are `xgb` or `sql`</span><span class="w"></span>
+<span class="w">   </span><span class="nt">compute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sql</span><span class="w"></span>
 
-   <span class="c1"># Attestation configuration</span>
-   <span class="nt">attestation</span><span class="p">:</span>
-      <span class="c1"># Whether we are running in simulation mode</span>
-      <span class="c1"># If 0 (False), we are _not_ running in simulation mode,</span>
-      <span class="c1"># and should verify the attestation evidence</span>
-      <span class="nt">simulation_mode</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">   </span><span class="c1"># Attestation configuration</span><span class="w"></span>
+<span class="w">   </span><span class="nt">attestation</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># Whether we are running in simulation mode</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># If 0 (False), we are _not_ running in simulation mode,</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># and should verify the attestation evidence</span><span class="w"></span>
+<span class="w">      </span><span class="nt">simulation_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
 
-      <span class="c1"># MRENCLAVE value to check</span>
-      <span class="c1"># MRENCLAVE is a hash of the enclave build log</span>
-      <span class="nt">mrenclave</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">NULL</span>
+<span class="w">      </span><span class="c1"># MRENCLAVE value to check</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># MRENCLAVE is a hash of the enclave build log</span><span class="w"></span>
+<span class="w">      </span><span class="nt">mrenclave</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NULL</span><span class="w"></span>
 
-      <span class="c1"># Path to MRSIGNER value to check</span>
-      <span class="c1"># MRSIGNER is the key used to sign the built enclave</span>
-      <span class="nt">mrsigner</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/python-package/tests/keys/mc2_test_key.pub</span>
+<span class="w">      </span><span class="c1"># Path to MRSIGNER value to check</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># MRSIGNER is the key used to sign the built enclave</span><span class="w"></span>
+<span class="w">      </span><span class="nt">mrsigner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/python-package/tests/keys/mc2_test_key.pub</span><span class="w"></span>
 
-   <span class="c1"># The client consortium. Each username is mapped to a public key and</span>
-   <span class="c1"># release policy</span>
-   <span class="nt">consortium</span><span class="p">:</span>
-     <span class="p p-Indicator">-</span> <span class="nt">username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">user1</span>
-       <span class="nt">public_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keys/user1.pub</span>
-       <span class="nt">result_release</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">   </span><span class="c1"># The client consortium. Each username is mapped to a public key and</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># release policy</span><span class="w"></span>
+<span class="w">   </span><span class="nt">consortium</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user1</span><span class="w"></span>
+<span class="w">       </span><span class="nt">public_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keys/user1.pub</span><span class="w"></span>
+<span class="w">       </span><span class="nt">result_release</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
 <section id="download">
 <h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
 <p>In the download section, you should tell MC<sup>2</sup> Client that the results you are retrieving are encrypted by Opaque SQL. This section should look something like this:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">download</span><span class="p">:</span>
-   <span class="c1"># Whether to download data from Azure blob storage or disk</span>
-   <span class="c1"># Allowed values are `blob` or `disk`</span>
-   <span class="c1"># If `blob`, Azure CLI will be called to download data</span>
-   <span class="c1"># Else, `scp` will be used</span>
-   <span class="nt">storage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">disk</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">download</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Whether to download data from Azure blob storage or disk</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Allowed values are `blob` or `disk`</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># If `blob`, Azure CLI will be called to download data</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Else, `scp` will be used</span><span class="w"></span>
+<span class="w">   </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">disk</span><span class="w"></span>
 
-   <span class="c1"># Format this data is encrypted with</span>
-   <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sql</span>
+<span class="w">   </span><span class="c1"># Format this data is encrypted with</span><span class="w"></span>
+<span class="w">   </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sql</span><span class="w"></span>
 
-   <span class="c1"># Directory/file to download</span>
-   <span class="nt">src</span><span class="p">:</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/mc2/opaque_sql_result</span>
+<span class="w">   </span><span class="c1"># Directory/file to download</span><span class="w"></span>
+<span class="w">   </span><span class="nt">src</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/mc2/opaque_sql_result</span><span class="w"></span>
 
-   <span class="c1"># Local directory to download data to</span>
-   <span class="nt">dst</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">results/</span>
+<span class="w">   </span><span class="c1"># Local directory to download data to</span><span class="w"></span>
+<span class="w">   </span><span class="nt">dst</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">results/</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>All together, the configuration file should look something like the following when running Opaque SQL.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># User configuration</span>
-<span class="nt">user</span><span class="p">:</span>
-   <span class="c1"># Your username - username should be specified in certificate</span>
-   <span class="nt">username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">user1</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># User configuration</span><span class="w"></span>
+<span class="nt">user</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Your username - username should be specified in certificate</span><span class="w"></span>
+<span class="w">   </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user1</span><span class="w"></span>
 
-   <span class="c1"># Path to your symmetric key - will be used for encryption/decryption</span>
-   <span class="c1"># If you don't have a symmetric key, specify a path here</span>
-   <span class="c1"># and run `MC2 init` to generate a key</span>
-   <span class="c1">#</span>
-   <span class="c1"># `MC2 init` will not overwrite anything at this path</span>
-   <span class="nt">symmetric_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/keys/user1_sym.key</span>
+<span class="w">   </span><span class="c1"># Path to your symmetric key - will be used for encryption/decryption</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># If you don't have a symmetric key, specify a path here</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># and run `MC2 init` to generate a key</span><span class="w"></span>
+<span class="w">   </span><span class="c1">#</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># `MC2 init` will not overwrite anything at this path</span><span class="w"></span>
+<span class="w">   </span><span class="nt">symmetric_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/keys/user1_sym.key</span><span class="w"></span>
 
-   <span class="c1"># Path to your keypair and certificate</span>
-   <span class="c1"># If you don't have a keypair / certificate, specify paths here</span>
-   <span class="c1"># and run `MC2 init` to generate a keypair</span>
-   <span class="c1">#</span>
-   <span class="c1"># `MC2 init` will not overwrite anything at this path</span>
-   <span class="nt">private_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/keys/user1.pem</span>
-   <span class="nt">public_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/keys/user1.pub</span>
-   <span class="nt">certificate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/keys/user1.crt</span>
+<span class="w">   </span><span class="c1"># Path to your keypair and certificate</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># If you don't have a keypair / certificate, specify paths here</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># and run `MC2 init` to generate a keypair</span><span class="w"></span>
+<span class="w">   </span><span class="c1">#</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># `MC2 init` will not overwrite anything at this path</span><span class="w"></span>
+<span class="w">   </span><span class="nt">private_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/keys/user1.pem</span><span class="w"></span>
+<span class="w">   </span><span class="nt">public_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/keys/user1.pub</span><span class="w"></span>
+<span class="w">   </span><span class="nt">certificate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/keys/user1.crt</span><span class="w"></span>
 
-   <span class="c1"># Path to CA certificate and private key</span>
-   <span class="c1"># Needed if you want to generate a certificate signed by CA</span>
-   <span class="nt">root_certificate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/keys/root.crt</span>
-   <span class="nt">root_private_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/keys/root.pem</span>
+<span class="w">   </span><span class="c1"># Path to CA certificate and private key</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Needed if you want to generate a certificate signed by CA</span><span class="w"></span>
+<span class="w">   </span><span class="nt">root_certificate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/keys/root.crt</span><span class="w"></span>
+<span class="w">   </span><span class="nt">root_private_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/keys/root.pem</span><span class="w"></span>
 
-<span class="c1"># Configuration for launching cloud resources</span>
-<span class="nt">launch</span><span class="p">:</span>
-   <span class="c1"># The absolute path to your Azure configuraton</span>
-   <span class="c1"># This needs to be an absolute path</span>
-   <span class="nt">azure_config</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/azure.yaml</span>
+<span class="c1"># Configuration for launching cloud resources</span><span class="w"></span>
+<span class="nt">launch</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># The absolute path to your Azure configuraton</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># This needs to be an absolute path</span><span class="w"></span>
+<span class="w">   </span><span class="nt">azure_config</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/azure.yaml</span><span class="w"></span>
 
-   <span class="c1"># Whether to launch a cluster of VMs</span>
-   <span class="nt">cluster</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">   </span><span class="c1"># Whether to launch a cluster of VMs</span><span class="w"></span>
+<span class="w">   </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 
-   <span class="c1"># Whether to launch Azure blob storage</span>
-   <span class="nt">storage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">   </span><span class="c1"># Whether to launch Azure blob storage</span><span class="w"></span>
+<span class="w">   </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 
-   <span class="c1"># Whether to launch a storage container</span>
-   <span class="nt">container</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">   </span><span class="c1"># Whether to launch a storage container</span><span class="w"></span>
+<span class="w">   </span><span class="nt">container</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 
-<span class="c1"># Commands to start compute service</span>
-<span class="nt">start</span><span class="p">:</span>
-   <span class="c1"># Commands to run on head node</span>
-   <span class="c1"># This command is used to start the Opaque SQL service on the head node locally</span>
-   <span class="nt">head</span><span class="p">:</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd /mc2/opaque-sql; build/sbt run</span>
+<span class="c1"># Commands to start compute service</span><span class="w"></span>
+<span class="nt">start</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Commands to run on head node</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># This command is used to start the Opaque SQL service on the head node locally</span><span class="w"></span>
+<span class="w">   </span><span class="nt">head</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cd /mc2/opaque-sql; build/sbt run</span><span class="w"></span>
 
-   <span class="c1"># Commands to run on worker nodes</span>
-   <span class="c1"># For this quickstart there is only one node - no worker nodes</span>
-   <span class="nt">workers</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+<span class="w">   </span><span class="c1"># Commands to run on worker nodes</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># For this quickstart there is only one node - no worker nodes</span><span class="w"></span>
+<span class="w">   </span><span class="nt">workers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 
-<span class="c1"># Configuration for `MC2 upload`</span>
-<span class="nt">upload</span><span class="p">:</span>
-   <span class="c1"># Whether to upload data to Azure blob storage or disk</span>
-   <span class="c1"># Allowed values are `blob` or `disk`</span>
-   <span class="c1"># If `blob`, Azure CLI will be called to upload data</span>
-   <span class="c1"># Else, `scp` will be used</span>
-   <span class="nt">storage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">disk</span>
+<span class="c1"># Configuration for `MC2 upload`</span><span class="w"></span>
+<span class="nt">upload</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Whether to upload data to Azure blob storage or disk</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Allowed values are `blob` or `disk`</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># If `blob`, Azure CLI will be called to upload data</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Else, `scp` will be used</span><span class="w"></span>
+<span class="w">   </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">disk</span><span class="w"></span>
 
-   <span class="c1"># Encryption format to use</span>
-   <span class="c1"># Options are `sql` if you want to use Opaque SQL</span>
-   <span class="c1"># or `xgb` if you want to use Secure XGBoost</span>
-   <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sql</span>
+<span class="w">   </span><span class="c1"># Encryption format to use</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Options are `sql` if you want to use Opaque SQL</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># or `xgb` if you want to use Secure XGBoost</span><span class="w"></span>
+<span class="w">   </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sql</span><span class="w"></span>
 
-   <span class="c1"># Files to encrypt and upload</span>
-   <span class="nt">src</span><span class="p">:</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/data/opaquesql.csv</span>
+<span class="w">   </span><span class="c1"># Files to encrypt and upload</span><span class="w"></span>
+<span class="w">   </span><span class="nt">src</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/data/opaquesql.csv</span><span class="w"></span>
 
-   <span class="c1"># If you want to run Opaque SQL, you must also specify a schema,</span>
-   <span class="c1"># one for each file you want to encrypt and upload</span>
-   <span class="nt">schemas</span><span class="p">:</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/data/opaquesql_schema.json</span>
+<span class="w">   </span><span class="c1"># If you want to run Opaque SQL, you must also specify a schema,</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># one for each file you want to encrypt and upload</span><span class="w"></span>
+<span class="w">   </span><span class="nt">schemas</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/quickstart/data/opaquesql_schema.json</span><span class="w"></span>
 
-   <span class="c1"># Directory to upload data to</span>
-   <span class="nt">dst</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/mc2/data</span>
+<span class="w">   </span><span class="c1"># Directory to upload data to</span><span class="w"></span>
+<span class="w">   </span><span class="nt">dst</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/mc2/data</span><span class="w"></span>
 
 
-<span class="c1"># Computation configuration</span>
-<span class="nt">run</span><span class="p">:</span>
-   <span class="c1"># Script to run</span>
-   <span class="nt">script</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">opaque_sql_demo.scala</span>
+<span class="c1"># Computation configuration</span><span class="w"></span>
+<span class="nt">run</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Script to run</span><span class="w"></span>
+<span class="w">   </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opaque_sql_demo.scala</span><span class="w"></span>
 
-   <span class="c1"># Compute service you're using</span>
-   <span class="c1"># Choices are `xgb` or `sql`</span>
-   <span class="nt">compute</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sql</span>
+<span class="w">   </span><span class="c1"># Compute service you're using</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Choices are `xgb` or `sql`</span><span class="w"></span>
+<span class="w">   </span><span class="nt">compute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sql</span><span class="w"></span>
 
-   <span class="c1"># Attestation configuration</span>
-   <span class="nt">attestation</span><span class="p">:</span>
-      <span class="c1"># Whether we are running in simulation mode</span>
-      <span class="c1"># If 0 (False), we are _not_ running in simulation mode,</span>
-      <span class="c1"># and should verify the attestation evidence</span>
-      <span class="nt">simulation_mode</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">   </span><span class="c1"># Attestation configuration</span><span class="w"></span>
+<span class="w">   </span><span class="nt">attestation</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># Whether we are running in simulation mode</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># If 0 (False), we are _not_ running in simulation mode,</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># and should verify the attestation evidence</span><span class="w"></span>
+<span class="w">      </span><span class="nt">simulation_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
 
-      <span class="c1"># MRENCLAVE value to check</span>
-      <span class="c1"># MRENCLAVE is a hash of the enclave build log</span>
-      <span class="nt">mrenclave</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">NULL</span>
+<span class="w">      </span><span class="c1"># MRENCLAVE value to check</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># MRENCLAVE is a hash of the enclave build log</span><span class="w"></span>
+<span class="w">      </span><span class="nt">mrenclave</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NULL</span><span class="w"></span>
 
-      <span class="c1"># Path to MRSIGNER value to check</span>
-      <span class="c1"># MRSIGNER is the key used to sign the built enclave</span>
-      <span class="c1"># This key should be used for testing purposes only,</span>
-      <span class="c1"># and is not secure for production purpose.</span>
-      <span class="nt">mrsigner</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/python-package/tests/keys/mc2_test_key.pub</span>
+<span class="w">      </span><span class="c1"># Path to MRSIGNER value to check</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># MRSIGNER is the key used to sign the built enclave</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># This key should be used for testing purposes only,</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># and is not secure for production purpose.</span><span class="w"></span>
+<span class="w">      </span><span class="nt">mrsigner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MC2_CLIENT_HOME}/python-package/tests/keys/mc2_test_key.pub</span><span class="w"></span>
 
-   <span class="c1"># The client consortium. Each username is mapped to a public key and</span>
-   <span class="c1"># release policy</span>
-   <span class="nt">consortium</span><span class="p">:</span>
-     <span class="p p-Indicator">-</span> <span class="nt">username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">user1</span>
-       <span class="nt">public_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keys/user1.pub</span>
-       <span class="nt">result_release</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">   </span><span class="c1"># The client consortium. Each username is mapped to a public key and</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># release policy</span><span class="w"></span>
+<span class="w">   </span><span class="nt">consortium</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user1</span><span class="w"></span>
+<span class="w">       </span><span class="nt">public_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keys/user1.pub</span><span class="w"></span>
+<span class="w">       </span><span class="nt">result_release</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 
-  <span class="c1"># Configuration for downloading results</span>
-<span class="-Error">  </span><span class="nt">download</span><span class="p">:</span>
-     <span class="c1"># Whether to download data from Azure blob storage or disk</span>
-     <span class="c1"># Allowed values are `blob` or `disk`</span>
-     <span class="c1"># If `blob`, Azure CLI will be called to download data</span>
-     <span class="c1"># Else, `scp` will be used</span>
-     <span class="nt">storage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">disk</span>
+<span class="w">  </span><span class="c1"># Configuration for downloading results</span><span class="w"></span>
+<span class="w w-Error">  </span><span class="nt">download</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="c1"># Whether to download data from Azure blob storage or disk</span><span class="w"></span>
+<span class="w">     </span><span class="c1"># Allowed values are `blob` or `disk`</span><span class="w"></span>
+<span class="w">     </span><span class="c1"># If `blob`, Azure CLI will be called to download data</span><span class="w"></span>
+<span class="w">     </span><span class="c1"># Else, `scp` will be used</span><span class="w"></span>
+<span class="w">     </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">disk</span><span class="w"></span>
 
-     <span class="c1"># Format this data is encrypted with</span>
-     <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sql</span>
+<span class="w">     </span><span class="c1"># Format this data is encrypted with</span><span class="w"></span>
+<span class="w">     </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sql</span><span class="w"></span>
 
-     <span class="c1"># Directory/file to download</span>
-     <span class="c1"># FIXME: If storage is `blob` this value must be a file</span>
-     <span class="c1"># Need to investigate whether we can use directories in Azure blob storage</span>
-     <span class="nt">src</span><span class="p">:</span>
-       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/mc2/opaque_sql_result</span>
+<span class="w">     </span><span class="c1"># Directory/file to download</span><span class="w"></span>
+<span class="w">     </span><span class="c1"># FIXME: If storage is `blob` this value must be a file</span><span class="w"></span>
+<span class="w">     </span><span class="c1"># Need to investigate whether we can use directories in Azure blob storage</span><span class="w"></span>
+<span class="w">     </span><span class="nt">src</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/mc2/opaque_sql_result</span><span class="w"></span>
 
-     <span class="c1"># Local directory to download data to</span>
-     <span class="nt">dst</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">results/</span>
+<span class="w">     </span><span class="c1"># Local directory to download data to</span><span class="w"></span>
+<span class="w">     </span><span class="nt">dst</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">results/</span><span class="w"></span>
 
-  <span class="c1"># Configuration for stopping services</span>
-  <span class="nt">stop</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Configuration for stopping services</span><span class="w"></span>
+<span class="w">  </span><span class="nt">stop</span><span class="p">:</span><span class="w"></span>
 
-  <span class="c1"># Configuration for deleting Azure resources</span>
-  <span class="nt">teardown</span><span class="p">:</span>
-     <span class="c1"># Whether to terminate launched VMs</span>
-     <span class="nt">cluster</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="c1"># Configuration for deleting Azure resources</span><span class="w"></span>
+<span class="w">  </span><span class="nt">teardown</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="c1"># Whether to terminate launched VMs</span><span class="w"></span>
+<span class="w">     </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 
-     <span class="c1"># Whether to terminate created Azure blob storage</span>
-     <span class="nt">storage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">     </span><span class="c1"># Whether to terminate created Azure blob storage</span><span class="w"></span>
+<span class="w">     </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 
-     <span class="c1"># Whether to terminate created storage container</span>
-     <span class="nt">container</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">     </span><span class="c1"># Whether to terminate created storage container</span><span class="w"></span>
+<span class="w">     </span><span class="nt">container</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 
-     <span class="c1"># Whether to terminate specified resource group</span>
-     <span class="nt">resource_group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">     </span><span class="c1"># Whether to terminate specified resource group</span><span class="w"></span>
+<span class="w">     </span><span class="nt">resource_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -502,11 +502,9 @@
 
         <div class="related-information">
               Copyright &#169; 2021, MC² Team |
-            Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
-              and
-              <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-              <a href="https://github.com/pradyunsg/furo">Furo theme</a>. |
-            <a class="muted-link" href="_sources/opaquesql_usage.rst.txt"
+          Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+          <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+            | <a class="muted-link" href="_sources/opaquesql_usage.rst.txt"
                rel="nofollow">
               Show Source
             </a>
@@ -547,7 +545,7 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/scripts/main.js"></script>
+    <script src="_static/scripts/furo.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
     </body>

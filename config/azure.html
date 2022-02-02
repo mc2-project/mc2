@@ -5,12 +5,12 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Python Interface" href="../python/index.html" /><link rel="prev" title="Global Configuration" href="config.html" />
 
-    <meta name="generator" content="sphinx-4.2.0, furo 2021.09.22"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.01.02"/>
         <title>Azure Configuration - MC2 Client documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=150e365fa939648e89c22f6d7d13c72a1657915a" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=16fb25fabf47304eee183a5e9af80b1ba98259b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=fade93df149f7c5fedb3ff897f799dc7d283b420" />
     
     
 
@@ -208,139 +208,139 @@
 <h1>Azure Configuration<a class="headerlink" href="#azure-configuration" title="Permalink to this headline">¶</a></h1>
 <p>MC<sup>2</sup> Client provides an interface to directly launch Azure resources – you can launch VMs, blob storage accounts, or storage containers. To do so, you’ll need to configure some parameters that will tell MC<sup>2</sup> Client how to set up your Azure resources. You should specify the path to this configuration in the <code class="docutils literal notranslate"><span class="pre">["launch"]["azure_config"]</span></code> section of your <a class="reference internal" href="config.html"><span class="doc">Global Configuration</span></a>.</p>
 <p>Below is an example of the Azure configuration with comments about each field.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># An unique identifier for the head node and workers of this cluster.</span>
-<span class="nt">cluster_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># An unique identifier for the head node and workers of this cluster.</span><span class="w"></span>
+<span class="nt">cluster_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
 
-<span class="c1"># The total number of workers nodes to launch in addition to the head</span>
-<span class="c1"># node. This number should be &gt;= 0.</span>
-<span class="nt">num_workers</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="c1"># The total number of workers nodes to launch in addition to the head</span><span class="w"></span>
+<span class="c1"># node. This number should be &gt;= 0.</span><span class="w"></span>
+<span class="nt">num_workers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
 
-<span class="c1"># Cloud-provider specific configuration.</span>
-<span class="nt">provider</span><span class="p">:</span>
-   <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
-   <span class="c1"># https://docs.microsoft.com/en-us/azure/confidential-computing/virtual-machine-solutions</span>
+<span class="c1"># Cloud-provider specific configuration.</span><span class="w"></span>
+<span class="nt">provider</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">azure</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># https://docs.microsoft.com/en-us/azure/confidential-computing/virtual-machine-solutions</span><span class="w"></span>
 
-   <span class="c1"># Location of resources</span>
-   <span class="c1"># For a full list of regions that have VMs with enclave support,</span>
-   <span class="c1"># go to the following link and look for DCs-v2 series VMs</span>
-   <span class="c1"># https://azure.microsoft.com/en-us/global-infrastructure/services/?products=virtual-machines&amp;regions=all</span>
-   <span class="nt">location</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">eastus</span>
+<span class="w">   </span><span class="c1"># Location of resources</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># For a full list of regions that have VMs with enclave support,</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># go to the following link and look for DCs-v2 series VMs</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># https://azure.microsoft.com/en-us/global-infrastructure/services/?products=virtual-machines&amp;regions=all</span><span class="w"></span>
+<span class="w">   </span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eastus</span><span class="w"></span>
 
-   <span class="c1"># The name of the resource group that will contain all resources</span>
-   <span class="nt">resource_group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mc2-client-dev</span>
+<span class="w">   </span><span class="c1"># The name of the resource group that will contain all resources</span><span class="w"></span>
+<span class="w">   </span><span class="nt">resource_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mc2-client-dev</span><span class="w"></span>
 
-   <span class="c1"># The name of the storage account to create</span>
-   <span class="nt">storage_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mc2storage</span>
+<span class="w">   </span><span class="c1"># The name of the storage account to create</span><span class="w"></span>
+<span class="w">   </span><span class="nt">storage_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mc2storage</span><span class="w"></span>
 
-   <span class="c1"># The name of the storage container to create</span>
-   <span class="nt">container_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">blob-container-1</span>
+<span class="w">   </span><span class="c1"># The name of the storage container to create</span><span class="w"></span>
+<span class="w">   </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">blob-container-1</span><span class="w"></span>
 
-   <span class="c1"># If left blank or commented out, the default subscription ID</span>
-   <span class="c1"># from the Azure CLI will be used</span>
-   <span class="c1"># subscription_id:</span>
+<span class="w">   </span><span class="c1"># If left blank or commented out, the default subscription ID</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># from the Azure CLI will be used</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># subscription_id:</span><span class="w"></span>
 
-<span class="c1"># How MC2 will authenticate with newly launched nodes.</span>
-<span class="nt">auth</span><span class="p">:</span>
-   <span class="c1"># The username to use to SSH to launched nodes</span>
-   <span class="nt">ssh_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mc2</span>
+<span class="c1"># How MC2 will authenticate with newly launched nodes.</span><span class="w"></span>
+<span class="nt">auth</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># The username to use to SSH to launched nodes</span><span class="w"></span>
+<span class="w">   </span><span class="nt">ssh_user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mc2</span><span class="w"></span>
 
-   <span class="c1"># You must specify paths to matching private and public key pair files</span>
-   <span class="c1"># Use `ssh-keygen -t rsa -b 4096` to generate a new SSH key pair</span>
-   <span class="nt">ssh_private_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">~/.ssh/id_rsa</span>
-   <span class="nt">ssh_public_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">~/.ssh/id_rsa.pub</span>
+<span class="w">   </span><span class="c1"># You must specify paths to matching private and public key pair files</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Use `ssh-keygen -t rsa -b 4096` to generate a new SSH key pair</span><span class="w"></span>
+<span class="w">   </span><span class="nt">ssh_private_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~/.ssh/id_rsa</span><span class="w"></span>
+<span class="w">   </span><span class="nt">ssh_public_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~/.ssh/id_rsa.pub</span><span class="w"></span>
 
-<span class="c1"># Provider-specific config for the head node, e.g. instance type.</span>
-<span class="nt">head_node</span><span class="p">:</span>
-   <span class="nt">azure_arm_parameters</span><span class="p">:</span>
-      <span class="c1"># https://docs.microsoft.com/en-us/azure/confidential-computing/virtual-machine-solutions</span>
-      <span class="c1"># The DCs_v2 VMs support Intel SGX</span>
-      <span class="nt">vmSize</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Standard_DC2s_v2</span>
+<span class="c1"># Provider-specific config for the head node, e.g. instance type.</span><span class="w"></span>
+<span class="nt">head_node</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">azure_arm_parameters</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># https://docs.microsoft.com/en-us/azure/confidential-computing/virtual-machine-solutions</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># The DCs_v2 VMs support Intel SGX</span><span class="w"></span>
+<span class="w">      </span><span class="nt">vmSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Standard_DC2s_v2</span><span class="w"></span>
 
-      <span class="c1"># If launching a minimal Ubuntu machine</span>
-      <span class="c1"># (and manually installing using setup commands)</span>
-      <span class="nt">imagePublisher</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Canonical</span>
-      <span class="nt">imageOffer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">UbuntuServer</span>
-      <span class="nt">imageSku</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">18_04-lts-gen2</span>
-      <span class="nt">imageVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">latest</span>
+<span class="w">      </span><span class="c1"># If launching a minimal Ubuntu machine</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># (and manually installing using setup commands)</span><span class="w"></span>
+<span class="w">      </span><span class="nt">imagePublisher</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Canonical</span><span class="w"></span>
+<span class="w">      </span><span class="nt">imageOffer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UbuntuServer</span><span class="w"></span>
+<span class="w">      </span><span class="nt">imageSku</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18_04-lts-gen2</span><span class="w"></span>
+<span class="w">      </span><span class="nt">imageVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latest</span><span class="w"></span>
 
-<span class="c1"># Provider-specific config for worker nodes, e.g. instance type.</span>
-<span class="nt">worker_nodes</span><span class="p">:</span>
-   <span class="nt">azure_arm_parameters</span><span class="p">:</span>
-      <span class="c1"># https://docs.microsoft.com/en-us/azure/confidential-computing/virtual-machine-solutions</span>
-      <span class="c1"># The DCs_v2 VMs support Intel SGX</span>
-      <span class="nt">vmSize</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Standard_DC2s_v2</span>
+<span class="c1"># Provider-specific config for worker nodes, e.g. instance type.</span><span class="w"></span>
+<span class="nt">worker_nodes</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">azure_arm_parameters</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># https://docs.microsoft.com/en-us/azure/confidential-computing/virtual-machine-solutions</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># The DCs_v2 VMs support Intel SGX</span><span class="w"></span>
+<span class="w">      </span><span class="nt">vmSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Standard_DC2s_v2</span><span class="w"></span>
 
-      <span class="c1"># If launching a minimal Ubuntu machine</span>
-      <span class="c1"># (and manually installing using setup commands)</span>
-      <span class="nt">imagePublisher</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Canonical</span>
-      <span class="nt">imageOffer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">UbuntuServer</span>
-      <span class="nt">imageSku</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">18_04-lts-gen2</span>
-      <span class="nt">imageVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">latest</span>
+<span class="w">      </span><span class="c1"># If launching a minimal Ubuntu machine</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># (and manually installing using setup commands)</span><span class="w"></span>
+<span class="w">      </span><span class="nt">imagePublisher</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Canonical</span><span class="w"></span>
+<span class="w">      </span><span class="nt">imageOffer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UbuntuServer</span><span class="w"></span>
+<span class="w">      </span><span class="nt">imageSku</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18_04-lts-gen2</span><span class="w"></span>
+<span class="w">      </span><span class="nt">imageVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latest</span><span class="w"></span>
 
-<span class="c1">##############################################################################</span>
-<span class="c1">#       Everything below this can be ignored - you likely won't have to      #</span>
-<span class="c1">#       modify it.                                                           #</span>
-<span class="c1">##############################################################################</span>
+<span class="c1">##############################################################################</span><span class="w"></span>
+<span class="c1">#       Everything below this can be ignored - you likely won't have to      #</span><span class="w"></span>
+<span class="c1">#       modify it.                                                           #</span><span class="w"></span>
+<span class="c1">##############################################################################</span><span class="w"></span>
 
-<span class="c1"># Files or directories to copy to the head and worker nodes. The format is a</span>
-<span class="c1"># dictionary from REMOTE_PATH: LOCAL_PATH, e.g.</span>
-<span class="nt">file_mounts</span><span class="p">:</span> <span class="p p-Indicator">{</span>
-   <span class="c1"># This script installs Open Enclave</span>
-   <span class="s">"~/install_oe.sh"</span><span class="nt"> </span><span class="p">:</span> <span class="s">"scripts/install_oe.sh"</span><span class="p p-Indicator">,</span>
+<span class="c1"># Files or directories to copy to the head and worker nodes. The format is a</span><span class="w"></span>
+<span class="c1"># dictionary from REMOTE_PATH: LOCAL_PATH, e.g.</span><span class="w"></span>
+<span class="nt">file_mounts</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># This script installs Open Enclave</span><span class="w"></span>
+<span class="w">   </span><span class="s">"~/install_oe.sh"</span><span class="nt"> </span><span class="p">:</span><span class="w"> </span><span class="s">"scripts/install_oe.sh"</span><span class="p p-Indicator">,</span><span class="w"></span>
 
-   <span class="c1"># This script builds Spark 3.1.1 from source</span>
-   <span class="s">"~/build_spark.sh"</span><span class="nt"> </span><span class="p">:</span> <span class="s">"scripts/build_spark.sh"</span><span class="p p-Indicator">,</span>
+<span class="w">   </span><span class="c1"># This script builds Spark 3.1.1 from source</span><span class="w"></span>
+<span class="w">   </span><span class="s">"~/build_spark.sh"</span><span class="nt"> </span><span class="p">:</span><span class="w"> </span><span class="s">"scripts/build_spark.sh"</span><span class="p p-Indicator">,</span><span class="w"></span>
 
-   <span class="c1"># This script downloads a pre-built Spark 3.1.1 binary</span>
-   <span class="s">"~/install_spark.sh"</span><span class="nt"> </span><span class="p">:</span> <span class="s">"scripts/install_spark.sh"</span><span class="p p-Indicator">,</span>
+<span class="w">   </span><span class="c1"># This script downloads a pre-built Spark 3.1.1 binary</span><span class="w"></span>
+<span class="w">   </span><span class="s">"~/install_spark.sh"</span><span class="nt"> </span><span class="p">:</span><span class="w"> </span><span class="s">"scripts/install_spark.sh"</span><span class="p p-Indicator">,</span><span class="w"></span>
 
-   <span class="c1"># This script builds Opaque SQL from source</span>
-   <span class="s">"~/build_opaque.sh"</span><span class="nt"> </span><span class="p">:</span> <span class="s">"scripts/build_opaque.sh"</span><span class="p p-Indicator">,</span>
+<span class="w">   </span><span class="c1"># This script builds Opaque SQL from source</span><span class="w"></span>
+<span class="w">   </span><span class="s">"~/build_opaque.sh"</span><span class="nt"> </span><span class="p">:</span><span class="w"> </span><span class="s">"scripts/build_opaque.sh"</span><span class="p p-Indicator">,</span><span class="w"></span>
 
-   <span class="c1"># This script installs Secure XGBoost from source</span>
-   <span class="s">"~/install_secure_xgboost.sh"</span><span class="nt"> </span><span class="p">:</span> <span class="s">"scripts/install_secure_xgboost.sh"</span>
-<span class="p p-Indicator">}</span>
+<span class="w">   </span><span class="c1"># This script installs Secure XGBoost from source</span><span class="w"></span>
+<span class="w">   </span><span class="s">"~/install_secure_xgboost.sh"</span><span class="nt"> </span><span class="p">:</span><span class="w"> </span><span class="s">"scripts/install_secure_xgboost.sh"</span><span class="w"></span>
+<span class="p p-Indicator">}</span><span class="w"></span>
 
-<span class="c1"># List of commands that will be run before `setup_commands`. If docker is</span>
-<span class="c1"># enabled, these commands will run outside the container and before docker</span>
-<span class="c1"># is setup.</span>
-<span class="nt">initialization_commands</span><span class="p">:</span>
-   <span class="c1"># Get rid of annoying Ubuntu message</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">touch ~/.sudo_as_admin_successful</span>
+<span class="c1"># List of commands that will be run before `setup_commands`. If docker is</span><span class="w"></span>
+<span class="c1"># enabled, these commands will run outside the container and before docker</span><span class="w"></span>
+<span class="c1"># is setup.</span><span class="w"></span>
+<span class="nt">initialization_commands</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># Get rid of annoying Ubuntu message</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">touch ~/.sudo_as_admin_successful</span><span class="w"></span>
 
-<span class="c1"># List of shell commands to run to set up nodes.</span>
-<span class="c1"># Note: Use empty list if using image</span>
-<span class="nt">setup_commands</span><span class="p">:</span>
-   <span class="c1"># This script installs Open Enclave on the node</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">chmod +x ~/install_oe.sh</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">source ~/install_oe.sh</span>
-   <span class="c1"># This script installs Apache Spark on the node</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">chmod +x ~/install_spark.sh</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">source ~/install_spark.sh</span>
-   <span class="c1"># This script installs Opaque SQL on the node</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">chmod +x ~/build_opaque.sh</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">source ~/build_opaque.sh</span>
-   <span class="c1"># This script installs Secure XGBoost on the node</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">chmod +x ~/install_secure_xgboost.sh</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">source ~/install_secure_xgboost.sh</span>
+<span class="c1"># List of shell commands to run to set up nodes.</span><span class="w"></span>
+<span class="c1"># Note: Use empty list if using image</span><span class="w"></span>
+<span class="nt">setup_commands</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># This script installs Open Enclave on the node</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chmod +x ~/install_oe.sh</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source ~/install_oe.sh</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># This script installs Apache Spark on the node</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chmod +x ~/install_spark.sh</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source ~/install_spark.sh</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># This script installs Opaque SQL on the node</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chmod +x ~/build_opaque.sh</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source ~/build_opaque.sh</span><span class="w"></span>
+<span class="w">   </span><span class="c1"># This script installs Secure XGBoost on the node</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chmod +x ~/install_secure_xgboost.sh</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source ~/install_secure_xgboost.sh</span><span class="w"></span>
 
-<span class="c1"># Custom commands that will be run on the head node after common setup.</span>
-<span class="c1"># Set to empty list if using image</span>
-<span class="nt">head_setup_commands</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+<span class="c1"># Custom commands that will be run on the head node after common setup.</span><span class="w"></span>
+<span class="c1"># Set to empty list if using image</span><span class="w"></span>
+<span class="nt">head_setup_commands</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 
-<span class="c1"># Custom commands that will be run on worker nodes after common setup.</span>
-<span class="c1"># Set to empty list if using image</span>
-<span class="nt">worker_setup_commands</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+<span class="c1"># Custom commands that will be run on worker nodes after common setup.</span><span class="w"></span>
+<span class="c1"># Set to empty list if using image</span><span class="w"></span>
+<span class="nt">worker_setup_commands</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 
-<span class="c1"># Command to start MC2 on the head node.</span>
-<span class="c1"># Set to empty list if using image</span>
-<span class="nt">head_start_mc2_commands</span><span class="p">:</span>
-<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd $SPARK_HOME; ./sbin/start-master.sh</span>
+<span class="c1"># Command to start MC2 on the head node.</span><span class="w"></span>
+<span class="c1"># Set to empty list if using image</span><span class="w"></span>
+<span class="nt">head_start_mc2_commands</span><span class="p">:</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cd $SPARK_HOME; ./sbin/start-master.sh</span><span class="w"></span>
 
-<span class="c1"># Command to start MC2 on worker nodes.</span>
-<span class="c1"># Set to empty list if using image</span>
-<span class="nt">worker_start_mc2_commands</span><span class="p">:</span>
-<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cd $SPARK_HOME; ./sbin/start-slave.sh $MC2_HEAD_IP:7077</span>
+<span class="c1"># Command to start MC2 on worker nodes.</span><span class="w"></span>
+<span class="c1"># Set to empty list if using image</span><span class="w"></span>
+<span class="nt">worker_start_mc2_commands</span><span class="p">:</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cd $SPARK_HOME; ./sbin/start-slave.sh $MC2_HEAD_IP:7077</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -374,11 +374,9 @@
 
         <div class="related-information">
               Copyright &#169; 2021, MC² Team |
-            Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
-              and
-              <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-              <a href="https://github.com/pradyunsg/furo">Furo theme</a>. |
-            <a class="muted-link" href="../_sources/config/azure.rst.txt"
+          Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+          <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+            | <a class="muted-link" href="../_sources/config/azure.rst.txt"
                rel="nofollow">
               Show Source
             </a>
@@ -396,7 +394,7 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/scripts/main.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     </body>
