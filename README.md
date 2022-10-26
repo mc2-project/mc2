@@ -21,12 +21,12 @@ MC<sup>2</sup> also enables secure collaboration -- multiple data owners can use
 MC<sup>2</sup> provides the following (actively maintained) secure computation services:
 * [Opaque SQL](https://github.com/mc2-project/opaque-sql): Encrypted data analytics on Spark SQL using hardware enclaves
 * [Secure XGBoost](https://github.com/mc2-project/secure-xgboost): Collaborative XGBoost training and inference on encrypted data using hardware enclaves
-* [Federated XGBoost](https://github.com/mc2-project/federated-xgboost): Collaborative XGBoost in the federated setting
 
 The MC<sup>2</sup> project also includes exploratory research prototypes that develop new cryptographic techniques for secure computation. Please visit the individual project pages for more information:
 * [Cerebro](https://github.com/mc2-project/cerebro): A general purpose Python DSL for learning with secure multiparty computation.
 * [Delphi](https://github.com/mc2-project/delphi): Secure inference for deep neural networks.
 * [Muse](https://github.com/mc2-project/muse): Secure inference resilient to malicious clients.
+* [Federated XGBoost](https://github.com/mc2-project/federated-xgboost): Collaborative XGBoost in the federated setting
 
 For more information on MC<sup>2</sup>, visit our [website](https://mc2-project.github.io/).
 
@@ -62,7 +62,7 @@ docker run -it -v </absolute/path/to/mc2/playground>:/mc2/client/playground mc2_
 ```
 
 ### Installation via pulling an image
-If you prefer to pull the image instead, you can pull a pre-built image (~3 GB) from Docker Hub.
+If you prefer to pull the image instead, you can pull a pre-built image (~3 GB) from [Docker Hub](https://hub.docker.com/r/mc2project/mc2_img).
 
 ```
 # Clone the `mc2-project/mc2 repo`
