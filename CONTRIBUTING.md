@@ -10,8 +10,7 @@ You can ask questions, bring up issues, or garner feedback through the following
 
 ## To contribute a patch
 
-1. Break your work into small, single-purpose patches if possible. It's much
-   harder to merge in a large change with a lot of disjoint features.
+1. Break your work into small, single-purpose patches if possible. It's much harder to merge in a large change with a lot of disjoint features.
 2. Submit the patch as a GitHub pull request against the master branch.
 3. Make sure that your code passes the automated tests.
 4. Run `pip3 install pre-commit; pre-commit install` to create a git hook that will run the linter and automatically format your code when you commit. If the hook reformats your code, you'll need to `git add` the changed files again.

@@ -1,3 +1,7 @@
+/*!
+ *  Copyright (c) 2020-22 by Contributors
+ */
+
 #include "crypto.h"
 #include "flatbuffers/EncryptedBlock_generated.h"
 #include "flatbuffers/Rows_generated.h"

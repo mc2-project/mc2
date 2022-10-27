@@ -1,3 +1,7 @@
+/*!
+ *  Copyright (c) 2020-22 by Contributors
+ */
+
 #include <math.h>
 
 #include "base64.h"

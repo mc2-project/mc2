@@ -1,3 +1,4 @@
 #/bin/bash
+
 export MC2_CLIENT_HOME="`( cd \"$(dirname "${BASH_SOURCE[0]}")\" && pwd )`"
 alias mc2="python3 ${MC2_CLIENT_HOME}/mc2.py"
