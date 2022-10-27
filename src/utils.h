@@ -1,3 +1,7 @@
+/*!
+ *  Copyright (c) 2020-22 by Contributors
+ */
+
 #include <fstream>
 #include <iostream>
 #include <map>

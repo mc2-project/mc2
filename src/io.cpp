@@ -1,3 +1,7 @@
+/*!
+ *  Copyright (c) 2020-22 by Contributors
+ */
+
 #include <algorithm>
 #include <assert.h>
 #include <fstream>

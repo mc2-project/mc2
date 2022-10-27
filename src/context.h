@@ -1,3 +1,7 @@
+/*!
+ *  Copyright (c) 2020-22 by Contributors
+ */
+
 #include "attestation.h"
 #include "crypto.h"
 #include <openenclave/attestation/sgx/evidence.h>
