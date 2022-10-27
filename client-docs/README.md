@@ -1,6 +1,6 @@
 # Documentation Development
 
-To build the documentation locally, install the `sphinx` and `sphinx-argparse` Python packages, then build the documentation from this directory.
+To build the documentation locally, install the required `sphinx` Python packages, then build the documentation from this directory.
 
 ```sh
 # In mc2/docs/ directory
