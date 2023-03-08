@@ -18,7 +18,7 @@ Born out of research in the [UC Berkeley RISE Lab](https://rise.cs.berkeley.edu/
 With MC<sup>2</sup>, users can outsource their confidential data workloads to the cloud, while ensuring that the data is never exposed unencrypted to the cloud provider. 
 MC<sup>2</sup> also enables secure collaboration -- multiple data owners can use the platform to jointly analyze their collective data, without revealing their individual data to each other.
 
-MC<sup>2</sup> provides the following (actively maintained) secure computation services:
+MC<sup>2</sup> provides the following secure computation services:
 * [Opaque SQL](https://github.com/mc2-project/opaque-sql): Encrypted data analytics on Spark SQL using hardware enclaves
 * [Secure XGBoost](https://github.com/mc2-project/secure-xgboost): Collaborative XGBoost training and inference on encrypted data using hardware enclaves
 
