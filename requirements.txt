@@ -6,7 +6,7 @@ azure-mgmt-network==10.0.0
 azure-cli-core
 azure-storage-blob
 azure-identity
-cryptography==3.3.1
+cryptography==39.0.1
 flatbuffers
 grpcio
 grpcio-tools
