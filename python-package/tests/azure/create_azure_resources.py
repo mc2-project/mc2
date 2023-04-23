@@ -2,6 +2,7 @@ import os
 import pathlib
 
 import mc2client as mc2
+from . import test_logger as logger
 
 tests_dir = pathlib.Path(__file__).parent.absolute()
 config = os.path.join(tests_dir, "../test.yaml")
@@ -9,17 +10,17 @@ mc2.set_config(config)
 
 dummy_file = os.path.join(tests_dir, "dummy.txt")
 
-print("Creating resource group")
+logger.info("Creating resource group")
 mc2.create_resource_group()
 
-print("Creating storage")
+logger.info("Creating storage")
 mc2.create_storage()
 
-print("Creating container")
+logger.info("Creating container")
 mc2.create_container()
 
-print("Uploading file")
+logger.info("Uploading file")
 mc2.upload_file(dummy_file, "dummy.txt")
 
-print("Creating cluster")
+logger.info("Creating cluster")
 mc2.create_cluster()
